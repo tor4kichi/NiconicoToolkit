@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>157b2fce-b2e7-4e30-958a-55aecd6fd6d7</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>NiconicoTookit.Shared.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AccountTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AccountTestHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActivityTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChannelTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommunityTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtractContenntIdTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FollowTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IchibaTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IdTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LikesTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NicoRepoTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RecommendTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchCeApiTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchHtmlTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SeriesTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearchTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeshiftReservationTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UnitTest1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoMylistLoginTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoMylistPublicTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoWatchTest.cs" />
+  </ItemGroup>
+</Project>
