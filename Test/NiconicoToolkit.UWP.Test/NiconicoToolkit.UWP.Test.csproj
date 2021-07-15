@@ -158,7 +158,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NiconicoToolkit.UWP\NiconicoToolkit.UWP.csproj">
+    <ProjectReference Include="..\..\NiconicoToolkit.UWP\NiconicoToolkit.UWP.csproj">
       <Project>{9ec6b1ba-1896-4516-b0f4-1c3701566d16}</Project>
       <Name>NiconicoToolkit.UWP</Name>
     </ProjectReference>
@@ -166,7 +166,7 @@
   <ItemGroup>
     <Content Include="Assets\_TestAccount.json" />
   </ItemGroup>
-  <Import Project="..\NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.projitems" Label="Shared" />
+  <Import Project="..\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

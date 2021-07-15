@@ -7,23 +7,23 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NiconicoToolkit.Shared", "N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{CA250975-CB65-4739-BD3D-1C48DD00195E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiconicoToolkit.Net5.Test", "NiconicoToolkit.Net5.Test\NiconicoToolkit.Net5.Test.csproj", "{664C257F-63AC-4F39-B8FD-1379D70956C5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.UWP", "NiconicoToolkit.UWP\NiconicoToolkit.UWP.csproj", "{9EC6B1BA-1896-4516-B0F4-1C3701566D16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiconicoToolkit.Net5", "NiconicoToolkit.Net5\NiconicoToolkit.Net5.csproj", "{6F8D50B6-735F-49B3-99E2-1330FA3A8416}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NiconicoTookit.Shared.Test", "NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.shproj", "{157B2FCE-B2E7-4E30-958A-55AECD6FD6D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiconicoToolkit.Net5.Test", "Test\NiconicoToolkit.Net5.Test\NiconicoToolkit.Net5.Test.csproj", "{89A32377-05C1-4239-B943-051BD72114F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.UWP.Test", "NiconicoToolkit.UWP.Test\NiconicoToolkit.UWP.Test.csproj", "{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NiconicoToolkit.Shared.Test", "Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.shproj", "{157B2FCE-B2E7-4E30-958A-55AECD6FD6D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.UWP.Test", "Test\NiconicoToolkit.UWP.Test\NiconicoToolkit.UWP.Test.csproj", "{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.projitems*{157b2fce-b2e7-4e30-958a-55aecd6fd6d7}*SharedItemsImports = 13
-		NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.projitems*{1ca46ebc-c163-472c-9f98-5d65d2bbbe8b}*SharedItemsImports = 4
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{157b2fce-b2e7-4e30-958a-55aecd6fd6d7}*SharedItemsImports = 13
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{1ca46ebc-c163-472c-9f98-5d65d2bbbe8b}*SharedItemsImports = 4
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{1e3a1d63-1808-4b92-9456-d3c0fb39042d}*SharedItemsImports = 13
-		NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.projitems*{664c257f-63ac-4f39-b8fd-1379d70956c5}*SharedItemsImports = 5
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{6f8d50b6-735f-49b3-99e2-1330fa3a8416}*SharedItemsImports = 5
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{89a32377-05c1-4239-b943-051bd72114f2}*SharedItemsImports = 5
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{9ec6b1ba-1896-4516-b0f4-1c3701566d16}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,26 +39,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|ARM.Build.0 = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|x64.Build.0 = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Debug|x86.Build.0 = Debug|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|ARM.ActiveCfg = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|ARM.Build.0 = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|ARM64.Build.0 = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|x64.ActiveCfg = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|x64.Build.0 = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|x86.ActiveCfg = Release|Any CPU
-		{664C257F-63AC-4F39-B8FD-1379D70956C5}.Release|x86.Build.0 = Release|Any CPU
 		{9EC6B1BA-1896-4516-B0F4-1C3701566D16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9EC6B1BA-1896-4516-B0F4-1C3701566D16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EC6B1BA-1896-4516-B0F4-1C3701566D16}.Debug|ARM.ActiveCfg = Debug|ARM
@@ -99,6 +79,26 @@ Global
 		{6F8D50B6-735F-49B3-99E2-1330FA3A8416}.Release|x64.Build.0 = Release|Any CPU
 		{6F8D50B6-735F-49B3-99E2-1330FA3A8416}.Release|x86.ActiveCfg = Release|Any CPU
 		{6F8D50B6-735F-49B3-99E2-1330FA3A8416}.Release|x86.Build.0 = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|ARM.Build.0 = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|x64.Build.0 = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|ARM.ActiveCfg = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|ARM.Build.0 = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|ARM64.Build.0 = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|x64.ActiveCfg = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|x64.Build.0 = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{89A32377-05C1-4239-B943-051BD72114F2}.Release|x86.Build.0 = Release|Any CPU
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Debug|ARM.ActiveCfg = Debug|ARM
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Debug|ARM.Build.0 = Debug|ARM
@@ -130,7 +130,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{664C257F-63AC-4F39-B8FD-1379D70956C5} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
+		{89A32377-05C1-4239-B943-051BD72114F2} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
 		{157B2FCE-B2E7-4E30-958A-55AECD6FD6D7} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
 	EndGlobalSection

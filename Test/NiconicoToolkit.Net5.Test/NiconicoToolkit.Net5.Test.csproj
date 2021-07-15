@@ -25,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NiconicoToolkit.Net5\NiconicoToolkit.Net5.csproj" />
+    <ProjectReference Include="..\..\NiconicoToolkit.Net5\NiconicoToolkit.Net5.csproj" />
   </ItemGroup>
 
-  <Import Project="..\NiconicoTookit.Shared.Test\NiconicoTookit.Shared.Test.projitems" Label="Shared" />
+  <Import Project="..\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems" Label="Shared" />
 
 </Project>
