@@ -27,12 +27,12 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
 
 
-#region Watch Video
+        #region Watch Video
 
 #if WINDOWS_UWP
 
         [TestMethod]
-        [DataRow("sm38647727")]
+        [DataRow("sm36403134")]
         public async Task PlayVideoProgressiveMp4Async(string videoId)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);

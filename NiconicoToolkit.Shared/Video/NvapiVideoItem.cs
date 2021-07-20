@@ -4,6 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Video
 {
+    public class PlaybackPosition
+    {
+        public TimeSpan? Position { get; init; }
+    }
     public class NvapiVideoItem
     {
         [JsonPropertyName("type")]
@@ -40,7 +44,8 @@ namespace NiconicoToolkit.Video
         public bool IsPaymentRequired { get; set; }
 
         [JsonPropertyName("playbackPosition")]
-        public long? PlaybackPosition { get; set; }
+        [JsonConverter(typeof(PlaybackPositionConverter))]
+        public PlaybackPosition PlaybackPosition { get; set; }
 
         [JsonPropertyName("owner")]
         public Owner Owner { get; set; }
