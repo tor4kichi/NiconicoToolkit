@@ -36,7 +36,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 return await JsonSerializer.DeserializeAsync<AccountInfo>(stream);
             }
 #else
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"_TestAccount.json");
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"TestAccount.json");
             return JsonSerializer.Deserialize<AccountInfo>(await File.ReadAllTextAsync(path));
 #endif
         }
