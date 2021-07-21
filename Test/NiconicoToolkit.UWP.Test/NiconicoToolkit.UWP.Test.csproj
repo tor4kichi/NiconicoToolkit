@@ -164,7 +164,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\_TestAccount.json" />
+    <Content Include="Assets\TestAccount.json" />
   </ItemGroup>
   <Import Project="..\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

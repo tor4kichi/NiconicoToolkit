@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="_TestAccount.json" />
+    <None Remove="TestAccount.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="_TestAccount.json">
+    <Content Include="TestAccount.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
