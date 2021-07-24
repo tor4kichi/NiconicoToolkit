@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using Microsoft.Toolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.SnapshotSearch;
 using NiconicoToolkit.SnapshotSearch.Filters;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NiconicoToolkit.UWP.Test.Tests
@@ -70,7 +71,13 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 new SearchSort(SearchFieldType.ViewCounter, SearchSortOrder.Desc),
                 "NiconicoToolkit",
                 fields: SearchFieldTypeExtensions.FieldTypes.ToArray(),
-                filter: new ValueContainsSearchFilter<string>(SearchFieldType.Genre, "ゲーム", "アニメ")
+                filter: new CompositionSearchFilter(
+                    new[] 
+                    {
+                        new CompareSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal),
+                        new CompareSearchFilter<string>(SearchFieldType.Genre, "アニメ", SearchFilterCompareCondition.Equal)
+                    }
+                    )
                 );
 
 
@@ -169,5 +176,6 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 Guard.IsNotNull(item.Description, nameof(item.Description));
             }
         }
+
     }
 }

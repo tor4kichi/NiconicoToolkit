@@ -153,13 +153,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\Filters\CompositeSearchFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\Filters\CompositionSearchFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\Filters\SearchFilterCompareCondition.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\Filters\ValueContainsSearchFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\FilterValueHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\ISearchFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\AndJsonFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\EqaulJsonFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\IJsonSearchFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\IJsonSearchFilterData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\JsonFilterDataJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\JsonFilterSerializeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\NotJsonFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\JsonFilters\OrJsonFilter.cs" />
@@ -169,6 +169,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\VideoSnapshotSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\ChannelIdJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\CommunityIdJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\HeterogenousListConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\JsonSnakeCaseNamingPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LiveIdJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LongToStringConverter.cs" />

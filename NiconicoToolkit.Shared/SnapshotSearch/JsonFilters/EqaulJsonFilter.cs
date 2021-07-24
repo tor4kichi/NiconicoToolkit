@@ -15,10 +15,10 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 			_value = value;
 		}
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
 			var json = JsonSerializer.Serialize(GetJsonFilterData(), JsonFilterSerializeHelper.SerializerOptions);
-			return new[] { new KeyValuePair<string, string>(SearchConstants.JsonFilterParameter, json) };
+			yield return new KeyValuePair<string, string>(SearchConstants.JsonFilterParameter, json);
 		}
 
         public IJsonSearchFilterData GetJsonFilterData()

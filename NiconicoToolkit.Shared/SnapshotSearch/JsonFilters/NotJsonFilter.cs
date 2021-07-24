@@ -13,10 +13,10 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 			_filter = filter;
 		}
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
 			var json = JsonSerializer.Serialize(GetJsonFilterData(), JsonFilterSerializeHelper.SerializerOptions);
-			return new[] { new KeyValuePair<string, string>(SearchConstants.JsonFilterParameter, json) };
+			yield return new KeyValuePair<string, string>(SearchConstants.JsonFilterParameter, json);
 		}
 
 		public IJsonSearchFilterData GetJsonFilterData()
@@ -34,7 +34,7 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 		public string Type => "not";
 
 		[JsonPropertyName("filter")]
-		public object Filter { get; set; }
+		public IJsonSearchFilterData Filter { get; set; }
 	}
 
 }

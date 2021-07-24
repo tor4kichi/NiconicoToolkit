@@ -138,7 +138,7 @@ namespace NiconicoToolkit.SnapshotSearch
 
 			if (filter != null)
             {
-				var filters = filter.GetFilterKeyValues();
+				var filters = filter.GetFilterKeyValues(new ());
 				foreach (var f in filters)
                 {
 					dict.Add(f.Key, f.Value);

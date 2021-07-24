@@ -16,7 +16,7 @@ namespace NiconicoToolkit.SnapshotSearch
             _compareOpExpression = compareOpExpression;
         }
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
 			return _keyValues ?? (_keyValues = ConvertToKeyValues(_compareOpExpression.Body as BinaryExpression));
 		}

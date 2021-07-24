@@ -12,9 +12,9 @@ namespace NiconicoToolkit.SnapshotSearch.Filters
 			_filters = filters;
 		}
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
-			return _filters.SelectMany(x => x.GetFilterKeyValues());
+			return _filters.SelectMany(x => x.GetFilterKeyValues(context));
 
 		}
 	}

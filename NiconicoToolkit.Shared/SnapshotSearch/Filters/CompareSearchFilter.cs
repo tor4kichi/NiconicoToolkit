@@ -15,9 +15,17 @@ namespace NiconicoToolkit.SnapshotSearch.Filters
 			_condition = condition;
 		}
 
-		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues()
+		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
-			return new[] { new KeyValuePair<string, string>($"filters[{_filterType.GetDescription()}][{_condition.GetDescription()}]", FilterValueHelper.ToStringFilterValue(_value)) };
+			if (_condition == SearchFilterCompareCondition.Equal)
+            {
+				var index = context.GetNextIndex(_filterType);
+				yield return new KeyValuePair<string, string>($"filters[{_filterType.GetDescription()}][{index}]", FilterValueHelper.ToStringFilterValue(_value));
+			}
+			else
+            {
+				yield return new KeyValuePair<string, string>($"filters[{_filterType.GetDescription()}][{_condition.GetDescription()}]", FilterValueHelper.ToStringFilterValue(_value));
+			}			
 		}
 	}
 
