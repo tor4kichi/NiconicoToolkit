@@ -215,7 +215,7 @@ namespace NiconicoToolkit.SnapshotSearch
 		/// </summary>
 		/// <remarks>DateTime | SearchField | SearchSort | SearchFilter</remarks>
 		[Description("startTime")]
-		[SearchFieldType(typeof(DateTime))]
+		[SearchFieldType(typeof(DateTimeOffset))]
 		[SearchField]
 		[SearchSort]
 		[SearchFilter]
@@ -247,7 +247,7 @@ namespace NiconicoToolkit.SnapshotSearch
 		/// </summary>
 		/// <remarks>DateTime | SearchField | SearchSort | SearchFilter</remarks>
 		[Description("lastCommentTime")]
-		[SearchFieldType(typeof(DateTime))]
+		[SearchFieldType(typeof(DateTimeOffset))]
 		[SearchField]
 		[SearchSort]
 		[SearchFilter]

@@ -74,8 +74,8 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 filter: new CompositionSearchFilter(
                     new[] 
                     {
-                        new CompareSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal),
-                        new CompareSearchFilter<string>(SearchFieldType.Genre, "アニメ", SearchFilterCompareCondition.Equal)
+                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal),
+                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "アニメ", SearchFilterCompareCondition.Equal)
                     }
                     )
                 );
@@ -113,7 +113,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 new SearchSort(SearchFieldType.ViewCounter, SearchSortOrder.Desc),
                 "NiconicoToolkit",
                 fields: SearchFieldTypeExtensions.FieldTypes.ToArray(),
-                filter: new CompareSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal)
+                filter: new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal)
                 );
 
 

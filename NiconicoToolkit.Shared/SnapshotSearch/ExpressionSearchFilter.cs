@@ -124,11 +124,11 @@ namespace NiconicoToolkit.SnapshotSearch
 
 					var conditionType = be.NodeType switch
 					{
-						ExpressionType.Equal => SearchFilterCompareCondition.Equal,
-						ExpressionType.GreaterThan => isNeedInverseCompereOperation ? SearchFilterCompareCondition.LessThan : SearchFilterCompareCondition.GreaterThan,
-						ExpressionType.GreaterThanOrEqual => isNeedInverseCompereOperation ? SearchFilterCompareCondition.LessThenOrEqual : SearchFilterCompareCondition.GreaterThanOrEqual,
-						ExpressionType.LessThan => isNeedInverseCompereOperation ? SearchFilterCompareCondition.GreaterThan : SearchFilterCompareCondition.LessThan,
-						ExpressionType.LessThanOrEqual => isNeedInverseCompereOperation ? SearchFilterCompareCondition.GreaterThanOrEqual: SearchFilterCompareCondition.LessThenOrEqual,
+						ExpressionType.Equal => SimpleFilterComparison.Equal,
+						ExpressionType.GreaterThan => isNeedInverseCompereOperation ? SimpleFilterComparison.LessThan : SimpleFilterComparison.GreaterThan,
+						ExpressionType.GreaterThanOrEqual => isNeedInverseCompereOperation ? SimpleFilterComparison.LessThenOrEqual : SimpleFilterComparison.GreaterThanOrEqual,
+						ExpressionType.LessThan => isNeedInverseCompereOperation ? SimpleFilterComparison.GreaterThan : SimpleFilterComparison.LessThan,
+						ExpressionType.LessThanOrEqual => isNeedInverseCompereOperation ? SimpleFilterComparison.GreaterThanOrEqual: SimpleFilterComparison.LessThenOrEqual,
 						_ => throw new ArgumentException("対応してない演算子が使われています : " + be.NodeType),
 					};
 
@@ -138,7 +138,7 @@ namespace NiconicoToolkit.SnapshotSearch
 
 					object value = Expression.Lambda(valueExpression).Compile().DynamicInvoke();
 					var valueText = value is DateTime time ? time.ToString("o") : value.ToString();
-					if (conditionType == SearchFilterCompareCondition.Equal)
+					if (conditionType == SimpleFilterComparison.Equal)
 					{
 						int count = fieldTypeIndexMap.TryGetValue(fieldType, out count) ? count : 0;
 						sb.Add(new KeyValuePair<string, string>($"filters[{fieldType.GetDescription()}][{count}]", valueText));

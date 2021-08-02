@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace NiconicoToolkit.SnapshotSearch
@@ -31,7 +32,8 @@ namespace NiconicoToolkit.SnapshotSearch
 	public static class SearchConstants
 	{
 		public static readonly string VideoSearchApiUrl = "https://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search";
-		
+		public static readonly string SearchApiVersionUrl = "https://api.search.nicovideo.jp/api/v2/snapshot/version";
+
 		public static readonly int MaxSearchOffset = 100_000;
 		public static readonly int MaxSearchLimit = 100;
 		public static readonly int MaxContextLength = 40;
@@ -48,8 +50,11 @@ namespace NiconicoToolkit.SnapshotSearch
 		public static readonly string OffsetParameter = "_offset";
 		public static readonly string LimitParameter = "_limit";
 		public static readonly string ContextParameter = "_context";
-	}
 
+
+
+	}
+	
 
 	/// <summary>
 	/// niconicoコンテンツ検索APIの生放送検索
@@ -65,6 +70,13 @@ namespace NiconicoToolkit.SnapshotSearch
             _context = context;
             _defaultOptions = defaultOptions;
         }
+
+		public async Task<DateTimeOffset> GetSnapshotVersionAsync()
+        {
+			var result = await _context.GetJsonAsAsync<SnapshotApiVersion>(SearchConstants.SearchApiVersionUrl);
+			return result.LastModified;
+        }
+
 
 		/*
 		public Task<LiveSearchResponse> GetVideoSnapshotSearchAsync(
@@ -103,12 +115,12 @@ namespace NiconicoToolkit.SnapshotSearch
 			ISearchFilter filter = null
 			)
         {
-			if (offset < 0 || offset >= SearchConstants.MaxSearchOffset)
+			if (offset < 0 || offset > SearchConstants.MaxSearchOffset)
 			{
 				throw new ArgumentException("offset value out of bounds. (0 <= offset <= 1600)");
 			}
 
-			if (limit < 0 || limit >= SearchConstants.MaxSearchLimit)
+			if (limit < 0 || limit > SearchConstants.MaxSearchLimit)
 			{
 				throw new ArgumentException("limit value out of bounds. (0 <= limit <= 100)");
 			}

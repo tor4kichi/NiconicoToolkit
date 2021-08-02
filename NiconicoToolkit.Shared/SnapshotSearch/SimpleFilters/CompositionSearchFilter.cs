@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace NiconicoToolkit.SnapshotSearch.Filters
 {
-    public class CompositionSearchFilter : ISearchFilter
+    public class CompositionSearchFilter : ISimpleSearchFilter
 	{
 		private readonly IEnumerable<ISearchFilter> _filters;
 
-		public CompositionSearchFilter(IEnumerable<ISearchFilter> filters)
+		public CompositionSearchFilter(IEnumerable<ISimpleSearchFilter> filters)
 		{
 			_filters = filters;
 		}
@@ -15,7 +15,6 @@ namespace NiconicoToolkit.SnapshotSearch.Filters
 		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
 		{
 			return _filters.SelectMany(x => x.GetFilterKeyValues(context));
-
 		}
 	}
 

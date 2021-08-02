@@ -2,7 +2,8 @@
 
 namespace NiconicoToolkit.SnapshotSearch.Filters
 {
-    public enum SearchFilterCompareCondition
+    public enum SimpleFilterComparison
+
 	{
 		[Description("0")]
 		Equal,

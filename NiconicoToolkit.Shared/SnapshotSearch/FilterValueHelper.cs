@@ -6,9 +6,9 @@ namespace NiconicoToolkit.SnapshotSearch
     {
 		public static string ToStringFilterValue<T>(T value)
         {
-			if (typeof(T) == typeof(DateTime))
+			if (value is DateTimeOffset dateTimeOffset)
             {
-				var dateTime = Convert.ToDateTime(value);
+				var dateTime = dateTimeOffset;
 				return dateTime.ToString("o");
             }
 			else
