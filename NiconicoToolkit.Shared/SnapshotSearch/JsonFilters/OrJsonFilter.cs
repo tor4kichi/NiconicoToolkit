@@ -7,11 +7,11 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 {
     public sealed class OrJsonFilter : IJsonSearchFilter
     {
-        private readonly IList<IJsonSearchFilter> _filters;
+        public IList<IJsonSearchFilter> Filters { get; }
 
         public OrJsonFilter(IEnumerable<IJsonSearchFilter> filters)
         {
-            _filters = filters.ToList();
+            Filters = filters.ToList();
         }
 
 		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
@@ -24,9 +24,14 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 		{
 			return new OrJsonFilterData()
 			{
-				Filters = _filters.Select(x => x.GetJsonFilterData()).ToList()
+				Filters = Filters.Select(x => x.GetJsonFilterData()).ToList()
 			};
 		}
+
+        public override string ToString()
+        {
+            return string.Join(" or ", Filters.Select(x => $"({x})"));
+        }
     }
 
 

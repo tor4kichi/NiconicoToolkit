@@ -4,15 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 {
-    public sealed class EqaulJsonFilter<T> : IJsonSearchFilter
+    public sealed class EqualJsonFilter : IValueJsonSearchFilter
 	{
-		private readonly SearchFieldType _filterType;
-		private readonly T _value;
+		public SearchFieldType FieldType { get; }
+		public object Value { get; }
         
-        public EqaulJsonFilter(SearchFieldType filterType, T value)
+        public EqualJsonFilter(SearchFieldType filterType, object value)
 		{
-			_filterType = filterType;
-			_value = value;
+			FieldType = filterType;
+			Value = value;
 		}
 
 		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
@@ -25,11 +25,16 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
         {
 			return new EqualJsonFilterData()
 			{
-				Field = _filterType.GetDescription(),
-				Value = FilterValueHelper.ToStringFilterValue(_value)
+				Field = FieldType.GetDescription(),
+				Value = FilterValueHelper.ToStringFilterValue(Value)
 			};
 		}
-	}
+
+        public override string ToString()
+        {
+			return $"{FieldType} = {Value}";
+        }
+    }
 
 
 	public sealed class EqualJsonFilterData : IJsonSearchFilterData

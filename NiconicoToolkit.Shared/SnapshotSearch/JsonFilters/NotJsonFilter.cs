@@ -6,11 +6,11 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 {
     public sealed class NotJsonFilter : IJsonSearchFilter
 	{
-		private readonly IJsonSearchFilter _filter;
+		public IJsonSearchFilter Filter { get; }
 
 		public NotJsonFilter(IJsonSearchFilter filter)
 		{
-			_filter = filter;
+			Filter = filter;
 		}
 
 		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
@@ -23,10 +23,14 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 		{
 			return new NotJsonFilterData()
 			{
-				Filter = _filter.GetJsonFilterData()
+				Filter = Filter.GetJsonFilterData()
 			};
 		}
-	}
+        public override string ToString()
+        {
+			return $"not ({Filter})";
+        }
+    }
 
 	public sealed class NotJsonFilterData : IJsonSearchFilterData
 	{

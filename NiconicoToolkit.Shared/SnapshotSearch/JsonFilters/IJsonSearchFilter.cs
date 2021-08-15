@@ -4,4 +4,9 @@
 	{
 		IJsonSearchFilterData GetJsonFilterData();
     }
+
+    public interface IValueJsonSearchFilter : IJsonSearchFilter
+    {
+        SearchFieldType FieldType { get; }
+    }
 }
