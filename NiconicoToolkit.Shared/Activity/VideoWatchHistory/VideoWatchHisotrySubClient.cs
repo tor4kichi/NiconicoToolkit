@@ -110,14 +110,14 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
             [JsonPropertyName("watchId")]
             public string WatchId { get; set; }
 
-            [JsonPropertyName("frontendId")]
-            public long FrontendId { get; set; }
+            //[JsonPropertyName("frontendId")]
+            //public long FrontendId { get; set; }
 
             [JsonPropertyName("views")]
-            public long Views { get; set; }
+            public long? Views { get; set; }
 
             [JsonPropertyName("lastViewedAt")]
-            public DateTimeOffset LastViewedAt { get; set; }
+            public DateTimeOffset? LastViewedAt { get; set; }
 
             [JsonPropertyName("playbackPosition")]
             public long? PlaybackPosition { get; set; }
