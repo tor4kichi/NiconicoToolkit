@@ -320,7 +320,7 @@ namespace NiconicoToolkit.Video.Watch.NMSG_Comment
                     UserId = _userId,
                     Content = comment,
                     PostKey = postKey,
-                    //                        Premium = _isPremium ? "1" : "0"
+                    Premium = _isPremium ? "1" : null
                 }
             });
             

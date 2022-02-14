@@ -158,8 +158,8 @@ namespace NiconicoToolkit.Video.Watch.NMSG_Comment
         [JsonPropertyName("postkey")]
         public string PostKey { get; set; }
 
-//        [JsonPropertyName("premium")]
-//        public string Premium { get; set; } = "0"; // 一般ユーザー:0 プレミアム会員:1
+        [JsonPropertyName("premium")]
+        public string Premium { get; set; } // 一般ユーザー:0 プレミアム会員:1
 
     }
 }
