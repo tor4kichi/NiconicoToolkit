@@ -30,7 +30,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         public static async Task<AccountInfo> AccountLoadingAsync()
         {
 #if WINDOWS_UWP
-            var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/_TestAccount.json"));
+            var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/TestAccount.json"));
             using (var stream = (await file.OpenSequentialReadAsync()).AsStreamForRead())
             {
                 return await JsonSerializer.DeserializeAsync<AccountInfo>(stream);

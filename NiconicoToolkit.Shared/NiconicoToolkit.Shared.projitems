@@ -199,6 +199,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\NvapiVideoItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\PrivateReasonType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\VideoClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Video\VideoConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\VideoId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\VideoPermission.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\DmcWatchApiData.cs" />

@@ -4,7 +4,7 @@ namespace NiconicoToolkit.SnapshotSearch
 {
     public static class FilterValueHelper
     {
-		public static string ToStringFilterValue<T>(T value)
+		public static string ToStringFilterValue(object value)
         {
 			if (value is DateTimeOffset dateTimeOffset)
             {
@@ -13,7 +13,7 @@ namespace NiconicoToolkit.SnapshotSearch
             }
 			else
             {
-				return value.ToString();
+				return value?.ToString() ?? string.Empty;
             }
         }
     }

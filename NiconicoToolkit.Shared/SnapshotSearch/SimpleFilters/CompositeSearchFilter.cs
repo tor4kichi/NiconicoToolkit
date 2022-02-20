@@ -6,26 +6,23 @@ namespace NiconicoToolkit.SnapshotSearch.Filters
 {
     public class CompositeSearchFilter : ISimpleSearchFilter
 	{
-		List<ISimpleSearchFilter> _filters;
-
-		public IReadOnlyList<ISimpleSearchFilter> Filters { get; }
+		public List<ISimpleSearchFilter> Filters { get; }
 		public CompositeSearchFilter(params ISimpleSearchFilter[] filters)
         {
-			_filters = filters.ToList();
-			Filters = _filters.AsReadOnly();
+			Filters = filters.ToList();
 		}		
 
 		public CompositeSearchFilter AddCompareFilter<T>(SearchFieldType filterFieldType, T value, SimpleFilterComparison condition)
         {
 			Guard.IsTrue(filterFieldType.IsAcceptableTypeForFiled(value.GetType()), nameof(filterFieldType));
 
-			_filters.Add(new CompareSimpleSearchFilter<T>(filterFieldType, value, condition));
+			Filters.Add(new CompareSimpleSearchFilter<T>(filterFieldType, value, condition));
 			return this;
 		}
 
 		public IEnumerable<KeyValuePair<string, string>> GetFilterKeyValues(FilterGetKeyValuesContext context)
         {
-			return _filters.SelectMany(x => x.GetFilterKeyValues(context));
+			return Filters.SelectMany(x => x.GetFilterKeyValues(context));
         }
     }
 

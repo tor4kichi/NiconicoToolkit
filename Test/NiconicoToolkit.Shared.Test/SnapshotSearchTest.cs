@@ -74,8 +74,8 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 filter: new CompositionSearchFilter(
                     new[] 
                     {
-                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal),
-                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "アニメ", SearchFilterCompareCondition.Equal)
+                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SimpleFilterComparison.Equal),
+                        new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "アニメ", SimpleFilterComparison.Equal)
                     }
                     )
                 );
@@ -113,7 +113,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 new SearchSort(SearchFieldType.ViewCounter, SearchSortOrder.Desc),
                 "NiconicoToolkit",
                 fields: SearchFieldTypeExtensions.FieldTypes.ToArray(),
-                filter: new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SearchFilterCompareCondition.Equal)
+                filter: new CompareSimpleSearchFilter<string>(SearchFieldType.Genre, "ゲーム", SimpleFilterComparison.Equal)
                 );
 
 
@@ -150,7 +150,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 new SearchSort(SearchFieldType.ViewCounter, SearchSortOrder.Desc),
                 "NiconicoToolkit",
                 fields: SearchFieldTypeExtensions.FieldTypes.ToArray(),
-                filter: new AndJsonFilter(new IJsonSearchFilter[] { new EqaulJsonFilter<string>(SearchFieldType.Genre, "アニメ"), new RangeJsonFilter<TimeSpan>(SearchFieldType.LengthSeconds, 1200, null) })
+                filter: new AndJsonFilter(new IJsonSearchFilter[] { new EqualJsonFilter(SearchFieldType.Genre, "アニメ"), new RangeJsonFilter(SearchFieldType.LengthSeconds, 1200, null) })
                 );
 
 
