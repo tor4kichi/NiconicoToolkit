@@ -184,25 +184,33 @@ namespace NiconicoToolkit
         }
 #endif
 
-        internal Task<string> GetStringAsync(string path)
+        internal Task<string> GetStringAsync(string path, CancellationToken ct = default)
         {
-            return GetStringAsync(new Uri(path));
+            return GetStringAsync(new Uri(path), ct);
         }
 
-        internal async Task<string> GetStringAsync(Uri path)
+        internal async Task<string> GetStringAsync(Uri path, CancellationToken ct = default)
         {
-            return await HttpClient.GetStringAsync(path);
+#if WINDOWS_UWP
+            return await HttpClient.GetStringAsync(path).AsTask(ct);
+#else
+            return await HttpClient.GetStringAsync(path, ct);
+#endif
         }
 
-        internal Task<T> GetJsonAsAsync<T>(string path, JsonSerializerOptions options = null)
+        internal Task<T> GetJsonAsAsync<T>(string path, JsonSerializerOptions options = null, CancellationToken ct = default)
         {
-            return GetJsonAsAsync<T>(new Uri(path), options);
+            return GetJsonAsAsync<T>(new Uri(path), options, ct);
         }
 
-        internal async Task<T> GetJsonAsAsync<T>(Uri path, JsonSerializerOptions options = null)
+        internal async Task<T> GetJsonAsAsync<T>(Uri path, JsonSerializerOptions options = null, CancellationToken ct = default)
         {
-            using var res = await HttpClient.GetAsync(path);
-            return await res.Content.ReadAsAsync<T>(options);
+#if WINDOWS_UWP
+            using var res = await HttpClient.GetAsync(path).AsTask(ct);
+#else
+            using var res = await HttpClient.GetAsync(path, ct);
+#endif
+            return await res.Content.ReadAsAsync<T>(options, ct);
         }
 
 

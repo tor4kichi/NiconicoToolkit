@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NiconicoToolkit.SnapshotSearch
@@ -112,7 +113,8 @@ namespace NiconicoToolkit.SnapshotSearch
 			int? offset = null,
 			int? limit = null,
 			SearchFieldType[]? fields = null,
-			ISearchFilter filter = null
+			ISearchFilter filter = null,
+			CancellationToken cancellationToken = default
 			)
         {
 			if (offset < 0 || offset > SearchConstants.MaxSearchOffset)
@@ -161,7 +163,7 @@ namespace NiconicoToolkit.SnapshotSearch
 				.AppendQueryString(dict)
 				.ToString();
 
-			return await _context.GetJsonAsAsync<SnapshotResponse>(url, _defaultOptions);
+			return await _context.GetJsonAsAsync<SnapshotResponse>(url, _defaultOptions, cancellationToken);
 		}
 	}
 }
