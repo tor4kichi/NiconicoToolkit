@@ -217,7 +217,7 @@ namespace NiconicoToolkit.Live.WatchSession
                     catch (OperationCanceledException) { }
                 }
 
-                _ = RunMessageRecievingLoopAsync(ct);
+                _ = Task.Run(() => RunMessageRecievingLoopAsync(ct), ct);
             }
 
             if (!IsTimeshift)

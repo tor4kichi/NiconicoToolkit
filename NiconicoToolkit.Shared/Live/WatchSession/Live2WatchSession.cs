@@ -171,6 +171,8 @@ namespace NiconicoToolkit.Live.WatchSession
         CancellationTokenSource _connectionCts;
         public async void Open(CancellationToken ct)
         {
+            _connectionCts?.Cancel();
+            _connectionCts?.Dispose();
             _connectionCts = new CancellationTokenSource();
             using (var releaser = await _WebSocketLock.LockAsync())
             {
@@ -180,28 +182,37 @@ namespace NiconicoToolkit.Live.WatchSession
                 {
                     _ws.Options.SetRequestHeader(header.Item1, header.Item2);
                 }
-                
-                await _ws.ConnectAsync(new Uri(_webSocketUrl), ct);
 
-                while (_ws.State == WebSocketState.Connecting)
+
+                await Task.Run(async () => 
                 {
-                    await Task.Delay(1);
-                }
+                    await _ws.ConnectAsync(new Uri(_webSocketUrl), ct);
+
+                    while (_ws.State == WebSocketState.Connecting)
+                    {
+                        await Task.Delay(1);
+                    }
+                });
             }
 
-            using var linkCt = CancellationTokenSource.CreateLinkedTokenSource(ct, _connectionCts.Token);            
-            try
+            _ = Task.Run(() => WatchSessionCommandRecieveLoopAsync(ct), ct);
+
+            async Task WatchSessionCommandRecieveLoopAsync(CancellationToken ct)
             {
-                byte[] buffer = new byte[256 * 8];
-                while (await _ws.ReceiveAsync(buffer, linkCt.Token) is not null and var result)
+                using var linkCt = CancellationTokenSource.CreateLinkedTokenSource(ct, _connectionCts.Token);
+                try
                 {
-                    if (result.MessageType == WebSocketMessageType.Text)
+                    byte[] buffer = new byte[256 * 8];
+                    while (await _ws.ReceiveAsync(buffer, linkCt.Token) is not null and var result)
                     {
-                        _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
+                        if (result.MessageType == WebSocketMessageType.Text)
+                        {
+                            _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
+                        }
                     }
                 }
-            }
-            catch (OperationCanceledException) { }
+                catch (OperationCanceledException) { }
+            }            
         }
 
         public async Task CloseAsync()
@@ -433,7 +444,7 @@ namespace NiconicoToolkit.Live.WatchSession
         private async Task SendMessageAsync(WatchClientToServerMessageDataBase messageData)
         {
             var payload = new WatchClientToServerMessagePayload(messageData);
-            var json = JsonSerializer.Serialize(payload, _SocketJsonSerializerOptions);
+            var json = JsonSerializer.SerializeToUtf8Bytes(payload, _SocketJsonSerializerOptions);
             await SendMessageAsync(json);
         }
 
