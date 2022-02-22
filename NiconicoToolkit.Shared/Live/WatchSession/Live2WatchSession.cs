@@ -8,13 +8,12 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using NeoSmart.AsyncLock;
-using WebSocket4Net;
-using WebSocket = WebSocket4Net.WebSocket;
 using NiconicoToolkit.Live.WatchSession;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
 using NiconicoToolkit.Live.WatchSession.ToClientMessage;
+using System.Net.WebSockets;
 
 namespace NiconicoToolkit.Live.WatchSession
 {
@@ -25,6 +24,7 @@ namespace NiconicoToolkit.Live.WatchSession
     public delegate void LiveStreamRecieveRoomHandler(Live2CurrentRoomEventArgs e);
     public delegate void LiveStreamRecieveRoomsHandler(Live2RoomsEventArgs e);
     public delegate void LiveStreamRecieveStatisticsHandler(Live2StatisticsEventArgs e);
+    public delegate void LiveStreamReceiveTagUpdatedHandler(Live2TagUpdatedEventArgs e);
     public delegate void LiveStreamRecieveScheduleHandler(Live2ScheduleEventArgs e);
     public delegate void LiveStreamReceivedisconnectHandler(Live2DisconnectEventArgs e);
     public delegate void LiveStreamRecieveResconnectHandler(Live2ReconnectEventArgs e);
@@ -98,9 +98,16 @@ namespace NiconicoToolkit.Live.WatchSession
         public TimeSpan WaitTime { get; set; }
     }
 
+    public class Live2TagUpdatedEventArgs
+    {
+        public TagUpdated_TagItem[] TagItems { get; set; }
+
+        public bool OwnerLocked { get; set; }
+    }
+
     public sealed class Live2WatchSession : IDisposable
     {
-        private WebSocket _ws { get; set; }
+        private ClientWebSocket _ws { get; set; }
 
         AsyncLock _WebSocketLock = new AsyncLock();
 
@@ -115,32 +122,29 @@ namespace NiconicoToolkit.Live.WatchSession
         public event LiveStreamRecieveRoomHandler RecieveRoom;
         public event LiveStreamRecieveRoomsHandler RecieveRooms;
         public event LiveStreamRecieveStatisticsHandler RecieveStatistics;
+        public event LiveStreamReceiveTagUpdatedHandler RecieveTagUpdated;
         public event LiveStreamRecieveScheduleHandler RecieveSchedule;
         public event LiveStreamReceivedisconnectHandler ReceiveDisconnect;
         public event LiveStreamRecieveResconnectHandler RecieveReconnect;
         public event LiveStreamElapsedTimeUpdateEventHandler ElapsedTimeUpdated;
 
+
+
+        private readonly (string, string)[] _customHeaderPairs = new []
+        {
+            ("host", "a.live2.nicovideo.jp"),
+            ("Origin", "https://live.nicovideo.jp"),
+            ("upgrade", "websocket"),
+            ("pragma", "no-cache"),
+            ("cache-control", "no-cache"),
+            ("connection", "upgrade"),
+            ("User-Agent", "NiconicoLiveToolkit_UWP"),
+        };
+
         internal Live2WatchSession(string webSocketUrl, bool isTimeshift)
         {
             IsWatchWithTimeshift = isTimeshift;
-            _webSocketUrl = webSocketUrl;
-
-            Dictionary<string, string> customHeaderItems = new Dictionary<string, string> 
-            {
-                {"host", "a.live2.nicovideo.jp"},
-                {"upgrade", "websocket"},
-                {"pragma", "no-cache"},
-                {"cache-control", "no-cache"},
-                {"connection", "upgrade"},
-                
-            };
-
-            _ws = new WebSocket(_webSocketUrl, customHeaderItems: customHeaderItems.ToList(), origin: "https://live2.nicovideo.jp", userAgent: "NiconicoLiveToolkit_UWP");
-            _ws.MessageReceived += _ws_MessageReceived;
-            _ws.Opened += _ws_Opened;
-            _ws.Closed += _ws_Closed;
-            _ws.EnableAutoSendPing = false;
-            
+            _webSocketUrl = webSocketUrl;            
 
             _SocketJsonDeserializerOptions = new System.Text.Json.JsonSerializerOptions()
             {
@@ -164,19 +168,63 @@ namespace NiconicoToolkit.Live.WatchSession
 
         Timer WatchingHeartbaetTimer;
 
-        public async void Close()
+        CancellationTokenSource _connectionCts;
+        public async void Open(CancellationToken ct)
         {
+            _connectionCts = new CancellationTokenSource();
             using (var releaser = await _WebSocketLock.LockAsync())
             {
-                _ws.Close(0x8, "");
+                _ws = new ClientWebSocket();
+                _ws.Options.AddSubProtocol("msg.nicovideo.jp#json");
+                foreach (var header in _customHeaderPairs)
+                {
+                    _ws.Options.SetRequestHeader(header.Item1, header.Item2);
+                }
+                
+                await _ws.ConnectAsync(new Uri(_webSocketUrl), ct);
+
+                while (_ws.State == WebSocketState.Connecting)
+                {
+                    await Task.Delay(1);
+                }
+            }
+
+            using var linkCt = CancellationTokenSource.CreateLinkedTokenSource(ct, _connectionCts.Token);            
+            try
+            {
+                byte[] buffer = new byte[256 * 8];
+                while (await _ws.ReceiveAsync(buffer, linkCt.Token) is not null and var result)
+                {
+                    if (result.MessageType == WebSocketMessageType.Text)
+                    {
+                        _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
+                    }
+                }
+            }
+            catch (OperationCanceledException) { }
+        }
+
+        public async Task CloseAsync()
+        {
+            _connectionCts?.Cancel();
+            _connectionCts?.Dispose();
+            _connectionCts = null;
+
+            using (var releaser = await _WebSocketLock.LockAsync())
+            {
+                if (_ws.State == WebSocketState.Open)
+                {
+                    await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None);
+                }
+
                 WatchingHeartbaetTimer?.Dispose();
             }
         }
 
-        public void Dispose()
+        public async void Dispose()
         {
+            await CloseAsync();
             _ws.Dispose();
-            WatchingHeartbaetTimer?.Dispose();
         }
 
 
@@ -194,11 +242,15 @@ namespace NiconicoToolkit.Live.WatchSession
 
         #region Message Received
 
-        private void _ws_MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void _ws_MessageReceived(ReadOnlySpan<byte> message)
         {
-            Debug.WriteLine(e.Message);
+            Debug.WriteLine(UTF8Encoding.UTF8.GetString(message.ToArray()));
 
-            var data = JsonDeserializeHelper.Deserialize<WatchServerToClientMessage>(e.Message, _SocketJsonDeserializerOptions);
+#if WINDOWS_UWP
+            var data = JsonDeserializeHelper.Deserialize<WatchServerToClientMessage>(message, _SocketJsonDeserializerOptions);
+#else
+            var data = JsonDeserializeHelper.Deserialize<WatchServerToClientMessage>(message.ToArray(), _SocketJsonDeserializerOptions);
+#endif
             _ = data switch
             {
                 Error_WatchSessionToClientMessage error => ProcessErrorData(error),
@@ -215,9 +267,11 @@ namespace NiconicoToolkit.Live.WatchSession
                 Disconnect_WatchSessionToClientMessage disconnect => ProcessDisconnectData(disconnect),
                 Reconnect_WatchSessionToClientMessage reconnect => ProcessReconnectData(reconnect),
                 PostCommentResult_WatchSessionToClientMessage postCommentResult => ProcessPostCommentResultData(postCommentResult),
+                TagUpdated_WatchSessionToClientMessage tagUpdate => ProcessTagUpdated(tagUpdate),
                 _ => true
             };
         }
+
 
         private bool ProcessErrorData(Error_WatchSessionToClientMessage error)
         {
@@ -309,6 +363,12 @@ namespace NiconicoToolkit.Live.WatchSession
             return true;
         }
 
+        private bool ProcessTagUpdated(TagUpdated_WatchSessionToClientMessage tagUpdate)
+        {
+            RecieveTagUpdated?.Invoke(new Live2TagUpdatedEventArgs() { TagItems = tagUpdate.Tags.Items, OwnerLocked = tagUpdate.Tags.OwnerLocked });
+            return true;
+        }
+
         private bool ProcessScheduleData(Schedule_WatchSessionToClientMessage schedule)
         {
             RecieveSchedule?.Invoke(new Live2ScheduleEventArgs()
@@ -352,17 +412,21 @@ namespace NiconicoToolkit.Live.WatchSession
         }
 
 
-        #endregion
+#endregion
 
 
-        #region Send Message
-
+#region Send Message
         private async Task SendMessageAsync(string message)
         {
+            await SendMessageAsync(System.Text.Encoding.Default.GetBytes(message));
+        }
+
+        private async Task SendMessageAsync(byte[] message)
+        {            
             using (var releaser = await _WebSocketLock.LockAsync())
             {
-                _ws.Send(message);
-                Debug.WriteLine("[Live2WatchSession <Send Message>]" + message);
+                await _ws.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                Debug.WriteLine("[Live2WatchSession <Send Message>]" + UTF8Encoding.UTF8.GetString(message));
             }
         }
 
@@ -376,10 +440,10 @@ namespace NiconicoToolkit.Live.WatchSession
         public async Task StartWachingAsync(LiveQualityType requestQuality, bool isLowLatency, LiveQualityLimitType? limit = null, bool? chasePlay = false)
         {
             bool isOpened = false;
-            using (var releaser = await _WebSocketLock.LockAsync())
-            {
-                isOpened = await _ws.OpenAsync();
-            }
+            Open(CancellationToken.None);
+            isOpened = true;
+
+            using var _ = await _WebSocketLock.LockAsync();
 
             if (isOpened)
             {
@@ -409,11 +473,6 @@ namespace NiconicoToolkit.Live.WatchSession
                 //var startWatchingCommandText = $@"{{""type"":""startWatching"",""data"":{{""stream"":{{""quality"":""{requestQuality}"",""protocol"":""hls"",""latency"":""{(isLowLatency ? "low" : "high")}"",""chasePlay"":false}},""room"":{{""protocol"":""webSocket"",""commentable"":true}},""reconnect"":false}}}}";
                 //await SendMessageAsync(startWatchingCommandText);
             }
-        }
-
-        public Task<bool> CloseAsync()
-        {
-            return _ws.CloseAsync();
         }
 
         public async Task ChangeStreamAsync(LiveQualityType requestQuality, bool isLowLatency, LiveQualityLimitType? limit = null, bool? chasePlay = false)
@@ -488,6 +547,6 @@ namespace NiconicoToolkit.Live.WatchSession
             return await _GetPostkeyTaskCompletionSource.Task;
         }
 
-        #endregion
+#endregion
     }
 }

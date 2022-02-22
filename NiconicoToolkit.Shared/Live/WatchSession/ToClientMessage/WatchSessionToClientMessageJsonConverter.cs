@@ -45,7 +45,7 @@ namespace NiconicoToolkit.Live.WatchSession.ToClientMessage
                 "disconnect" => dataProps.ToObject<Disconnect_WatchSessionToClientMessage>(options),
                 "reconnect" => dataProps.ToObject<Reconnect_WatchSessionToClientMessage>(options),
                 "postCommentResult" => dataProps.ToObject<PostCommentResult_WatchSessionToClientMessage>(options),
-
+                "tagUpdated" => dataProps.ToObject<TagUpdated_WatchSessionToClientMessage>(options),
                 _ => throw new NotImplementedException(typeName),
             };
         }

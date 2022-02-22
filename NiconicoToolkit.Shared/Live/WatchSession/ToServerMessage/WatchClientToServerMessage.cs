@@ -86,6 +86,12 @@ namespace NiconicoToolkit.Live.WatchSession
         /// </summary>
         [JsonPropertyName("chasePlay")]
         public bool? ChasePlay { get; set; }
+
+        /// <summary>
+        /// 視聴ストリーム動画のプロトコル
+        /// </summary>
+        [JsonPropertyName("protocol")]       
+        public string Protocol { get; set; } = "hls";
     }
 
 

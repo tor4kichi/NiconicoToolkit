@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 using NiconicoToolkit.Live.WatchSession;
 using NiconicoToolkit.Live.WatchSession.ToClientMessage;
 using NiconicoToolkit.Live.WatchSession.Events;
+using System.Net.WebSockets;
 
 namespace NiconicoToolkit.Live.WatchSession
 {
     using AsyncLock = NeoSmart.AsyncLock.AsyncLock;
-    using WebSocket = WebSocket4Net.WebSocket;
 
     public static class NiwavidedNicoLiveMessageHelper
     {
@@ -52,7 +52,7 @@ namespace NiconicoToolkit.Live.WatchSession
 
         const uint FirstGetRecentMessageCount = 50;
 
-        private readonly WebSocket _ws;
+        private readonly ClientWebSocket _ws;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private readonly AsyncLock _CommentSessionLock = new AsyncLock();
 
@@ -82,25 +82,10 @@ namespace NiconicoToolkit.Live.WatchSession
             MessageServerUrl = messageServerUrl;
             ThreadId = threadId;
             UserId = userId;
-
-            _ws = new WebSocket(
-                messageServerUrl,
-                "msg.nicovideo.jp#json",
-                userAgent: userAgent,
-                customHeaderItems: new Dictionary<string, string>()
-                {
-                    { "Pragma", "not-cache" },
-                    { "Sec-WebSocket-Extensions", "permessage-deflate,client_max_window_bits" },
-                    
-                }.ToList()
-                );
-
-            _ws.MessageReceived += _ws_MessageReceived;
-            _ws.Opened += _ws_Opened;
-            _ws.Closed += _ws_Closed;
-            _ws.Error += _ws_Error;
-            _ws.EnableAutoSendPing = false;
-
+            _userAgent = userAgent;
+            _ws = new ClientWebSocket();
+            _ws.Options.AddSubProtocol("msg.nicovideo.jp#json");
+            _ws.Options.SetRequestHeader("User-Agent", _userAgent);
 
             _jsonSerializerOptions = new JsonSerializerOptions()
             {
@@ -113,28 +98,9 @@ namespace NiconicoToolkit.Live.WatchSession
             };
         }
 
-        private void _ws_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        private void _ws_MessageReceived(ReadOnlySpan<byte> messageBytes)
         {
-            Debug.WriteLine($"[CommentSession] oucur error. ");
-            Debug.WriteLine(e.Exception.ToString());
-        }
-
-        private void _ws_Opened(object sender, EventArgs e)
-        {
-            Debug.WriteLine($"[CommentSession] Opened.");
-        }
-
-        private void _ws_Closed(object sender, EventArgs e)
-        {
-            Debug.WriteLine($"[CommentSession] Closed.");
-        }
-
-        private void _ws_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
-        {
-            //Debug.WriteLine($"[CommentSession] Message Received.");
-            //Debug.WriteLine(e.Message);
-
-            var message = JsonSerializer.Deserialize<CommentSessionToClientMessage>(e.Message, _jsonSerializerOptions);
+            var message = JsonSerializer.Deserialize<CommentSessionToClientMessage>(messageBytes, _jsonSerializerOptions);
             bool _ = message switch
             {
                 Chat_CommentSessionToClientMessage chat => ProcessChatMessage(chat),
@@ -224,11 +190,34 @@ namespace NiconicoToolkit.Live.WatchSession
         }
 
 
-        public async Task OpenAsync()
+        public async Task OpenAsync(CancellationToken ct)
         {
             using (var releaser = await _CommentSessionLock.LockAsync())
             {
-                await _ws.OpenAsync();
+                await _ws.ConnectAsync(new Uri(MessageServerUrl), ct);
+
+                async Task RunMessageRecievingLoopAsync(CancellationToken ct)
+                {
+                    try
+                    {
+                        byte[] buffer = new byte[256 * 4];
+                        while (_ws.State == WebSocketState.Open)
+                        {
+                            var result = await _ws.ReceiveAsync(buffer, ct);
+                            if (result.MessageType == WebSocketMessageType.Text)
+                            {
+                                _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
+                            }
+                            else if (result.MessageType == WebSocketMessageType.Close)
+                            {
+                                CleanupConnection();
+                            }
+                        }
+                    }
+                    catch (OperationCanceledException) { }
+                }
+
+                _ = RunMessageRecievingLoopAsync(ct);
             }
 
             if (!IsTimeshift)
@@ -239,24 +228,32 @@ namespace NiconicoToolkit.Live.WatchSession
             {
                 await ResetConnectionForTimeshift(_startTime);
             }
-        }
+        }        
 
         public async void Close()
         {
             using (var releaser = await _CommentSessionLock.LockAsync())
-            {
-                StopHeartbeatTimer();
-                _ws.Close(0x8, "");
+            {                
+                await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
             }
         }
 
-
+        private void CleanupConnection()
+        {
+            StopHeartbeatTimer();
+        }
 
         private async Task SendMessageAsync(string message)
         {
+            await SendMessageAsync(System.Text.Encoding.Default.GetBytes(message));
+        }
+
+        private async Task SendMessageAsync(byte[] message)
+        {
             using (var releaser = await _CommentSessionLock.LockAsync())
             {
-                _ws.Send(message);
+                await _ws.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                Debug.WriteLine("[CommentSession <Send Message>]" + UTF8Encoding.UTF8.GetString(message));
             }
         }
 
@@ -302,6 +299,7 @@ namespace NiconicoToolkit.Live.WatchSession
 
 
         static readonly TimeSpan HEARTBEAT_INTERVAL = TimeSpan.FromMinutes(1);
+        private readonly string _userAgent;
         Timer HeartbeatTimer;
 
         private void StartHeartbeatTimer()

@@ -84,6 +84,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\CommentSessionToClientMessageJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\DisconnectReasonType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\ErrorMessageType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\TagUpdatedToClientMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\WatchServerToClientMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToClientMessage\WatchSessionToClientMessageJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Live\WatchSession\ToServerMessage\WatchClientToServerMessage.cs" />

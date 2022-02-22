@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NiconicoToolkit.Shared", "NiconicoToolkit.Shared\NiconicoToolkit.Shared.shproj", "{1E3A1D63-1808-4B92-9456-D3C0FB39042D}"
 EndProject
@@ -17,12 +17,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NiconicoToolkit.Shared.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.UWP.Test", "Test\NiconicoToolkit.UWP.Test\NiconicoToolkit.UWP.Test.csproj", "{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiconicoToolkit.WinUI3", "NiconicoToolkit.WinUI3\NiconicoToolkit.WinUI3.csproj", "{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{157b2fce-b2e7-4e30-958a-55aecd6fd6d7}*SharedItemsImports = 13
 		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{1ca46ebc-c163-472c-9f98-5d65d2bbbe8b}*SharedItemsImports = 4
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{1e3a1d63-1808-4b92-9456-d3c0fb39042d}*SharedItemsImports = 13
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{6f8d50b6-735f-49b3-99e2-1330fa3a8416}*SharedItemsImports = 5
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{7027fe60-2c91-4c28-a2fd-ec0dfc3d4b0c}*SharedItemsImports = 5
 		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{89a32377-05c1-4239-b943-051bd72114f2}*SharedItemsImports = 5
 		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{9ec6b1ba-1896-4516-b0f4-1c3701566d16}*SharedItemsImports = 4
 	EndGlobalSection
@@ -125,6 +128,26 @@ Global
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Release|x86.ActiveCfg = Release|x86
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Release|x86.Build.0 = Release|x86
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B}.Release|x86.Deploy.0 = Release|x86
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|x64.Build.0 = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Debug|x86.Build.0 = Debug|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|ARM.Build.0 = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|ARM64.Build.0 = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x64.ActiveCfg = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x64.Build.0 = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
