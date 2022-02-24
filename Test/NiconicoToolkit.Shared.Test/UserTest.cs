@@ -14,7 +14,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         [TestInitialize]
         public void Initialize()
         {
-            _context = new NiconicoContext("HohoemaTest");
+            _context = new NiconicoContext(AccountTestHelper.Site);
             _context.SetupDefaultRequestHeaders();
             _userClient = _context.User;
         }

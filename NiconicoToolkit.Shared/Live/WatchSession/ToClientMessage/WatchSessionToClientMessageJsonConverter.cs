@@ -35,7 +35,6 @@ namespace NiconicoToolkit.Live.WatchSession.ToClientMessage
                 "error" => dataProps.ToObject<Error_WatchSessionToClientMessage>(options),
                 "seat" => dataProps.ToObject<Seat_WatchSessionToClientMessage>(options),
                 "akashic" => dataProps.ToObject<Akashic_WatchSessionToClientMessage>(options),
-                "postkey" => dataProps.ToObject<Postkey_WatchSessionToClientMessage>(options),
                 "stream" => dataProps.ToObject<Stream_WatchSessionToClientMessage>(options),
                 "room" => dataProps.ToObject<Room_WatchSessionToClientMessage>(options),
                 "rooms" => dataProps.ToObject<Rooms_WatchSessionToClientMessage>(options),

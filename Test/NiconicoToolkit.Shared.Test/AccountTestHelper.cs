@@ -27,6 +27,8 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
     public static class AccountTestHelper 
     {
+        public const string Site = "https://github.com/tor4kichi/NiconicoToolkit";
+
         public static async Task<AccountInfo> AccountLoadingAsync()
         {
 #if WINDOWS_UWP
@@ -49,7 +51,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
         public static async Task<(NiconicoContext niconicoContext, NiconicoSessionStatus status, NiconicoAccountAuthority authority, uint userId)> CreateNiconicoContextAndLogInWithTestAccountAsync()
         {
-            NiconicoContext niconicoContext = new NiconicoContext("HohoemaTest");
+            NiconicoContext niconicoContext = new NiconicoContext(Site);
             niconicoContext.SetupDefaultRequestHeaders();
             var accountInfo = await AccountLoadingAsync();
             var res = await niconicoContext.Account.SignInAsync(new MailAndPasswordAuthToken(accountInfo.Mail, accountInfo.Password));

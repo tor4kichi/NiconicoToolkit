@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Live;
+using NiconicoToolkit.SearchWithPage.Live;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         [TestInitialize]
         public void Initialize()
         {
-            _context = new NiconicoContext("HohoemaTest");
+            _context = new NiconicoContext(AccountTestHelper.Site);
             _liveClient = _context.Live;
         }
 
@@ -49,5 +50,62 @@ namespace NiconicoToolkit.UWP.Test.Tests
             var res = await _liveClient.GetLiveWatchPageDataPropAsync(liveId);
         }
 
+
+        //[TestMethod]
+        public async Task ConnectLiveWatchSessionWithSearchResultAsync()
+        {
+            var query = LiveSearchOptionsQuery.Create("ゲーム", LiveStatus.Onair);
+            var searchResult = await _context.SearchWithPage.Live.GetLiveSearchPageScrapingResultAsync(query, CancellationToken.None);
+            var watchPageRes = await _liveClient.GetLiveWatchPageDataPropAsync(searchResult.Data.OnAirItems[0].LiveId);
+            using (var session = LiveClient.CreateWatchSession(watchPageRes, _context.UserAgent))
+            {
+                var result = await session.StartWachingAsync(Live.WatchSession.LiveQualityType.Abr, isLowLatency: false);
+
+                Assert.IsTrue(result);
+            }
+        }
+
+
+        [TestMethod]
+        public async Task ConnectLiveCommentSessionWithSearchResultAsync()
+        {
+            var query = LiveSearchOptionsQuery.Create("ゲーム", LiveStatus.Onair);
+            var searchResult = await _context.SearchWithPage.Live.GetLiveSearchPageScrapingResultAsync(query, CancellationToken.None);
+            var watchPageRes = await _liveClient.GetLiveWatchPageDataPropAsync(searchResult.Data.OnAirItems[0].LiveId);
+            using (var session = LiveClient.CreateWatchSession(watchPageRes, _context.UserAgent))
+            {
+                TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+                async void Session_RecieveRoom(Live.WatchSession.Live2CurrentRoomEventArgs e)
+                {
+                    var (_, _, userId) = await _context.Account.GetCurrentSessionAsync();
+                    var commentsession = e.CreateCommentClientForLiveStreaming(_context.UserAgent, userId.ToString());
+                    commentsession.Connected += (s, commentArgs) =>
+                    {
+                        tcs.SetResult(true);
+                    };
+                    try
+                    {
+                        await commentsession.OpenAsync(CancellationToken.None);
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.SetException(ex);
+                    }
+                }
+                session.RecieveRoom += Session_RecieveRoom;
+
+                await session.StartWachingAsync(Live.WatchSession.LiveQualityType.Abr, isLowLatency: false);
+
+                var end = await Task.WhenAny(
+                    tcs.Task,
+                    Task.Delay(5000)
+                    );
+
+                var result = await tcs.Task;
+                Assert.IsTrue(result);
+            }
+        }
+
+        
     }
 }

@@ -37,10 +37,14 @@ namespace NiconicoToolkit
 {
     public sealed partial class NiconicoContext 
     {
+        public string RawUserAgent { get; }
+        public string UserAgent { get; }
         public NiconicoContext(string yourSiteUrl)
             : this(new HttpClient())
-        {
-            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd($"{nameof(NiconicoToolkit)}/1.0 (+{yourSiteUrl})");
+        {            
+            RawUserAgent = yourSiteUrl;
+            UserAgent = $"{nameof(NiconicoToolkit)}/1.0 (+{yourSiteUrl})";
+            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
         }
 
         internal static readonly JsonSerializerOptions DefaultOptions = new JsonSerializerOptions()

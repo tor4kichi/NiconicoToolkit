@@ -44,19 +44,6 @@ namespace NiconicoToolkit.Live.WatchSession.ToClientMessage
         public string LogServerUrl { get; set; }
     }
 
-    /// <summary>
-    /// ポストキー (コメントの投稿に必要なトークン) を通知するメッセージです。
-    /// </summary>
-    [Obsolete("※ 部屋統合後は取得できません")]
-    internal sealed class Postkey_WatchSessionToClientMessage : WatchServerToClientMessage
-    {
-        [JsonPropertyName("value")]
-        public string Value { get; set; }
-
-        [JsonPropertyName("expireAt")]
-        public DateTime ExpireAt { get; set; }
-    }
-
 
     internal sealed class Stream_WatchSessionToClientMessage : WatchServerToClientMessage
     {

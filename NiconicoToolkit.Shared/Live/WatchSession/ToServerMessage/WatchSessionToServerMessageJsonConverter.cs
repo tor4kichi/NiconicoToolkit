@@ -30,9 +30,6 @@ namespace NiconicoToolkit.Live.WatchSession
                 case GetAkashic_ToServerMessageData getAkashic:
                     JsonSerializer.Serialize(writer, getAkashic, options);
                     break;
-                case GetPostkey_ToServerMessageData getPostkey:
-                    JsonSerializer.Serialize(writer, getPostkey, options);
-                    break;
                 case ChangeStream_ToServerMessageData changeStream:
                     JsonSerializer.Serialize(writer, changeStream, options);
                     break;

@@ -91,6 +91,14 @@ namespace NiconicoToolkit.Account
             return __IsSignedInAsync_Internal(res);
         }
 
+        public async Task<(NiconicoSessionStatus status, NiconicoAccountAuthority authority, UserId userId)> GetCurrentSessionAsync()
+        {
+            using var res = await _context.GetAsync(LoginPageUrl);
+            var (authority, userId) = __GetAccountAuthority_Internal(res);
+            var status = __IsSignedInAsync_Internal(res);
+            return (status, authority, userId);
+        }
+
         public async Task<(NiconicoSessionStatus status, NiconicoAccountAuthority authority, UserId userId)> SignInAsync(MailAndPasswordAuthToken authToken, CancellationToken ct = default)
         {
             var dict = new Dictionary<string, string>()

@@ -128,15 +128,6 @@ namespace NiconicoToolkit.Live.WatchSession
     }
 
     /// <summary>
-    /// ポストキー (コメントの投稿に必要なトークン) を取得するためのメッセージです。<br />
-    /// ※ 部屋統合後は使えなくなります
-    /// </summary>
-    internal sealed class GetPostkey_ToServerMessageData : WatchClientToServerMessageDataBase
-    {
-        public GetPostkey_ToServerMessageData() : base("getPostkey") { }
-    }
-
-    /// <summary>
     /// 視聴ストリームの送信をサーバーに求めるメッセージです。 <br />
     /// 有効な視聴セッションが既に存在する場合には作成しなおして返します。
     /// </summary>
