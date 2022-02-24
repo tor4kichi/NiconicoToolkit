@@ -402,8 +402,6 @@ namespace NiconicoToolkit.Follow
                     headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
                 }, HttpCompletionOption.ResponseHeadersRead);
 
-                Debug.WriteLine(postResult);
-
                 return postResult.IsSuccessStatusCode ? ContentManageResult.Success : ContentManageResult.Failed;
             }
 

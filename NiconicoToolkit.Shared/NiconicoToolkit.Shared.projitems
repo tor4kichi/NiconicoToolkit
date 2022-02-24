@@ -225,7 +225,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchPageResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Live\WatchPageProp\DataPropsSource.Json" />
-    <Content Include="$(MSBuildThisFileDirectory)Properties\NiconicoLiveToolkit.UWP.rd.xml" />
+    <None Include="$(MSBuildThisFileDirectory)Live\WatchPageProp\DataPropsSource.Json" />
   </ItemGroup>
 </Project>

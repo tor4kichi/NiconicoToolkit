@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>NiconicoToolkit</id>
+    <version>$version$</version>
+    <authors>tor4kichi</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <projectUrl>https://github.com/tor4kichi/NiconicoToolkit</projectUrl>
+    <description>
+      ニコニコ動画/生放送の.Net向けサードパーティライブラリです。
+
+      - Account (Login with mail/password)
+      - Video (Play, Comment)
+      - Activity (Video History)
+      - Channels (Videos)
+      - Follow (Tag, User, Mylist, Channel, Community)
+      - Likes (Video)
+      - Live (Play, Comment, TimeShift)
+      - Mylist (List videos, Edit MylistGroup)
+      - NicoRepo
+      - Ranking (Video)
+      - Series (List videos)
+      - User
+      - SnapshotSearchV2 (Video)
+      - Search (Video/Mylist/Live)
+    </description>
+    <releaseNotes></releaseNotes>
+    <copyright>tor4kichi</copyright>
+    <tags>Niconico UWP WinUI3 Net5</tags>
+    <dependencies >
+      <group targetFramework="uap10.0.19041">
+        <dependency id="AngleSharp" version="0.16.0" />
+        <dependency id="Macross.Json.Extensions" version="2.0.0" />
+        <dependency id="Microsoft.Toolkit.Diagnostics" version="7.0.2" />
+        <dependency id="NeoSmart.AsyncLock" version="3.1.0" />
+        <dependency id="System.ServiceModel.Syndication" version="6.0.0" />
+        <dependency id="System.Text.Json" version="5.0.2" />
+        <dependency id="U8XmlParser" version="1.4.0" />
+      </group>
+      <group targetFramework="net50">
+        <dependency id="AngleSharp" version="0.16.0" />
+        <dependency id="Macross.Json.Extensions" version="2.0.0" />
+        <dependency id="Microsoft.Toolkit.Diagnostics" version="7.0.2" />
+        <dependency id="NeoSmart.AsyncLock" version="3.1.0" />
+        <dependency id="System.ServiceModel.Syndication" version="6.0.0" />
+        <dependency id="System.Text.Json" version="5.0.2" />
+        <dependency id="U8XmlParser" version="1.4.0" />
+      </group>
+      <group targetFramework="net6.0-windows10.0.19041">
+        <dependency id="AngleSharp" version="0.16.0" />
+        <dependency id="Macross.Json.Extensions" version="2.0.0" />
+        <dependency id="Microsoft.Toolkit.Diagnostics" version="7.0.2" />
+        <dependency id="NeoSmart.AsyncLock" version="3.1.0" />
+        <dependency id="System.ServiceModel.Syndication" version="6.0.0" />
+        <dependency id="System.Text.Json" version="5.0.2" />
+        <dependency id="U8XmlParser" version="1.4.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm\lib\uap10.0.19041"/>
+
+    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm64\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm64\lib\uap10.0.19041"/>
+
+    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x64\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x64\lib\uap10.0.19041"/>
+
+    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x86\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x86\lib\uap10.0.19041"/>
+
+    <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.dll" target="ref\uap10.0" />
+    <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.pri" target="ref\uap10.0" />
+
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.dll" target="lib\net50"/>
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.pdb" target="lib\net50"/>
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.xml" target="lib\net50"/>
+
+    <file src="..\NiconicoToolkit.WinUI3\bin\Release\net6.0-windows10.0.19041.0\NiconicoToolkit.WinUI3.dll" target="lib\net6.0-windows10.0.19041"/>
+    <file src="..\NiconicoToolkit.WinUI3\bin\Release\net6.0-windows10.0.19041.0\NiconicoToolkit.WinUI3.pri" target="lib\net6.0-windows10.0.19041"/>
+    <file src="..\NiconicoToolkit.WinUI3\bin\Release\net6.0-windows10.0.19041.0\NiconicoToolkit.WinUI3.xml" target="lib\net6.0-windows10.0.19041"/>
+
+  </files>
+</package>

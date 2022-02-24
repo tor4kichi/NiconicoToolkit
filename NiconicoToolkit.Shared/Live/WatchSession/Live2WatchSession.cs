@@ -255,8 +255,6 @@ namespace NiconicoToolkit.Live.WatchSession
 
         private void _ws_MessageReceived(ReadOnlySpan<byte> message)
         {
-            Debug.WriteLine(UTF8Encoding.UTF8.GetString(message.ToArray()));
-
 #if WINDOWS_UWP
             var data = JsonDeserializeHelper.Deserialize<WatchServerToClientMessage>(message, _SocketJsonDeserializerOptions);
 #else
@@ -437,7 +435,6 @@ namespace NiconicoToolkit.Live.WatchSession
             using (var releaser = await _WebSocketLock.LockAsync())
             {
                 await _ws.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
-                Debug.WriteLine("[Live2WatchSession <Send Message>]" + UTF8Encoding.UTF8.GetString(message));
             }
         }
 

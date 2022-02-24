@@ -253,7 +253,6 @@ namespace NiconicoToolkit.Live.WatchSession
             using (var releaser = await _CommentSessionLock.LockAsync())
             {
                 await _ws.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
-                Debug.WriteLine("[CommentSession <Send Message>]" + UTF8Encoding.UTF8.GetString(message));
             }
         }
 

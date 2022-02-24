@@ -5,6 +5,7 @@
     <AssemblyName>NiconicoToolkit.Net5</AssemblyName>
     <LangVersion>preview</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="..\NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems" Label="Shared" />

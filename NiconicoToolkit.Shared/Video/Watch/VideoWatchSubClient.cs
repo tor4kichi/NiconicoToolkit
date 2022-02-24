@@ -328,10 +328,6 @@ namespace NiconicoToolkit.Video.Watch
                 }
                 , HttpCompletionOption.ResponseHeadersRead
                 );
-            if (!result.IsSuccessStatusCode)
-            {
-                System.Diagnostics.Debug.WriteLine(result.ToString());
-            }
         }
 
 
@@ -360,11 +356,6 @@ namespace NiconicoToolkit.Video.Watch
                 }
                 , HttpCompletionOption.ResponseHeadersRead
                 );
-
-            if (!result.IsSuccessStatusCode)
-            {
-                System.Diagnostics.Debug.WriteLine(result.ToString());
-            }
         }
 
         public async Task DmcSessionExitHeartbeatAsync(
@@ -392,11 +383,6 @@ namespace NiconicoToolkit.Video.Watch
                }
                , HttpCompletionOption.ResponseHeadersRead
                );
-
-            if (!result.IsSuccessStatusCode)
-            {
-                System.Diagnostics.Debug.WriteLine(result.ToString());
-            }
         }
 
 
@@ -416,10 +402,6 @@ namespace NiconicoToolkit.Video.Watch
             }
             , HttpCompletionOption.ResponseHeadersRead
             );
-            if (!result.IsSuccessStatusCode)
-            {
-                System.Diagnostics.Debug.WriteLine(result.ToString());
-            }
         }
 
 #region nvapi Watch
