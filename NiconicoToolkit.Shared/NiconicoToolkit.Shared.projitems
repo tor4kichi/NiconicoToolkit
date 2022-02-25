@@ -172,6 +172,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearch\VideoSnapshotSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\ChannelIdJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\CommunityIdJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\DateTimeOffsetConverterUsingDateTimeParse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\JsonSnakeCaseNamingPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LiveIdJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LongToStringConverter.cs" />
