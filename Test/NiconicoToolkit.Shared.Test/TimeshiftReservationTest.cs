@@ -43,17 +43,13 @@ namespace NiconicoToolkit.UWP.Test.Tests
         {
             var res = await _context.Timeshift.GetTimeshiftReservationsAsync();
 
-            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.User);
+            Assert.IsNotNull(res.Reservations);
 
-            Assert.IsNotNull(res.Data);
-            Assert.IsNotNull(res.Data.ReservationToken);
-            Assert.IsNotNull(res.Data.Items);
-
-            foreach (var item in res.Data.Items.Take(3))
+            foreach (var item in res.Reservations.Items.Take(3))
             {
-                Assert.IsNotNull(item.Id, "item.Id is null");
-                Assert.IsNotNull(item.Title, "item.Title is null");
-                Assert.IsNotNull(item.StatusText, "item.StatusText is null");
+                Assert.IsNotNull(item.ProgramId, "item.Id is null");
+                Assert.IsNotNull(item.Program.Title, "item.Title is null");
             }
         }
     }

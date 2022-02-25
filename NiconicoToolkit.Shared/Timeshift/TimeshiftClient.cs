@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using System.Text.RegularExpressions;
 using U8Xml;
+using AngleSharp.Html.Dom;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -25,11 +26,22 @@ namespace NiconicoToolkit.Live.Timeshift
     {
         private readonly NiconicoContext _context;
         private readonly JsonSerializerOptions _defaultOptions;
+        private readonly JsonSerializerOptions _timeshiftReservationOptions;
 
         internal TimeshiftClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
             _defaultOptions = defaultOptions;
+
+
+            _timeshiftReservationOptions = new JsonSerializerOptions(defaultOptions)
+            {
+                Converters = 
+                {
+                    new JsonStringEnumMemberConverter(new JsonSnakeCaseNamingPolicy(), false),
+                    new DateTimeOffsetConverterUsingDateTimeParse()
+                }
+            };
         }
 
 
@@ -37,7 +49,7 @@ namespace NiconicoToolkit.Live.Timeshift
         {
             public const string TimeshiftReservationApiUrl = $"{NiconicoUrls.NicoLivePageUrl}api/timeshift.reservations";
 
-            public const string MyTimeshiftListHtmlFragmentApiUrl = $"{NiconicoUrls.NicoLivePageUrl}my_timeshift_list";
+            public const string MyTimeshiftReservationsEmbedPageUrl = $"{NiconicoUrls.NicoLivePageUrl}embed/timeshift-reservations";
 
             public const string MyTimeshiftPageUrl = $"{NiconicoUrls.NicoLivePageUrl}my"; //.php";
 
@@ -139,7 +151,7 @@ namespace NiconicoToolkit.Live.Timeshift
         {
             try
             {
-                using var res = await _context.GetAsync(Urls.MyTimeshiftListHtmlFragmentApiUrl);
+                using var res = await _context.GetAsync(Urls.MyTimeshiftReservationsEmbedPageUrl);
 
                 return await res.Content.ReadHtmlDocumentActionAsync(document =>
                 {
@@ -186,51 +198,16 @@ namespace NiconicoToolkit.Live.Timeshift
         }
 
 
-        public async Task<TimeshiftReservationsResponse> GetTimeshiftReservationsAsync()
+        public async Task<TimeshiftReservationsResponse> GetTimeshiftReservationsAsync(System.Threading.CancellationToken ct = default)
         {
-            using var res = await _context.GetAsync(Urls.MyTimeshiftListHtmlFragmentApiUrl);
-            if (!res.IsSuccessStatusCode)
+            using var res = await _context.GetAsync(Urls.MyTimeshiftReservationsEmbedPageUrl, ct: ct);
+            return await res.Content.ReadHtmlDocumentActionAsync((doc) => 
             {
-                return ResponseWithMeta.CreateFromStatusCode<TimeshiftReservationsResponse>(res.StatusCode);
-            }
-
-            return await res.Content.ReadHtmlDocumentActionAsync(document =>
-            {
-                var tokenNode = document.QuerySelector("input#confirm");
-                var token = new ReservationToken(tokenNode.GetAttribute("value"));
-
-                var itemNodes = document.QuerySelectorAll("#liveItemsWrap > form > div > div.column");
-
-                static TimeshiftReservation HtmlElementToReservationItem(IElement itemNode)
-                {
-                    var nameNode = itemNode.QuerySelector("div.name > a");
-                    var liveId = nameNode.GetAttribute("href").Split('/').Last();
-                    var statusNode = itemNode.QuerySelector("div.status > span");
-
-                    return new TimeshiftReservation()
-                    {
-                        Title = nameNode.TextContent,
-                        Id = liveId,
-                        Status = statusNode.ClassName switch
-                        {
-                            "timeshift_watch" => TimeshiftStatus.TimeshiftWatch,
-                            "timeshift_reservation" => TimeshiftStatus.TimeshiftReservation,
-                            "timeshift_disable" => TimeshiftStatus.TimeshiftDisable,
-                            _ => TimeshiftStatus.Unknown,
-                        },
-                        StatusText = statusNode.TextContent,
-                    };
-                }
-
-                return new TimeshiftReservationsResponse()
-                {
-                    Meta = new Meta() { Status = (long)res.StatusCode },
-                    Data = new TimeshiftReservationsData()
-                    {
-                        ReservationToken = token,
-                        Items = itemNodes.Select(HtmlElementToReservationItem).ToList()
-                    }
-                };
+                var embededdData = doc.DocumentElement
+                    .FindChild<IHtmlBodyElement>()
+                    .Children.First(x => x.GetAttribute("id") == "embedded-data")
+                    .GetAttribute("data-props");
+                return JsonSerializer.Deserialize<TimeshiftReservationsResponse>(embededdData, _timeshiftReservationOptions);
             });
         }
 
