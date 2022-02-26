@@ -26,7 +26,8 @@ namespace NiconicoToolkit.NicoRepo
             public const string NicorepoTimelineApiUrl = $"{NiconicoUrls.PublicApiV1Url}timelines/nicorepo/last-1-month/my/pc/entries.json";
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<NicoRepoEntriesResponse> GetLoginUserNicoRepoEntriesAsync(NicoRepoType type, NicoRepoDisplayTarget target, string untilId = null)
         {
             NameValueCollection dict = new();

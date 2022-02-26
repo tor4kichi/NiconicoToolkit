@@ -34,6 +34,8 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
             public const string WatchHitoryApi = $"{NiconicoUrls.NvApiV1Url}users/me/watch/history";
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<VideoWatchHistory> GetWatchHistoryAsync(int page, int pageSize)
         {
             var url = new StringBuilder(Urls.WatchHitoryApi)
@@ -47,7 +49,8 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
             return _context.GetJsonAsAsync<VideoWatchHistory>(url, _options);
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<VideoWatchHistoryDeleteResult> DeleteWatchHistoriesAsync(VideoId target)
         {
             var url = new StringBuilder(Urls.WatchHitoryApi)
@@ -60,6 +63,8 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
             return _context.SendJsonAsAsync<VideoWatchHistoryDeleteResult>(HttpMethod.Delete, url, _options);
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<VideoWatchHistoryDeleteResult> DeleteWatchHistoriesAsync(IEnumerable<VideoId> targets)
         {
             var url = new StringBuilder(Urls.WatchHitoryApi)
@@ -73,6 +78,8 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
         }
 
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<VideoWatchHistoryDeleteResult> DeleteAllWatchHistoriesAsync()
         {
             var url = new StringBuilder(Urls.WatchHitoryApi)

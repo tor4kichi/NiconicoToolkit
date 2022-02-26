@@ -34,16 +34,22 @@ namespace NiconicoToolkit.Likes
             
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<LikeActionResponse> DoLikeVideoAsync(string videoId)
         {
             return await _context.SendJsonAsAsync<LikeActionResponse>(httpMethod: HttpMethod.Post, Urls.NvApiV1LikeVideoItemsApiUrl + videoId, httpContent: null, options: _options);
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<LikeActionResponse> UnDoLikeVideoAsync(string videoId)
         {
             return await _context.SendJsonAsAsync<LikeActionResponse>(httpMethod: HttpMethod.Delete, Urls.NvApiV1LikeVideoItemsApiUrl + videoId, httpContent: null, options: _options);
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<LikesListResponse> GetLikesAsync(int page, int pageSize)
         {
             return await _context.GetJsonAsAsync<LikesListResponse>($"{Urls.NvApiV1LikeApiUrl}?pageSize={pageSize}&page={page + 1}", options: _options);

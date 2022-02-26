@@ -72,7 +72,8 @@ namespace NiconicoToolkit.Follow
                 _options = options;
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<FollowTagsResponse> GetFollowTagsAsync()
             {
                 var uri = $"https://nvapi.nicovideo.jp/v1/users/me/following/tags";
@@ -81,12 +82,15 @@ namespace NiconicoToolkit.Follow
             }
 
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> AddFollowTagAsync(string tag)
             {
                 return _followClient.AddFollowInternalAsync($"{Urls.NvapiV1FollowingApiUrl}tags?tag={tag}");
             }
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> RemoveFollowTagAsync(string tag)
             {
                 return _followClient.RemoveFollowInternalAsync($"{Urls.NvapiV1FollowingApiUrl}tags?tag={tag}");
@@ -116,6 +120,8 @@ namespace NiconicoToolkit.Follow
             }
 
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<FollowUsersResponse> GetFollowUsersAsync(int pageSize, FollowUsersResponse lastUserResponse = null)
             {
                 var uri = $"{Urls.NvapiV1FollowingApiUrl}users?pageSize={pageSize}";
@@ -128,17 +134,23 @@ namespace NiconicoToolkit.Follow
                 return await _context.GetJsonAsAsync<FollowUsersResponse>(uri, _options);
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> AddFollowUserAsync(UserId userId)
             {
                 return _followClient.AddFollowInternalAsync($"{Urls.PublicV1FollowingApiUrl}niconico-users/{userId}.json");
             }
 
+
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> RemoveFollowUserAsync(UserId userId)
             {
                 return _followClient.RemoveFollowInternalAsync($"{Urls.PublicV1FollowingApiUrl}niconico-users/{userId}.json");
             }
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<bool> IsFollowingUserAsync(UserId userId)
             {
                 return _followClient.GetFollowedInternalAsync($"https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
@@ -158,7 +170,8 @@ namespace NiconicoToolkit.Follow
                 _options = options;
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<FollowMylistResponse> GetFollowMylistsAsync(int sampleItemCount = 3)
             {
                 var uri = $"{Urls.NvapiV1FollowingApiUrl}mylists?sampleItemCount={sampleItemCount}";
@@ -166,15 +179,15 @@ namespace NiconicoToolkit.Follow
                 return await _context.GetJsonAsAsync<FollowMylistResponse>(uri, _options);
             }
 
-
-
-
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> AddFollowMylistAsync(MylistId mylistId)
             {
                 return _followClient.AddFollowInternalAsync($"{Urls.NvapiV1FollowingApiUrl}mylists/{mylistId}");
             }
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<ContentManageResult> RemoveFollowMylistAsync(MylistId mylistId)
             {
                 return _followClient.RemoveFollowInternalAsync($"{Urls.NvapiV1FollowingApiUrl}mylists/{mylistId}");
@@ -203,6 +216,8 @@ namespace NiconicoToolkit.Follow
             }
 
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<FollowChannelResponse> GetFollowChannelAsync(int offset = 0, int limit = 25)
             {
                 var uri = $"{Urls.PublicV1FollowingApiUrl}channels.json?limit={limit}&offset={offset}";
@@ -210,9 +225,8 @@ namespace NiconicoToolkit.Follow
                 return await _context.GetJsonAsAsync<FollowChannelResponse>(uri, _options);
             }
 
-
-
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<ChannelAuthorityResponse> GetChannelAuthorityAsync(ChannelId channelNumberId)
             {
                 return await _context.GetJsonAsAsync<ChannelAuthorityResponse>(
@@ -245,13 +259,16 @@ namespace NiconicoToolkit.Follow
                 });
             }
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<ChannelFollowResult> AddFollowChannelAsync(ChannelId channelId)
             {
                 var apiInfo = await GetFollowChannelApiInfo(channelId);
                 return await _context.GetJsonAsAsync<ChannelFollowResult>($"{apiInfo.AddApi}?{apiInfo.Params}", _options);
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<ChannelFollowResult> DeleteFollowChannelAsync(ChannelId channelId)
             {
                 var apiInfo = await GetFollowChannelApiInfo(channelId);
@@ -274,7 +291,8 @@ namespace NiconicoToolkit.Follow
                 _options = options;
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<FollowCommunityResponse> GetFollowCommunityAsync(int page = 0, int limit = 25)
             {
                 var uri = $"{Urls.PublicV1FollowingApiUrl}communities.json?limit={limit}&page={page}";
@@ -282,7 +300,8 @@ namespace NiconicoToolkit.Follow
                 return await _context.GetJsonAsAsync<FollowCommunityResponse>(uri, _options);
             }
 
-
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public Task<UserOwnedCommunityResponse> GetUserOwnedCommunitiesAsync(UserId userId)
             {
                 return _context.GetJsonAsAsync<UserOwnedCommunityResponse>(
@@ -290,6 +309,8 @@ namespace NiconicoToolkit.Follow
                     );
             }
 
+            /// <remarks>[Require Login]</remarks>
+            [RequireLogin]
             public async Task<ContentManageResult> AddFollowCommunityAsync(CommunityId communityId)
             {
                 var nonPrefixCommunityId = communityId.ToStringWithoutPrefix();
@@ -378,8 +399,9 @@ namespace NiconicoToolkit.Follow
             /// 
             /// </summary>
             /// <param name="communityId"></param>
-            /// <remarks>コミュニティオーナーがフォロー解除を行うとコミュニティ解散という重大な操作になるため注意</remarks>
+            /// <remarks>[Require Login] コミュニティオーナーがフォロー解除を行うとコミュニティ解散という重大な操作になるため注意</remarks>
             /// <returns></returns>
+            [RequireLogin]
             public async Task<ContentManageResult> RemoveFollowCommunityAsync(CommunityId communityId)
             {
                 var url = $"{NiconicoUrls.CommunityPageUrl}leave/{communityId}";

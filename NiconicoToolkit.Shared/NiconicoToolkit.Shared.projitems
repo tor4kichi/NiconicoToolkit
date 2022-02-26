@@ -127,6 +127,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\RecommendType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\VideoRecommendResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReponseMeta.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequireLoginAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rss\Video\RssVideoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Mylist\MylistSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\SearchWithCeApiClient.cs" />

@@ -50,13 +50,16 @@ namespace NiconicoToolkit.Mylist.LoginUser
             public const string NvApiV1CopyMylistItemsApiUrl = $"{NvApiV1LoginUserApiUrl}copy-mylist-items";
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<LoginUserMylistsResponse> GetMylistGroupsAsync(int sampleItemCount = 0)
         {
             return _context.GetJsonAsAsync<LoginUserMylistsResponse>($"{Urls.NvApiV1MylistApiUrl}?sampleItemCount={sampleItemCount}", _defaultOptions);
         }
 
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<CreateMylistResponse> CreateMylistAsync(string name, string description, bool isPublic, MylistSortKey sortKey, MylistSortOrder sortOrder)
         {
             return await _context.SendJsonAsAsync<CreateMylistResponse>(HttpMethod.Post, Urls.NvApiV1MylistApiUrl, new Dictionary<string, string>()
@@ -69,6 +72,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             });
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<bool> UpdateMylistAsync(string mylistId, string name, string description, bool isPublic, MylistSortKey sortKey, MylistSortOrder sortOrder)
         {
             var dict = new Dictionary<string, string>()
@@ -88,13 +93,16 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.IsSuccessStatusCode;
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<bool> RemoveMylistAsync(string mylistId)
         {
             using var res = await _context.SendAsync(HttpMethod.Delete, $"{Urls.NvApiV1MylistApiUrl}/{mylistId}", completionOption: HttpCompletionOption.ResponseHeadersRead);
             return res.IsSuccessStatusCode;
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ChangeMylistGroupsOrderResponse> ChangeMylistGroupsOrderAsync<T>(IEnumerable<T> orderedMylistIds)
         {
             return await _context.SendJsonAsAsync<ChangeMylistGroupsOrderResponse>(HttpMethod.Put, Urls.NvApiV1MylistOrderApiUrl, new Dictionary<string, string>()
@@ -106,8 +114,10 @@ namespace NiconicoToolkit.Mylist.LoginUser
 
 
 
-#region WatchAfter
+        #region WatchAfter
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<WatchAfterItemsResponse> GetWatchAfterItemsAsync(int? page = null, int? pageSize = null, MylistSortKey? sortKey = null, MylistSortOrder? sortOrder = null)
         {
             var dict = new NameValueCollection();
@@ -122,6 +132,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return _context.GetJsonAsAsync<WatchAfterItemsResponse>(uri, _defaultOptions);
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> AddWatchAfterMylistItemAsync(string watchId, string memo)
         {
             using var res = await _context.PostAsync(Urls.NvApiV1WatchAfterApiUrl, new Dictionary<string, string>
@@ -133,6 +145,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> UpdateWatchAfterMylistItemMemoAsync(string itemId, string memo)
         {
             Dictionary<string, string> dict = new()
@@ -149,7 +163,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> RemoveWatchAfterItemsAsync(IEnumerable<long> itemIds)
         {
             NameValueCollection dict = new NameValueCollection()
@@ -165,22 +180,26 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
             return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
             return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
-#endregion
+        #endregion
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<GetMylistItemsResponse> GetMylistItemsAsync(string mylistId, int? page = null, int? pageSize = null, MylistSortKey? sortKey = null, MylistSortOrder? sortOrder = null)
         {
             var dict = new NameValueCollection();
@@ -198,7 +217,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
 
 
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> AddMylistItemAsync(string mylistId, string itemId, string memo)
         {
             NameValueCollection dict = new NameValueCollection()
@@ -217,7 +237,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> UpdateMylistItemMemoAsync(string mylistId, string itemId, string memo)
         {
             NameValueCollection dict = new NameValueCollection()
@@ -236,6 +257,8 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<ContentManageResult> RemoveMylistItemsAsync(string mylistId, IEnumerable<long> itemIds)
         {
             NameValueCollection dict = new NameValueCollection()
@@ -253,12 +276,16 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return res.StatusCode.ToContentManagerResult();
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
             return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
