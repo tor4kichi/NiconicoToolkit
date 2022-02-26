@@ -54,8 +54,7 @@ namespace NiconicoToolkit.Live
         public static Live2WatchSession CreateWatchSession(LiveWatchPageDataProp prop, string userAgent)
         {
             bool isWatchTimeshift =
-                prop.Program.Status == ProgramLiveStatus.ENDED
-                && (prop.ProgramTimeshiftWatch?.Condition.NeedReservation ?? false) 
+                prop.Program.Status == ProgramLiveStatus.ENDED 
                 ;
             return new Live2WatchSession(prop.Site.Relive.WebSocketUrl, isWatchTimeshift, userAgent);
         }
