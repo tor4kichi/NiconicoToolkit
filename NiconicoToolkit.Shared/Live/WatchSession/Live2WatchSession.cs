@@ -457,6 +457,9 @@ namespace NiconicoToolkit.Live.WatchSession
         }
 
         TaskCompletionSource<PostCommentResultChat> _PostCommentResultTaskCompletionSource;
+
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<PostCommentResultChat> PostCommentAsync(string text, TimeSpan videoPosition, bool isAnonymous, string size = null, string position = null, string color = null, string font = null)
         {
             _PostCommentResultTaskCompletionSource = new TaskCompletionSource<PostCommentResultChat>();

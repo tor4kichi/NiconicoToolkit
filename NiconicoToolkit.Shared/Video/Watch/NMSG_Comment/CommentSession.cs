@@ -337,13 +337,14 @@ namespace NiconicoToolkit.Video.Watch.NMSG_Comment
 
 
         /// <summary>
-        /// コメント投稿。登校前に<see cref="GetCommentFirstAsync"/>、または<see cref="GetDifferenceCommentAsync"/>を呼び出して投稿のためのTicketを取得しておく必要があります。
-        /// ログインしていない場合はコメント投稿は出来ません。
+        /// [Require Login] 動画にコメントを投稿する。<br />
+        /// 投稿前に<see cref="GetCommentFirstAsync"/>、または<see cref="GetDifferenceCommentAsync"/>を呼び出して投稿のためのTicketを取得しておく必要があります。
         /// </summary>
         /// <param name="position"></param>
         /// <param name="comment"></param>
         /// <param name="mail"></param>
         /// <returns></returns>
+        [RequireLogin]
         public async Task<PostCommentResponse> PostCommentAsync(TimeSpan position, string comment, string mail)
         {
             if (_Ticket == null)

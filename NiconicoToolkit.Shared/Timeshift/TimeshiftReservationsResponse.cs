@@ -106,8 +106,9 @@
 
     public enum ScheduleStatus
     {
-        Released,
-        Ended,
+        RELEASED,
+        ON_AIR,
+        ENDED,
     };
 
     public partial class Schedule

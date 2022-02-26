@@ -63,6 +63,8 @@ namespace NiconicoToolkit.Live.Timeshift
         private static readonly byte[] s_unwatchUtf8 = Encoding.UTF8.GetBytes("unwatch");
         private static readonly byte[] s_expireUtf8 = Encoding.UTF8.GetBytes("expire");
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<TimeshiftReservationsDetailResponse> GetTimeshiftReservationsDetailAsync()
         {
             using var res = await _context.GetAsync($"{Urls.TimeshiftWachingReservationApiUrl}?mode=detaillist");
@@ -131,7 +133,8 @@ namespace NiconicoToolkit.Live.Timeshift
 
 
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task<ReserveTimeshiftResponse> ReserveTimeshiftAsync(LiveId liveId, bool overwrite)
         {
             var dict = new NameValueCollection()
@@ -144,9 +147,10 @@ namespace NiconicoToolkit.Live.Timeshift
         }
 
         /// <summary>
-        /// タイムシフト予約の削除用トークンを取得します。（要ログインセッション）
+        /// [Require Login] タイムシフト予約の削除用トークンを取得します。
         /// </summary>
         /// <returns></returns>
+        /// [RequireLogin]
         public async Task<ReservationToken> GetReservationTokenAsync()
         {
             try
@@ -165,12 +169,15 @@ namespace NiconicoToolkit.Live.Timeshift
             }
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public Task DeleteTimeshiftReservationAsync(LiveId liveId, ReservationToken reservationDeleteToken)
         {
             return DeleteTimeshiftReservationAsync(new string[] { liveId }, reservationDeleteToken);
         }
 
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task DeleteTimeshiftReservationAsync(IEnumerable<string> liveIds, ReservationToken reservationDeleteToken)
         {
             if (ReservationToken.InavalidToken == reservationDeleteToken)
@@ -197,7 +204,8 @@ namespace NiconicoToolkit.Live.Timeshift
             using var _ = await _context.PostAsync(url);
         }
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<TimeshiftReservationsResponse> GetTimeshiftReservationsAsync(System.Threading.CancellationToken ct = default)
         {
             using var res = await _context.GetAsync(Urls.MyTimeshiftReservationsEmbedPageUrl, ct: ct);
@@ -212,7 +220,8 @@ namespace NiconicoToolkit.Live.Timeshift
         }
 
 
-
+        /// <remarks>[Require Login]</remarks>
+        [RequireLogin]
         public async Task<UseTimeshiftViewingAuthorityResponse> UseTimeshiftViewingAuthorityAsync(string vid, ReservationToken token)
         {
             var nonPrefixLiveId = ContentIdHelper.RemoveContentIdPrefix(vid);
