@@ -63,9 +63,9 @@ namespace NiconicoToolkit.Live.WatchSession
         public bool IsFirst { get; set; }
         public string WaybackKey { get; set; }
 
-        public LiveCommentSession CreateCommentClientForTimeshift(string userAgent, string userId, DateTimeOffset startTime)
+        public LiveCommentSession CreateCommentClientForTimeshift(string userAgent, string userId, DateTimeOffset startTime, DateTimeOffset endTime)
         {
-            return LiveCommentSession.CreateForTimeshift(MessageServerUrl.OriginalString, ThreadId, userId, userAgent, WaybackKey, startTime);
+            return LiveCommentSession.CreateForTimeshift(MessageServerUrl.OriginalString, ThreadId, userId, userAgent, WaybackKey, startTime, endTime);
         }
         public LiveCommentSession CreateCommentClientForLiveStreaming(string userAgent, string userId)
         {
@@ -220,14 +220,18 @@ namespace NiconicoToolkit.Live.WatchSession
             _watchingHeartbaetTimer = null;
             if (_ws.State == WebSocketState.Open)
             {
-                await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None);
+                try
+                {
+                    await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None);
+                }
+                catch { }
             }
         }
 
         public async void Dispose()
         {
-            await CloseAsync();
             _ws.Dispose();
+            await CloseAsync();
         }
 
         #region Message Received

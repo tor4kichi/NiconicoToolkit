@@ -37,9 +37,9 @@ namespace NiconicoToolkit.Live.WatchSession
             return new LiveCommentSession(messageServerUrl, threadId, userId, userAgent);
         }
 
-        public static LiveCommentSession CreateForTimeshift(string messageServerUrl, string threadId, string userId, string userAgent, string waybackkey, DateTimeOffset startTime)
+        public static LiveCommentSession CreateForTimeshift(string messageServerUrl, string threadId, string userId, string userAgent, string waybackkey, DateTimeOffset startTime, DateTimeOffset endTime)
         {
-            return new LiveCommentSession(messageServerUrl, threadId, userId, userAgent, waybackkey, startTime);
+            return new LiveCommentSession(messageServerUrl, threadId, userId, userAgent, waybackkey, startTime, endTime);
         }
 
 
@@ -52,7 +52,7 @@ namespace NiconicoToolkit.Live.WatchSession
 
         const uint FirstGetRecentMessageCount = 50;
 
-        private readonly ClientWebSocket _ws;
+        private ClientWebSocket _ws;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private readonly AsyncLock _CommentSessionLock = new AsyncLock();
 
@@ -67,13 +67,15 @@ namespace NiconicoToolkit.Live.WatchSession
         private int _LastRes;
         private readonly string _waybackkey;
         private readonly DateTimeOffset _startTime;
+        private readonly DateTimeOffset _endTime;
 
-        private LiveCommentSession(string messageServerUrl, string threadId, string userId, string userAgent, string waybackkey, DateTimeOffset startTime)
+        private LiveCommentSession(string messageServerUrl, string threadId, string userId, string userAgent, string waybackkey, DateTimeOffset startTime, DateTimeOffset endTime)
             : this(messageServerUrl, threadId, userId, userAgent)
         {
             IsTimeshift = true;
             _waybackkey = waybackkey;
             _startTime = startTime;
+            _endTime = endTime;
         }
 
 
@@ -83,10 +85,7 @@ namespace NiconicoToolkit.Live.WatchSession
             ThreadId = threadId;
             UserId = userId;
             _userAgent = userAgent;
-            _ws = new ClientWebSocket();
-            _ws.Options.AddSubProtocol("msg.nicovideo.jp#json");
-            _ws.Options.SetRequestHeader("User-Agent", _userAgent);
-
+            
             _jsonSerializerOptions = new JsonSerializerOptions()
             {
                 Converters =
@@ -96,6 +95,14 @@ namespace NiconicoToolkit.Live.WatchSession
                     new VideoPositionToTimeSpanConverter(),
                 }
             };
+        }
+
+        private ClientWebSocket CreateWebSocket()
+        {
+            var ws = new ClientWebSocket();
+            ws.Options.AddSubProtocol("msg.nicovideo.jp#json");
+            ws.Options.SetRequestHeader("User-Agent", _userAgent);
+            return ws;
         }
 
         private void _ws_MessageReceived(ReadOnlySpan<byte> messageBytes)
@@ -152,13 +159,13 @@ namespace NiconicoToolkit.Live.WatchSession
         private bool ProcessThreadMessage(Thread_CommentSessionToClientMessage thread)
         {
             _ticket = thread.Ticket;
-            _LastRes = thread.LastRes ?? 0;
-
+            _LastRes = thread.LastRes ?? _LastRes;
+            
             StartHeartbeatTimer();
 
             Connected?.Invoke(this, new CommentServerConnectedEventArgs()
             {
-                LastRes = thread.LastRes ?? 0,
+                LastRes = _LastRes,
                 Resultcode = thread.Resultcode,
                 Revision = thread.Revision,
                 ServerTime = thread.ServerTime,
@@ -185,25 +192,37 @@ namespace NiconicoToolkit.Live.WatchSession
 
         public void Dispose()
         {
+            _connectionCts?.Cancel();
+            _connectionCts?.Dispose();
+            _ws?.Dispose();
             StopHeartbeatTimer();
-            _ws.Dispose();
+            StopCommentPullTimingTimer();
         }
 
-
-        public async Task OpenAsync(CancellationToken ct)
+        CancellationTokenSource _connectionCts;
+        public async Task OpenAsync(CancellationToken ct, TimeSpan seekTime = default)
         {
+            await Close();
+            _connectionCts = new CancellationTokenSource();
+            
             using (var releaser = await _CommentSessionLock.LockAsync())
             {
+                _ws = CreateWebSocket();
                 await _ws.ConnectAsync(new Uri(MessageServerUrl), ct);
+
+                _currentLoopTask = Task.Run(() => RunMessageRecievingLoopAsync(ct), ct);
+
 
                 async Task RunMessageRecievingLoopAsync(CancellationToken ct)
                 {
+                    using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, _connectionCts.Token);
+                    var linkCt = linkedCts.Token;
                     try
                     {
                         byte[] buffer = new byte[256 * 4];
                         while (_ws.State == WebSocketState.Open)
                         {
-                            var result = await _ws.ReceiveAsync(buffer, ct);
+                            var result = await _ws.ReceiveAsync(buffer, linkCt);
                             if (result.MessageType == WebSocketMessageType.Text)
                             {
                                 _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
@@ -214,10 +233,15 @@ namespace NiconicoToolkit.Live.WatchSession
                             }
                         }
                     }
-                    catch (OperationCanceledException) { }
+                    catch (OperationCanceledException)
+                    {
+                        //await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, CancellationToken.None);
+                    }
+
+                    StopHeartbeatTimer();
+                    StopCommentPullTimingTimer();
                 }
 
-                _ = Task.Run(() => RunMessageRecievingLoopAsync(ct), ct);
             }
 
             if (!IsTimeshift)
@@ -226,15 +250,24 @@ namespace NiconicoToolkit.Live.WatchSession
             }
             else
             {
-                await ResetConnectionForTimeshift(_startTime);
+                await ResetConnectionForTimeshift(_startTime + seekTime);
             }
-        }        
+        }
 
-        public async void Close()
+        Task _currentLoopTask;
+        public async Task Close()
         {
-            using (var releaser = await _CommentSessionLock.LockAsync())
-            {                
-                await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+            _connectionCts?.Cancel();
+            _connectionCts?.Dispose();
+
+            if (_currentLoopTask != null)
+            {
+                try
+                {
+                    await _currentLoopTask;
+                }
+                catch (OperationCanceledException) { }
+                _currentLoopTask = null;
             }
         }
 
@@ -303,11 +336,13 @@ namespace NiconicoToolkit.Live.WatchSession
 
         private void StartHeartbeatTimer()
         {
-            HeartbeatTimer = new Timer(_ =>
+            StopHeartbeatTimer();
+
+            HeartbeatTimer = new Timer(state =>
             {
-                SendMessageAsync(string.Empty).ConfigureAwait(false);
+                _ = (state as LiveCommentSession).SendMessageAsync(string.Empty).ConfigureAwait(false);
             }
-            , null, HEARTBEAT_INTERVAL, HEARTBEAT_INTERVAL);
+            , this, HEARTBEAT_INTERVAL, HEARTBEAT_INTERVAL);
         }
 
         private void StopHeartbeatTimer()
@@ -323,6 +358,40 @@ namespace NiconicoToolkit.Live.WatchSession
 
         #region Timeshift
 
+        
+        private AsyncLock _CommentPullTimingTimerLock = new AsyncLock();
+        private Timer _CommentPullTimingTimer;
+        private DateTimeOffset _NextCommentPullTiming;
+
+        TimeSpan _CommentPullingInterval = TimeSpan.FromSeconds(25);
+
+        private async Task ResetConnectionForTimeshift(DateTimeOffset initialTime)
+        {
+            if (!IsTimeshift) { throw new InvalidOperationException(); }
+
+            using (var releaser = await _CommentPullTimingTimerLock.LockAsync())
+            {
+                StopCommentPullTimingTimer();
+
+                // オープンからスタートまでのコメントをざっくり取得
+                await SendStartMessage_Timeshift(-30, initialTime);
+
+                _NextCommentPullTiming = initialTime + _CommentPullingInterval;
+
+                if (_NextCommentPullTiming < _endTime)
+                {
+                    // これぐらい開けないと取得できなくなる
+                    await Task.Delay(3000);
+
+                    await SendStartMessage_Timeshift(_LastRes + 1, _NextCommentPullTiming);
+
+                    _NextCommentPullTiming = _NextCommentPullTiming + _CommentPullingInterval;
+                    // 次のコメント取得の準備
+                    StartCommentPullTimingTimer();
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -336,45 +405,18 @@ namespace NiconicoToolkit.Live.WatchSession
             var whenString = when.ToUnixTimeSeconds().ToString();
             var waybackKey = _waybackkey;
             return SendNiwavidedMessage(
-                $"{{\"thread\":{{\"thread\":\"{ThreadId}\",\"version\":\"20061206\",\"fork\":0,\"when\":{whenString},\"user_id\":\"{UserId ?? "guest"}\",\"res_from\":{res_from},\"with_global\":1,\"scores\":1,\"nicoru\":0,\"waybackkey\":\"{waybackKey}\"}}}}"
+                $"{{\"thread\":{{\"thread\":\"{ThreadId}\",\"version\":\"20061206\",\"fork\":0,\"when\":{whenString},\"user_id\":\"{UserId ?? "guest"}\",\"res_from\":{res_from},\"with_global\":1,\"scores\":1,\"nicoru\":0,\"waybackkey\":\"\"}}}}"
                 );
         }
 
-        public async void Seek(TimeSpan timeSpan)
+
+        public async void Seek(CancellationToken ct, TimeSpan timeSpan)
         {
             if (!IsTimeshift) { throw new InvalidOperationException(); }
 
-            //if (await _ws.OpenAsync())
-            {
-                _ = ResetConnectionForTimeshift(_startTime + timeSpan);
-            }
+            await OpenAsync(ct, timeSpan);
         }
 
-        private AsyncLock _CommentPullTimingTimerLock = new AsyncLock();
-        private Timer _CommentPullTimingTimer;
-        private DateTimeOffset _NextCommentPullTiming;
-
-        private async Task ResetConnectionForTimeshift(DateTimeOffset initialTime)
-        {
-            if (!IsTimeshift) { throw new InvalidOperationException(); }
-
-            using (var releaser = await _CommentPullTimingTimerLock.LockAsync())
-            {
-                StopCommentPullTimingTimer();
-
-                // オープンからスタートまでのコメントをざっくり取得
-                await SendStartMessage_Timeshift(-30, initialTime);
-
-                _NextCommentPullTiming = initialTime + TimeSpan.FromSeconds(90);
-
-                await SendStartMessage_Timeshift(_LastRes + 1, _NextCommentPullTiming);
-
-                _NextCommentPullTiming = _NextCommentPullTiming + TimeSpan.FromSeconds(85);
-
-                // 次のコメント取得の準備
-                StartCommentPullTimingTimer();
-            }
-        }
 
         private void StopCommentPullTimingTimer()
         {
@@ -383,26 +425,27 @@ namespace NiconicoToolkit.Live.WatchSession
 
         private void StartCommentPullTimingTimer()
         {
-            if (_CommentPullTimingTimer != null)
-            {
-                _CommentPullTimingTimer.Dispose();
-                _CommentPullTimingTimer = null;
-            }
+            StopCommentPullTimingTimer();
 
             _CommentPullTimingTimer = new Timer(async _ =>
             {
                 using (var releaser = await _CommentPullTimingTimerLock.LockAsync())
                 {
-                    //await _ws.OpenAsync();
+                    if (_NextCommentPullTiming < _endTime)
+                    {
+                        await SendStartMessage_Timeshift(_LastRes + 1, _NextCommentPullTiming);
 
-                    await SendStartMessage_Timeshift(_LastRes + 1, _NextCommentPullTiming);
-
-                    _NextCommentPullTiming = _NextCommentPullTiming + TimeSpan.FromSeconds(85);
+                        _NextCommentPullTiming = _NextCommentPullTiming + _CommentPullingInterval;
+                    }
+                    else
+                    {
+                        StopCommentPullTimingTimer();
+                    }
                 }
             }
             , null
-            , TimeSpan.FromSeconds(85)
-            , TimeSpan.FromSeconds(85)
+            , _CommentPullingInterval - TimeSpan.FromSeconds(10)
+            , _CommentPullingInterval
             );
         }
 

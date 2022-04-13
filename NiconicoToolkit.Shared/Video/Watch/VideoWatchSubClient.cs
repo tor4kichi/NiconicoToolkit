@@ -350,8 +350,8 @@ namespace NiconicoToolkit.Video.Watch
                 (headers) => 
                 {
                     headers.UserAgent.Add(_context.HttpClient.DefaultRequestHeaders.UserAgent.First());
-                    headers.Add("Origin", "http://www.nicovideo.jp");
-                    headers.Add("Referer", "http://www.nicovideo.jp/watch/" + watch.Video.Id);
+                    headers.Add("Origin", "https://www.nicovideo.jp");
+                    headers.Add("Referer", "https://www.nicovideo.jp/watch/" + watch.Video.Id);
                     headers.Add("Accept", "application/json");
                 }
                 , HttpCompletionOption.ResponseHeadersRead

@@ -3,6 +3,7 @@ using NiconicoToolkit.Live;
 using NiconicoToolkit.SearchWithPage.Live;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -105,7 +106,5 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 Assert.IsTrue(result);
             }
         }
-
-        
     }
 }
