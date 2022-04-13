@@ -219,14 +219,14 @@ namespace NiconicoToolkit.Live.WatchSession
                     var linkCt = linkedCts.Token;
                     try
                     {
-                        byte[] buffer = new byte[256 * 4];
+                        byte[] buffer = new byte[1024 * 64];
                         while (_ws.State == WebSocketState.Open)
                         {
                             var result = await _ws.ReceiveAsync(buffer, linkCt);
                             if (result.MessageType == WebSocketMessageType.Text)
                             {
                                 _ws_MessageReceived(new ReadOnlySpan<byte>(buffer, 0, result.Count));
-                            }
+                            }                            
                             else if (result.MessageType == WebSocketMessageType.Close)
                             {
                                 CleanupConnection();
@@ -259,6 +259,7 @@ namespace NiconicoToolkit.Live.WatchSession
         {
             _connectionCts?.Cancel();
             _connectionCts?.Dispose();
+            _connectionCts = null;
 
             if (_currentLoopTask != null)
             {
@@ -421,6 +422,7 @@ namespace NiconicoToolkit.Live.WatchSession
         private void StopCommentPullTimingTimer()
         {
             _CommentPullTimingTimer?.Dispose();
+            _CommentPullTimingTimer = null;
         }
 
         private void StartCommentPullTimingTimer()
