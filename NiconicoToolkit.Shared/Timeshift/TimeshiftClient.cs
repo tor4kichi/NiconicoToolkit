@@ -53,7 +53,7 @@ namespace NiconicoToolkit.Live.Timeshift
 
             public const string MyTimeshiftPageUrl = $"{NiconicoUrls.NicoLivePageUrl}my"; //.php";
 
-            public const string TimeshiftWachingReservationApiUrl = $"http://live.nicovideo.jp/api/watchingreservation";
+            public const string TimeshiftWachingReservationApiUrl = $"https://live.nicovideo.jp/api/watchingreservation";
         }
 
 
