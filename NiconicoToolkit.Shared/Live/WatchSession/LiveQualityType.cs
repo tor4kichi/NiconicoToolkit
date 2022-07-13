@@ -17,6 +17,9 @@ namespace NiconicoToolkit.Live.WatchSession
         AudioHigh = 6,
         BroadcasterHigh = 7,
         BroadcasterLow = 8,
+
+        AudioOnly = 9
+
     }
 
 

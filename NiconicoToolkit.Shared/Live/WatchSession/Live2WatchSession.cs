@@ -41,8 +41,8 @@ namespace NiconicoToolkit.Live.WatchSession
     {
         public string SyncUri { get; set; }
         public string Uri { get; set; }
-        public LiveQualityType Quality { get; set; }
-        public LiveQualityType[] AvailableQualities { get; set; }
+        public string Quality { get; set; }
+        public string[] AvailableQualities { get; set; }
         public string MediaServerType { get; set; }
         public string MediaServerAuth { get; set; }
         public string Protocol { get; set; }

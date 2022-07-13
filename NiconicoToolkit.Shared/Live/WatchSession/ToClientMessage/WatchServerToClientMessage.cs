@@ -54,10 +54,10 @@ namespace NiconicoToolkit.Live.WatchSession.ToClientMessage
         public string SyncUri { get; set; }
 
         [JsonPropertyName("quality")]
-        public LiveQualityType Quality{ get; set; }
+        public string Quality{ get; set; }
 
         [JsonPropertyName("availableQualities")]
-        public LiveQualityType[] AvailableQualities { get; set; }
+        public string[] AvailableQualities { get; set; }
 
         [JsonPropertyName("protocol")]
         public string Protocol { get; set; }
