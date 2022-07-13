@@ -107,13 +107,13 @@ namespace NiconicoToolkit.Channels
                 // 件数
                 static int GetCount(IHtmlDocument document)
                 {
-                    var countNode = document.QuerySelector("#video_page > section.site_body > article > section > section > header > span > var");
+                    var countNode = document.QuerySelector("#video_page > section.site_body > article > section > section > header > div.list--upper > span > var");
                     return countNode.TextContent.ToInt();
                 }
 
                 static IEnumerable<ChannelVideoItem> GetChannelVideos(IHtmlDocument document)
                 {
-                    var itemNodes = document.QuerySelectorAll("#video_page > section.site_body > article > section > section > ul > li");
+                    var itemNodes = document.QuerySelectorAll("#video_page > section.site_body > article > section > section > div > ul > li");
                     foreach (var itemNode in itemNodes)
                     {
                         ChannelVideoItem item = new();
