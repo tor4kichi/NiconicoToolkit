@@ -13,12 +13,13 @@ namespace NiconicoToolkit.Live.WatchSession
         Normal = 3,
         High = 4,
         SuperHigh = 5,
+        _6Mbps1080p30fps = 6,
 
-        AudioHigh = 6,
-        BroadcasterHigh = 7,
-        BroadcasterLow = 8,
+        AudioHigh = 7,
+        BroadcasterHigh = 8,
+        BroadcasterLow = 9,
 
-        AudioOnly = 9
+        AudioOnly = 10
 
     }
 

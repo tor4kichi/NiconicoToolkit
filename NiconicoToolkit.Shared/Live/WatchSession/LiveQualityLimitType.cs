@@ -11,5 +11,7 @@ namespace NiconicoToolkit.Live.WatchSession
         Normal = 2,
         High = 3,
         SuperHigh = 4,
+
+        _6Mbps1080p30fps = 5,
     }
 }

@@ -176,6 +176,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\DateTimeOffsetConverterUsingDateTimeParse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\JsonSnakeCaseNamingPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LiveIdJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LiveQualityTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\LongToStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\MylistIdJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Text.Json.Serialization\NiconicoIdJsonConverter.cs" />
