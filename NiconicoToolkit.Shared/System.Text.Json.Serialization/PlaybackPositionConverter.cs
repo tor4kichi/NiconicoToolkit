@@ -14,8 +14,9 @@ namespace System.Text.Json.Serialization
             {
                 TimeSpan? time = reader.TokenType switch
                 {
-                    JsonTokenType.Number => TimeSpan.FromSeconds(reader.GetInt32()),
-                    JsonTokenType.String => throw new JsonException(reader.GetString()),
+                    JsonTokenType.Number => TimeSpan.FromSeconds(reader.GetInt32()),                    
+                    JsonTokenType.String => null,
+                    JsonTokenType.Null => null,
                     _ => throw new JsonException(),
                 };
 
