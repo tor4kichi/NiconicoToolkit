@@ -44,9 +44,7 @@ namespace NiconicoToolkit.Live
             {
                 var embeddedDataNode = document.QuerySelector("#embedded-data");
                 var dataPropText = embeddedDataNode.GetAttribute("data-props");
-                var decodedJson = WebUtility.HtmlDecode(dataPropText);
-
-                return JsonDeserializeHelper.Deserialize<LiveWatchPageDataProp>(decodedJson, _watchPageJsonSerializerOptions);
+                return JsonDeserializeHelper.Deserialize<LiveWatchPageDataProp>(dataPropText, _watchPageJsonSerializerOptions);
             });
         }        
 
