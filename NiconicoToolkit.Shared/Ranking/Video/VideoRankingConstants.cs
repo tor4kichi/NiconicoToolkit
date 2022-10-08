@@ -19,21 +19,20 @@
                 RankingTerm.Week,
                 RankingTerm.Month,
                 RankingTerm.Total
-            };
+        };
 
 
         public static readonly RankingTerm[] HotTopicAccepteRankingTerms = new[]
         {
                 RankingTerm.Hour,
                 RankingTerm.Day
-            };
+        };
 
         public static readonly RankingTerm[] GenreWithTagAccepteRankingTerms = new[]
         {
                 RankingTerm.Hour,
                 RankingTerm.Day
-            };
-
+        };        
     }
 
 

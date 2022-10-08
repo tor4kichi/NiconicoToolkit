@@ -46,6 +46,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
         [TestMethod]
         [DataRow("lv331925323")]
+        [DataRow("lv337817244")]
         public async Task GetLiveWatchDataPropAsync(string liveId)
         {
             var res = await _liveClient.GetLiveWatchPageDataPropAsync(liveId);

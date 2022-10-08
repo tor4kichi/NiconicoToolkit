@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using NiconicoToolkit.SnapshotSearch.Filters;
 using System;
 using System.Collections.Generic;

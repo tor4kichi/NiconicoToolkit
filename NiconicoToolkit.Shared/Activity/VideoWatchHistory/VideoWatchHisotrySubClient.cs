@@ -127,7 +127,8 @@ namespace NiconicoToolkit.Activity.VideoWatchHistory
             public DateTimeOffset? LastViewedAt { get; set; }
 
             [JsonPropertyName("playbackPosition")]
-            public long? PlaybackPosition { get; set; }
+            [JsonConverter(typeof(PlaybackPositionConverter))]
+            public PlaybackPosition PlaybackPosition { get; set; }
 
             [JsonPropertyName("video")]
             public NvapiVideoItem Video { get; set; }

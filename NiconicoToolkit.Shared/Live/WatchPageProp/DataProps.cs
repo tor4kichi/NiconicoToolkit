@@ -9,13 +9,9 @@ using System.Text.Json.Serialization;
 namespace NiconicoToolkit.Live.WatchPageProp
 {
     using NiconicoToolkit.User;
+    using System.Linq;
     // Generated with https://app.quicktype.io/
 
-    using System;
-    using System.Collections.Generic;
-
-    using System.Globalization;
-    using System.Linq;
     using J = JsonPropertyNameAttribute;
 
     public partial class LiveWatchPageDataProp
@@ -267,6 +263,7 @@ namespace NiconicoToolkit.Live.WatchPageProp
 
     public partial class ProgramStream
     {
+        [JsonConverter(typeof(System.Text.Json.Serialization.LiveQualityTypeConverter))]
         [J("maxQuality")] public Live.WatchSession.LiveQualityLimitType MaxQuality { get; set; }
     }
 

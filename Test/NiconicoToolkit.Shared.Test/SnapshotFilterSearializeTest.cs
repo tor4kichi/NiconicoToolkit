@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.SnapshotSearch;
 using NiconicoToolkit.SnapshotSearch.JsonFilters;
