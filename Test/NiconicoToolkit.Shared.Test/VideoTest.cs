@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NiconicoToolkit.Rss.Video;
 using System.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace NiconicoToolkit.UWP.Test.Tests
 {
@@ -105,6 +106,63 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
         #endregion Ranking
 
+
+
+        #region Web Ranking
+
+
+        [TestMethod]
+        [DataRow(RankingGenre.All)]
+        [DataRow(RankingGenre.HotTopic)]
+        [DataRow(RankingGenre.Other)]
+        public async Task GetRankingItemsFromWebRankingPageAsync(RankingGenre genre)
+        {
+            var res = await _context.Video.Ranking.GetRankingFromWebAsync(genre);
+
+            Guard.IsTrue(res.IsSuccess, nameof(res.IsSuccess));
+            Guard.IsTrue(res.Items.Any(), nameof(res.Items));
+
+            foreach (var item in res.Items.Take(3))
+            {
+                Guard.IsNotNullOrEmpty(item.VideoId, nameof(item.VideoId));
+                Guard.IsNotNullOrEmpty(item.OwnerId, nameof(item.OwnerId));
+                if (item.IsSensitiveContent is false)
+                {
+                    Guard.IsNotNull(item.Description);
+                    Guard.IsNotEqualTo(item.Duration, default(TimeSpan));
+                    Guard.IsTrue(!string.IsNullOrWhiteSpace(item.Title));
+                    Guard.IsTrue(!string.IsNullOrWhiteSpace(item.Thumbnail));
+                    Guard.IsTrue(item.ViewCount > 0);
+                    Guard.IsNotEqualTo(item.RegisteredAt, default(DateTime));
+                }
+            }
+        }
+
+        [TestMethod]
+        [DataRow(RankingGenre.HotTopic)]
+        [DataRow(RankingGenre.Anime)]
+        public async Task GetRankingItemsWithTagFromWebRankingPageAsync(RankingGenre genre)
+        {
+            var tagsRes = await _context.Video.Ranking.GetGenrePickedTagAsync(genre);
+
+            var tag = tagsRes.Skip(1).FirstOrDefault();
+            var res = await _context.Video.Ranking.GetRankingFromWebAsync(genre, tag.Tag);
+
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsTrue(res.Items.Any());
+
+            foreach (var item in res.Items.Take(3))
+            {
+                Assert.IsNotNull(item.Description);
+
+                Assert.AreNotEqual(default(TimeSpan), item.Duration);
+                Assert.IsTrue(!string.IsNullOrWhiteSpace(item.Title));
+                Assert.IsTrue(!string.IsNullOrWhiteSpace(item.Thumbnail));
+                Assert.IsTrue(item.ViewCount > 0);
+                Assert.AreNotEqual(default(DateTime), item.RegisteredAt);
+            }
+        }
+        #endregion
 
     }
 }

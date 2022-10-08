@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Community\CommunityVideoSortKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Community\CommunityVideoSortOrder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentIdHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DateTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeserializationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumDescriptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumExtensions.cs" />
