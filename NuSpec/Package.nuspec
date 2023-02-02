@@ -30,7 +30,7 @@
     <copyright>tor4kichi</copyright>
     <tags>Niconico UWP WinUI3 Net5</tags>
     <dependencies >
-      <group targetFramework="uap10.0.19041">
+      <group targetFramework="uap10.0.16299">
         <dependency id="AngleSharp" version="0.16.0" />
         <dependency id="Macross.Json.Extensions" version="2.0.0" />
         <dependency id="Microsoft.Toolkit.Diagnostics" version="7.0.2" />
@@ -60,17 +60,17 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm\lib\uap10.0.19041"/>
-    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm\lib\uap10.0.16299"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm\lib\uap10.0.16299"/>
 
-    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm64\lib\uap10.0.19041"/>
-    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm64\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm64\lib\uap10.0.16299"/>
+    <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm64\lib\uap10.0.16299"/>
 
-    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x64\lib\uap10.0.19041"/>
-    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x64\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x64\lib\uap10.0.16299"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x64\lib\uap10.0.16299"/>
 
-    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x86\lib\uap10.0.19041"/>
-    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x86\lib\uap10.0.19041"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-x86\lib\uap10.0.16299"/>
+    <file src="..\NiconicoToolkit.UWP\bin\x86\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-x86\lib\uap10.0.16299"/>
 
     <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.dll" target="ref\uap10.0" />
     <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.pri" target="ref\uap10.0" />

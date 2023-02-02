@@ -59,6 +59,8 @@ namespace NiconicoToolkit.Video
         [JsonPropertyName("acf68865")]
         public bool Acf68865 { get; set; }
 
+        [JsonPropertyName("isMuted")]
+        public bool? IsMuted { get; set; }
 
         public bool IsDeleted => Duration == 0;
     }

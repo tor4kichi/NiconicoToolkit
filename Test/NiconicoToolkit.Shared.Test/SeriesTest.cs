@@ -25,20 +25,17 @@ namespace NiconicoToolkit.UWP.Test.Tests
         [DataRow("225544")] // chのシリーズ
         public async Task GetSeriesVideoAsync(string seriesId)
         {
-            var res = await _context.Series.GetSeriesVideosAsync(seriesId);
-            Assert.IsNotNull(res.Series);
-            Assert.IsNotNull(res.Videos);
+            var res = await _context.Series.GetUserSeriesVideosAsync(seriesId);
+            Assert.IsNotNull(res.Data?.Items);
 
-            foreach (var video in res.Videos.Take(3))
+            foreach (var video in res.Data.Items.Take(3))
             {
-                Assert.IsNotNull(video.Id, "video.Id is null");
-                Assert.IsNotNull(video.Title, "video.Title is null");
-                Assert.AreNotEqual(TimeSpan.Zero, video.Duration, "video.Duration is TimeSpan.Zero");
+                Assert.IsNotNull(video.Video.Id, "video.Id is null");
+                Assert.IsNotNull(video.Video.Title, "video.Title is null");
+                Assert.AreNotEqual(TimeSpan.Zero, video.Video.Duration, "video.Duration is TimeSpan.Zero");
             }
 
-            Assert.IsNotNull(res.Owner);
-            Assert.IsNotNull(res.Owner.Id);
-            Assert.IsNotNull(res.Owner.Nickname);
+            Assert.IsNotNull(res.Data.Detail.Title);
         }
 
 
