@@ -17,14 +17,14 @@ namespace NiconicoToolkit.Video
 
         private readonly JsonSerializerOptions _option;
 
-        public VideoRankinguSubClient Ranking { get; }
+        public VideoRankingSubClient Ranking { get; }
         public VideoWatchSubClient VideoWatch { get; }
 
         internal VideoClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _option = defaultOptions;
             _context = context;
-            Ranking = new VideoRankinguSubClient(context);
+            Ranking = new VideoRankingSubClient(context);
             VideoWatch = new VideoWatchSubClient(context, _option);
         }
     }
