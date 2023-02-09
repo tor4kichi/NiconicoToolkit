@@ -24,7 +24,7 @@ namespace NiconicoToolkit.Video
         {
             _option = defaultOptions;
             _context = context;
-            Ranking = new VideoRankingSubClient(context);
+            Ranking = new VideoRankingSubClient(context, _option);
             VideoWatch = new VideoWatchSubClient(context, _option);
         }
     }

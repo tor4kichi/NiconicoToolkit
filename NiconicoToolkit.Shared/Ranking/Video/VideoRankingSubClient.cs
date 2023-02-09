@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NiconicoToolkit.Rss.Video;
-using NiconicoToolkit.Video;
 using System.Net;
+using System.Text.Json;
 #if WINDOWS_UWP
 using Windows.Web.Syndication;
 #else
@@ -23,10 +23,12 @@ namespace NiconicoToolkit.Ranking.Video
     public sealed class VideoRankingSubClient
     {
         private readonly NiconicoContext _context;
+        private readonly JsonSerializerOptions _options;
 
-        public VideoRankingSubClient(NiconicoContext context)
+        public VideoRankingSubClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
+            _options = defaultOptions;
         }
 
         public static bool IsHotTopicAcceptTerm(RankingTerm term)
@@ -84,34 +86,50 @@ namespace NiconicoToolkit.Ranking.Video
             }
         }
 
-        async Task<List<RankingGenrePickedTag>> Internal_GetPickedTagAsync(string url, bool isHotTopic, CancellationToken ct)
-        {
-            await _context.WaitPageAccessAsync();
+        //async Task<List<RankingGenrePickedTag>> Internal_GetPickedTagAsync(string url, bool isHotTopic, CancellationToken ct)
+        //{
+        //    await _context.WaitPageAccessAsync();
 
-            using var res = await _context.GetAsync(url, ct: ct);
-            return await res.Content.ReadHtmlDocumentActionAsync(document =>
-            {
+        //    using var res = await _context.GetAsync(url, ct: ct);
+        //    return await res.Content.ReadHtmlDocumentActionAsync(document =>
+        //    {
                 // ページ上の .RankingFilterTag となる要素を列挙する
-                var tagAnchorElements = isHotTopic
-                    ? document.QuerySelectorAll(@"section.HotTopicsContainer > ul > li > a")
-                    : document.QuerySelectorAll(@"section.RepresentedTagsContainer > ul > li > a")
-                    ;
+        //        var tagAnchorElements = isHotTopic
+        //            ? document.QuerySelectorAll(@"section.HotTopicsContainer > ul > li > a")
+        //            : document.QuerySelectorAll(@"section.RepresentedTagsContainer > ul > li > a")
+        //            ;
 
-                List<RankingGenrePickedTag> items = new();
-                foreach (var element in tagAnchorElements)
-                {
-                    var tag = new RankingGenrePickedTag();
-                    tag.DisplayName = element.TextContent.Trim('\n', ' ');
-                    var hrefAttr = element.GetAttribute("href");
-                    var splited = hrefAttr.Split('=', '&');
-                    var first = splited.ElementAtOrDefault(1);
-                    tag.Tag = Uri.UnescapeDataString(first?.Trim('\n') ?? String.Empty);
+        //        List<RankingGenrePickedTag> items = new();
+        //        foreach (var element in tagAnchorElements)
+        //        {
+        //            var tag = new RankingGenrePickedTag();
+        //            tag.DisplayName = element.TextContent.Trim('\n', ' ');
+        //            var hrefAttr = element.GetAttribute("href");
+        //            var splited = hrefAttr.Split('=', '&');
+        //            var first = splited.ElementAtOrDefault(1);
+        //            tag.Tag = Uri.UnescapeDataString(first?.Trim('\n') ?? String.Empty);
 
-                    items.Add(tag);
-                }
+        //            items.Add(tag);
+        //        }
 
-                return items;
-            });
+        //        return items;
+        //    });
+        //}
+
+        public Task<HotTopicResponse> GetHotTopicAsync(CancellationToken ct = default)
+        {
+            return _context.GetJsonAsAsync<HotTopicResponse>(
+                $"{NiconicoUrls.NvApiV1Url}hot-topics",
+                _options, ct
+                );
+        }
+
+        public Task<PopularTagResponse> GetPopularTagAsync(RankingGenre genre, CancellationToken ct = default)
+        {
+            return _context.GetJsonAsAsync<PopularTagResponse>(
+                $"{NiconicoUrls.NvApiV1Url}genres/{genre.GetDescription()}/popular-tags",
+                _options, ct
+                );
         }
 
         /// <summary>
@@ -123,9 +141,36 @@ namespace NiconicoToolkit.Ranking.Video
         /// <returns></returns>
         public async Task<List<RankingGenrePickedTag>> GetGenrePickedTagAsync(RankingGenre genre, CancellationToken ct = default)
         {
-            if (genre == RankingGenre.All) { return new List<RankingGenrePickedTag>(); }
+            var items = new List<RankingGenrePickedTag>();
 
-            return await Internal_GetPickedTagAsync(MakeRankingUrl(genre), isHotTopic: genre is RankingGenre.HotTopic, ct);
+            if (genre == RankingGenre.All) { return items; }
+
+            if (genre == RankingGenre.HotTopic)
+            {
+                var topics = await GetHotTopicAsync(ct);
+                foreach (var topic in topics.Data.HotTopics)
+                {
+                    var tag = new RankingGenrePickedTag();
+                    tag.DisplayName = topic.Label;
+                    tag.Tag = topic.Key;
+
+                    items.Add(tag);
+                }
+
+                return items;
+            }
+
+            var tags = await GetPopularTagAsync(genre, ct);
+            foreach(var popularTag in tags.Data.Tags)
+            {
+                var tag = new RankingGenrePickedTag();
+                tag.DisplayName = popularTag;
+                tag.Tag = popularTag;
+
+                items.Add(tag);
+            }
+
+            return items;
         }
 
         /// <summary>
@@ -216,6 +261,7 @@ namespace NiconicoToolkit.Ranking.Video
 #endif
         }
 
+        /*
         public async Task<VideoRankingResponse> GetRankingFromWebAsync(RankingGenre genre, string tag = null, RankingTerm term = RankingTerm.Hour, int page = 1, CancellationToken ct = default)
         {
             string url = MakeRankingUrl(genre, tag, term, page);
@@ -330,29 +376,34 @@ namespace NiconicoToolkit.Ranking.Video
                 };
             });
         }
+        */
+
+        public Task<VideoRankingResponse> GetRankingAsync(RankingGenre genre, string tag = null, RankingTerm term = RankingTerm.Hour, int page = 1, int pageSize = 100, CancellationToken ct = default)
+        {
+            if (genre == RankingGenre.HotTopic)
+            {
+                return _context.GetJsonAsAsync<VideoRankingResponse>(
+                    $"{NiconicoUrls.NvApiV1Url}ranking/hot-topic?page={page}&pageSize={pageSize}&term={term.GetDescription()}&key={tag}",
+                    _options, ct
+                    );
+            }
+            else
+            {
+                if (tag == null)
+                {
+                    return _context.GetJsonAsAsync<VideoRankingResponse>(
+                        $"{NiconicoUrls.NvApiV1Url}ranking/genre/{genre.GetDescription()}?page={page}&pageSize={pageSize}&term={term.GetDescription()}",
+                        _options, ct
+                        );
+                }
+                else
+                {
+                    return _context.GetJsonAsAsync<VideoRankingResponse>(
+                        $"{NiconicoUrls.NvApiV1Url}ranking/genre/{genre.GetDescription()}?page={page}&pageSize={pageSize}&term={term.GetDescription()}&tag={tag}",
+                        _options, ct
+                        );
+                }
+            }
+        }
     }
-
-    public sealed class VideoRankingResponse : ResponseWithMeta
-    {
-        public List<VideoRankingItem> Items { get; set; }
-    }
-
-    public sealed class VideoRankingItem
-    {
-        public bool IsSensitiveContent { get; set; }
-
-        public string Title { get; set; }
-        public string VideoId { get; set; }
-        public string OwnerId { get; set; }
-        public TimeSpan Duration { get; set; }
-        public string Thumbnail { get; set; }
-        public string Description { get; set; }
-        public DateTime RegisteredAt { get; set; }
-        public int Rank { get; set; }
-        public int ViewCount { get; set; }
-        public int CommentCount { get; set; }
-        public int MylistCount { get; set; }
-        public int LikeCount { get; set; }
-    }
-
 }

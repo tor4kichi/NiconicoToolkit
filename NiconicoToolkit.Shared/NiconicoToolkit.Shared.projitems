@@ -117,10 +117,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoEntriesResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoMuteContextTrigger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\HotTopicResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\PopularTagResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\RankingGenre.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\RankingGenrePickedTag.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\RankingTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankingConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankingResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankingSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\LiveRecommendResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\RecommendClient.cs" />
