@@ -20,11 +20,11 @@ namespace NiconicoToolkit.Ranking.Video
 {
 
 
-    public sealed class VideoRankinguSubClient
+    public sealed class VideoRankingSubClient
     {
         private readonly NiconicoContext _context;
 
-        public VideoRankinguSubClient(NiconicoContext context)
+        public VideoRankingSubClient(NiconicoContext context)
         {
             _context = context;
         }

@@ -121,7 +121,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\RankingGenrePickedTag.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\RankingTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankingConstants.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankinguSubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\VideoRankingSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\LiveRecommendResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\RecommendClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Recommend\RecommendContentType.cs" />
