@@ -6,9 +6,9 @@ namespace NiconicoToolkit.Search.Video
 {
     public enum Range
     {
-        In1Hoour = 4,
-        In24Hour = 1,
-        In1Week = 2,
+        InHour = 4,
+        In24Hours = 1,
+        InWeek = 2,
         InMonth = 3,
     }
 
@@ -19,11 +19,11 @@ namespace NiconicoToolkit.Search.Video
             DateTime now = DateTime.Now;
             switch (range)
             {
-                case Range.In1Hoour:
+                case Range.InHour:
                     return now.AddHours(-1);
-                case Range.In24Hour:
+                case Range.In24Hours:
                     return now.AddDays(-1);
-                case Range.In1Week:
+                case Range.InWeek:
                     return now.AddDays(-7);
                 case Range.InMonth:
                     return now.AddMonths(-1);
