@@ -15,13 +15,13 @@ namespace NiconicoToolkit.Search.Video
         private readonly NiconicoContext _context;
         private readonly JsonSerializerOptions _option;
 
-        internal VideoSearchSubClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
+        public VideoSearchSubClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
             _option = defaultOptions;
         }
 
-        internal Task<VideoSearchResponse> VideoSearchAsync(
+        public Task<VideoSearchResponse> VideoSearchAsync(
             string keyword,
             bool isTagSearch = false,
             int? pageCount = null,

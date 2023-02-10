@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)RecommendTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchCeApiTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchHtmlTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SeriesTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotFilterSearializeTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapshotSearchTest.cs" />
