@@ -35,7 +35,7 @@ namespace NiconicoToolkit.Search.User
             if (sortKey is not null)
                 query.Add("sortKey", sortKey.Value.GetDescription());
 
-            var url = new StringBuilder(NiconicoUrls.NvApiV2Url)
+            var url = new StringBuilder(NiconicoUrls.NvApiV1Url)
                 .Append("search/user")
                 .AppendQueryString(query)
                 .ToString();
