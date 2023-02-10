@@ -62,12 +62,12 @@ namespace NiconicoToolkit.User
             {
                 var dataNode = document.QuerySelector("#js-initial-userpage-data");
                 var json = dataNode.GetAttribute("data-initial-data");
-                var userDetailRes = JsonSerializer.Deserialize<UserDetailResponseContainer>(WebUtility.HtmlDecode(json), _options);
-                userDetailRes.Detail.Meta = new Meta()
+                var userDetailRes = JsonSerializer.Deserialize<UserDetailResponseContainerContainer>(WebUtility.HtmlDecode(json), _options);
+                userDetailRes.State.Detail.Meta = new Meta()
                 {
                     Status = (long)res.StatusCode
                 };
-                return userDetailRes.Detail;
+                return userDetailRes.State.Detail;
             });
         }
 

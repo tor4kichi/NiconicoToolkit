@@ -83,7 +83,7 @@ namespace NiconicoToolkit
             HttpClient httpClient
             )
         {
-            HttpClient = httpClient;
+            HttpClient = httpClient;            
             Live = new LiveClient(this, DefaultOptions);
             Account = new AccountClient(this);
             User = new UserClient(this, DefaultOptions);

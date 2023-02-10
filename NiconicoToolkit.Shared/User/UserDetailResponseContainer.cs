@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace NiconicoToolkit.User
 {
+    public sealed class UserDetailResponseContainerContainer
+    {
+        [JsonPropertyName("state")]
+        public UserDetailResponseContainer State { get; set; }
+
+        //[JsonPropertyName("nvapi")]
+        //public List<object> Nvapi { get; set; }
+    }
+
     public sealed class UserDetailResponseContainer
     {
         [JsonPropertyName("userDetails")]
