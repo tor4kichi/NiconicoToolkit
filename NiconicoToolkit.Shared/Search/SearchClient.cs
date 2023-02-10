@@ -18,9 +18,11 @@ namespace NiconicoToolkit.Search
             _context = context;
             Video = new Video.VideoSearchSubClient(context, defaultOptions);
             User = new User.UserSearchSubClient(context, defaultOptions);
+            List = new List.ListSearchSubClient(context, defaultOptions);
         }
 
         public Video.VideoSearchSubClient Video { get; }
         public User.UserSearchSubClient User { get; }
+        public List.ListSearchSubClient List { get; }
     }
 }

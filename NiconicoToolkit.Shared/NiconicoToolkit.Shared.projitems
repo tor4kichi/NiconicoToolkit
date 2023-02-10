@@ -152,6 +152,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\Video\SearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\Video\Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\Video\VideoSearchSubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\List\ListSearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\List\ListSearchSubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\List\Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\SearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\User\Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\User\UserSearchResponse.cs" />
