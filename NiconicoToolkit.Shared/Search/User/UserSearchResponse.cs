@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NiconicoToolkit.User;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -32,7 +33,7 @@ namespace NiconicoToolkit.Search.User
         public string Type { get; set; }
 
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public UserId Id { get; set; }
 
         [JsonPropertyName("nickname")]
         public string Nickname { get; set; }
