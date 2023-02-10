@@ -155,6 +155,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Search\List\ListSearchResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\List\ListSearchSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\List\Sort.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\Live\LiveSearchResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\Live\LiveSearchSubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Search\Live\Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\SearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\User\Sort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Search\User\UserSearchResponse.cs" />

@@ -19,10 +19,12 @@ namespace NiconicoToolkit.Search
             Video = new Video.VideoSearchSubClient(context, defaultOptions);
             User = new User.UserSearchSubClient(context, defaultOptions);
             List = new List.ListSearchSubClient(context, defaultOptions);
+            Live = new Live.LiveSearchSubClient(context, defaultOptions);
         }
 
         public Video.VideoSearchSubClient Video { get; }
         public User.UserSearchSubClient User { get; }
         public List.ListSearchSubClient List { get; }
+        public Live.LiveSearchSubClient Live { get; }
     }
 }
