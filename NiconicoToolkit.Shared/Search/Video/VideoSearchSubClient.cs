@@ -21,6 +21,12 @@ namespace NiconicoToolkit.Search.Video
             _option = defaultOptions;
         }
 
+        /// <summary>
+        /// キーワードかタグで動画を検索します<br />
+        /// sortKeyがHot/PersonalizedのときはsortOrderはNoneになります<br />
+        /// (min/max)RegisteredAtよりもrangeが優先されます
+        /// </summary>
+        /// <returns></returns>
         public Task<VideoSearchResponse> VideoSearchAsync(
             string keyword,
             bool isTagSearch = false,
