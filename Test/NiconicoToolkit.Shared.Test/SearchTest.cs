@@ -107,5 +107,27 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 Assert.IsNotNull(item.Title);
             }
         }
+
+        [TestMethod]
+        [DataRow("歌")]
+        public async Task LiveSearchAsync(string keyword)
+        {
+            var res = await _searchClient.Live.LiveSearchAsync(keyword, status: Search.Live.Status.ENDED);
+
+            Assert.IsNotNull(res.Meta.TotalCount);
+
+            Assert.IsNotNull(res.Items);
+
+            if (res.Items.Any())
+            {
+                var item = res.Items[0];
+
+                Assert.IsNotNull(item);
+                Assert.IsNotNull(item.ProgramId);
+                Assert.IsNotNull(item.Program);
+                Assert.IsNotNull(item.Program.Title);
+                Assert.IsNotNull(item.ProgramProvider);
+            }
+        }
     }
 }
