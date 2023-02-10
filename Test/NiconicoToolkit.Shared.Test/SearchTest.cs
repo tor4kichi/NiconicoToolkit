@@ -65,5 +65,26 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 Assert.IsNotNull(item.Owner);
             }
         }
+
+        [TestMethod]
+        [DataRow("ニコニコ")]
+        public async Task UserSearchAsync(string keyword)
+        {
+            var res = await _searchClient.User.UserSearchAsync(keyword);
+
+            Assert.IsTrue(res.Meta.IsSuccess);
+
+            Assert.IsNotNull(res.Data);
+            Assert.IsNotNull(res.Data.Items);
+
+            if (res.Data.Items.Any())
+            {
+                var item = res.Data.Items[0];
+
+                Assert.IsNotNull(item);
+                Assert.IsNotNull(item.Id);
+                Assert.IsNotNull(item.Nickname);
+            }
+        }
     }
 }
