@@ -24,7 +24,7 @@ namespace NiconicoToolkit.Search.User
         public string RequestId { get; set; }
 
         [JsonPropertyName("totalCount")]
-        public string TotalCount { get; set; }
+        public int TotalCount { get; set; }
     }
 
     public sealed class UserSearchItem

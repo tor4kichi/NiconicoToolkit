@@ -246,7 +246,7 @@ namespace NiconicoToolkit.Search.Live
         public TimeshiftStatus Status { get; set; }
 
         [JsonPropertyName("endTime")]
-        public DateTimeOffset EndTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
 
         [JsonPropertyName("reservationDeadline")]
         public DateTimeOffset ReservationDeadline { get; set; }

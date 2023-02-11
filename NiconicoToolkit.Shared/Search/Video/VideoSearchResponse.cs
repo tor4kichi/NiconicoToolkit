@@ -35,7 +35,7 @@ namespace NiconicoToolkit.Search.Video
         public string SearchId { get; set; }
 
         [JsonPropertyName("totalCount")]
-        public string TotalCount { get; set; }
+        public int TotalCount { get; set; }
 
         [JsonPropertyName("additionals")]
         public Additionals Additionals { get; set; }
