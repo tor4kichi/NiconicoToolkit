@@ -44,7 +44,7 @@ namespace NiconicoToolkit.Search.List
                 query.Add("sortOrder", sortOrder.Value.GetDescription());
 
             var url = new StringBuilder(NiconicoUrls.NvApiV1Url)
-                .Append("search/mylist")
+                .Append("search/list")
                 .AppendQueryString(query)
                 .ToString();
 
