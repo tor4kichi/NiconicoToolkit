@@ -385,25 +385,27 @@ namespace NiconicoToolkit.Ranking.Video
             int? pageCount = null,
             CancellationToken ct = default)
         {
+            var query = new NameValueCollection() { };
+
+            if (pageCount is not null)
+                query.Add("page", pageCount.ToString());
+
             if (genre == RankingGenre.HotTopic)
             {
                 if (term != RankingTerm.Hour && term != RankingTerm.Day)
                     term = RankingTerm.Day;
 
+                query.Add("term", term.GetDescription());
+
                 if (tag is not null)
-                {
-                    return _context.GetJsonAsAsync<VideoRankingResponse>(
-                        $"{NiconicoUrls.NvApiV1Url}ranking/hot-topic?page={pageCount}&term={term.GetDescription()}&key={tag}",
-                        _options, ct
-                        );
-                }
-                else
-                {
-                    return _context.GetJsonAsAsync<VideoRankingResponse>(
-                        $"{NiconicoUrls.NvApiV1Url}ranking/hot-topic?page={pageCount}&term={term.GetDescription()}",
-                        _options, ct
-                        );
-                }
+                    query.Add("key", tag);
+
+                var url = new StringBuilder(NiconicoUrls.NvApiV1Url)
+                    .Append("ranking/hot-topic")
+                    .AppendQueryString(query)
+                    .ToString();
+
+                return _context.GetJsonAsAsync<VideoRankingResponse>(url ,_options, ct);
             }
             else
             {
@@ -412,18 +414,17 @@ namespace NiconicoToolkit.Ranking.Video
                     if (term != RankingTerm.Hour && term != RankingTerm.Day)
                         term = RankingTerm.Day;
 
-                    return _context.GetJsonAsAsync<VideoRankingResponse>(
-                        $"{NiconicoUrls.NvApiV1Url}ranking/genre/{genre.GetDescription()}?page={pageCount}&term={term.GetDescription()}&tag={tag}",
-                        _options, ct
-                        );
+                    query.Add("tag", tag);
                 }
-                else
-                {
-                    return _context.GetJsonAsAsync<VideoRankingResponse>(
-                        $"{NiconicoUrls.NvApiV1Url}ranking/genre/{genre.GetDescription()}?page={pageCount}&term={term.GetDescription()}",
-                        _options, ct
-                        );
-                }
+
+                query.Add("term", term.GetDescription());
+
+                var url = new StringBuilder(NiconicoUrls.NvApiV1Url)
+                    .Append($"ranking/genre/{genre.GetDescription()}")
+                    .AppendQueryString(query)
+                    .ToString();
+
+                return _context.GetJsonAsAsync<VideoRankingResponse>(url, _options, ct);
             }
         }
     }

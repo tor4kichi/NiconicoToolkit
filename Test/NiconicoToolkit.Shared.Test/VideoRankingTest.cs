@@ -20,7 +20,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         NiconicoContext _context;
 
         [TestMethod]
-        [DataRow("all")]
+        [DataRow("All")]
         public async Task GetVideoRankingAsync(string genre)
         {
             var res = await _context.Video.Ranking.GetRankingAsync(Enum.Parse<Ranking.Video.RankingGenre>(genre));
