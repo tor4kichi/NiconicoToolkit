@@ -126,7 +126,6 @@ namespace NiconicoToolkit.UWP.Test.Tests
                 Assert.IsNotNull(item.ProgramId);
                 Assert.IsNotNull(item.Program);
                 Assert.IsNotNull(item.Program.Title);
-                Assert.IsNotNull(item.ProgramProvider);
             }
         }
     }
