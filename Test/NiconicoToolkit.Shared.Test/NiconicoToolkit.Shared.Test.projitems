@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UserTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VideoMylistLoginTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VideoMylistPublicTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VideoRankingTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VideoTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VideoWatchTest.cs" />
   </ItemGroup>
