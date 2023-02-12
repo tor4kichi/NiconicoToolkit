@@ -1,5 +1,4 @@
-﻿using AngleSharp.Html.Parser;
-using NiconicoToolkit.Live.Notify;
+﻿using NiconicoToolkit.Live.Notify;
 using NiconicoToolkit.Live.WatchPageProp;
 using NiconicoToolkit.Live.WatchSession;
 using System;
