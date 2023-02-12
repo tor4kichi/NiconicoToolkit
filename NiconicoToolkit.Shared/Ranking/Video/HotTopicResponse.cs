@@ -35,7 +35,7 @@ namespace NiconicoToolkit.Ranking.Video
     public sealed class Condition
     {
         [JsonPropertyName("genre")]
-        public string Genre { get; set; }
+        public Genre Genre { get; set; }
 
         [JsonPropertyName("tag")]
         public string Tag { get; set; }
