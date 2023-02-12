@@ -7,32 +7,31 @@ using System.Threading.Tasks;
 
 namespace NiconicoToolkit.User
 {
-    public sealed class UserDetailResponseContainer
-    {
-        [JsonPropertyName("userDetails")]
-        public UserDetailResponse Detail { get; set; }
-    }
-
-
     public sealed class UserDetailResponse : ResponseWithMeta
     {
-        [JsonPropertyName("userDetails")]
-        public UserDetailData Data { get; set; }
+        [JsonPropertyName("data")]
+        public Data Data { get; set; }
     }
 
-    public sealed class UserDetailData
+    public sealed class Data
     {
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-
         [JsonPropertyName("user")]
         public UserDetail User { get; set; }
 
-        [JsonPropertyName("followStatus")]
-        public FollowStatus FollowStatus { get; set; }
+        [JsonPropertyName("relationships")]
+        public Relationships Relationships { get; set; }
     }
 
-    public sealed class FollowStatus
+    public sealed class Relationships
+    {
+        [JsonPropertyName("sessionUser")]
+        public SessionUser SessionUser { get; set; }
+
+        [JsonPropertyName("isMe")]
+        public bool IsMe { get; set; }
+    }
+
+    public partial class SessionUser
     {
         [JsonPropertyName("isFollowing")]
         public bool IsFollowing { get; set; }
@@ -42,6 +41,9 @@ namespace NiconicoToolkit.User
     {
         [JsonPropertyName("description")]
         public string Description { get; set; }
+
+        [JsonPropertyName("decoratedDescriptionHtml")]
+        public string DecoratedDescriptionHtml { get; set; }
 
         [JsonPropertyName("strippedDescription")]
         public string StrippedDescription { get; set; }
@@ -67,8 +69,11 @@ namespace NiconicoToolkit.User
         [JsonPropertyName("isNicorepoReadable")]
         public bool IsNicorepoReadable { get; set; }
 
-        //[JsonPropertyName("sns")]
-        //public List<string> Sns { get; set; }
+        [JsonPropertyName("sns")]
+        public List<Sns> Sns { get; set; }
+
+        [JsonPropertyName("coverImage")]
+        public CoverImage CoverImage { get; set; }
 
         [JsonPropertyName("id")]
         public UserId Id { get; set; }
@@ -78,6 +83,38 @@ namespace NiconicoToolkit.User
 
         [JsonPropertyName("icons")]
         public Icons Icons { get; set; }
+    }
+
+    public enum SnsType { twitter, youtube, facebook, instagram };
+
+    public sealed class Sns
+    {
+        [JsonPropertyName("type")]
+        public SnsType Type { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        [JsonPropertyName("iconUrl")]
+        public Uri IconUrl { get; set; }
+
+        [JsonPropertyName("screenName")]
+        public string ScreenName { get; set; }
+
+        [JsonPropertyName("url")]
+        public Uri Url { get; set; }
+    }
+
+    public sealed class CoverImage
+    {
+        [JsonPropertyName("ogpUrl")]
+        public Uri OgpUrl { get; set; }
+
+        [JsonPropertyName("pcUrl")]
+        public Uri PcUrl { get; set; }
+
+        [JsonPropertyName("smartphoneUrl")]
+        public Uri SmartphoneUrl { get; set; }
     }
 
     public sealed class Icons

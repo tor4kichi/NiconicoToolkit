@@ -56,7 +56,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
             Assert.IsNotNull(res.Data.User.Icons.Small, "res.Data.User.Icons.Small is null");
             Assert.IsNotNull(res.Data.User.Icons.Large, "res.Data.User.Icons.Large is null");
             Assert.IsNotNull(res.Data.User.Description, "res.Data.User.Description is null");
-            Assert.IsNotNull(res.Data.FollowStatus, "res.Data.FollowStatus is null");
+            Assert.IsNotNull(res.Data.Relationships, "res.Data.Relationships is null");
         }
 
 
