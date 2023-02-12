@@ -1,5 +1,4 @@
-﻿using AngleSharp.Html.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
@@ -45,30 +44,39 @@ namespace NiconicoToolkit.User
         }
 
               
-        public async Task<UserDetailResponse> GetUserDetailAsync(UserId userId)
+        //public async Task<UserDetailResponse> GetUserDetailAsync(UserId userId)
+        //{
+        //    await _context.WaitPageAccessAsync();
+
+        //    using var res = await _context.GetAsync(NiconicoUrls.MakeUserPageUrl(userId));
+        //    if (!res.IsSuccessStatusCode)
+        //    {
+        //        return new UserDetailResponse()
+        //        {
+        //            Meta = new Meta() { Status = (long)res.StatusCode }
+        //        };
+        //    }
+
+        //    return await res.Content.ReadHtmlDocumentActionAsync(document =>
+        //    {
+        //        var dataNode = document.QuerySelector("#js-initial-userpage-data");
+        //        var json = dataNode.GetAttribute("data-initial-data");
+        //        var userDetailRes = JsonSerializer.Deserialize<UserDetailResponseContainer>(WebUtility.HtmlDecode(json), _options);
+        //        userDetailRes.Detail.Meta = new Meta()
+        //        {
+        //            Status = (long)res.StatusCode
+        //        };
+        //        return userDetailRes.Detail;
+        //    });
+        //}
+
+
+        public Task<UserDetailResponse> GetUserDetailAsync(UserId userId)
         {
-            await _context.WaitPageAccessAsync();
-
-            using var res = await _context.GetAsync(NiconicoUrls.MakeUserPageUrl(userId));
-            if (!res.IsSuccessStatusCode)
-            {
-                return new UserDetailResponse()
-                {
-                    Meta = new Meta() { Status = (long)res.StatusCode }
-                };
-            }
-
-            return await res.Content.ReadHtmlDocumentActionAsync(document =>
-            {
-                var dataNode = document.QuerySelector("#js-initial-userpage-data");
-                var json = dataNode.GetAttribute("data-initial-data");
-                var userDetailRes = JsonSerializer.Deserialize<UserDetailResponseContainer>(WebUtility.HtmlDecode(json), _options);
-                userDetailRes.Detail.Meta = new Meta()
-                {
-                    Status = (long)res.StatusCode
-                };
-                return userDetailRes.Detail;
-            });
+            return _context.GetJsonAsAsync<UserDetailResponse>(
+                $"{NiconicoUrls.NvApiV1Url}users/{userId}",
+                _options
+                );
         }
 
 

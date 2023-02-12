@@ -25,6 +25,7 @@ using NiconicoToolkit.Community;
 using NiconicoToolkit.Ichiba;
 using NiconicoToolkit.Live.Timeshift;
 using NiconicoToolkit.SnapshotSearch;
+using NiconicoToolkit.Search;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -83,12 +84,13 @@ namespace NiconicoToolkit
             HttpClient httpClient
             )
         {
-            HttpClient = httpClient;
+            HttpClient = httpClient;            
             Live = new LiveClient(this, DefaultOptions);
             Account = new AccountClient(this);
             User = new UserClient(this, DefaultOptions);
             Video = new VideoClient(this, DefaultOptions);
             Activity = new ActivityClient(this, DefaultOptions);
+            Search = new SearchClient(this, DefaultOptions);
             SearchWithPage = new SearchWithPageClient(this);
             SearchWithCeApi = new SearchWithCeApiClient(this, DefaultOptions);
             Recommend = new RecommendClient(this, DefaultOptions);
@@ -112,6 +114,7 @@ namespace NiconicoToolkit
         public UserClient User { get; }
         public VideoClient Video { get; }
         public ActivityClient Activity { get; }
+        public SearchClient Search { get; }
         public SearchWithPageClient SearchWithPage { get; }
         public SearchWithCeApiClient SearchWithCeApi { get; }
         public RecommendClient Recommend { get; }

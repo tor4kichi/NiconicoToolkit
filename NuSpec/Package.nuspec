@@ -28,7 +28,7 @@
     </description>
     <releaseNotes></releaseNotes>
     <copyright>tor4kichi</copyright>
-    <tags>Niconico UWP WinUI3 Net5</tags>
+    <tags>Niconico UWP WinUI3 Net6</tags>
     <dependencies >
       <group targetFramework="uap10.0.16299">
         <dependency id="AngleSharp" version="0.16.0" />
@@ -75,9 +75,9 @@
     <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.dll" target="ref\uap10.0" />
     <file src="..\NiconicoToolkit.UWP\bin\Release\NiconicoToolkit.UWP.pri" target="ref\uap10.0" />
 
-    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.dll" target="lib\net50"/>
-    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.pdb" target="lib\net50"/>
-    <file src="..\NiconicoToolkit.Net5\bin\Release\net5.0\NiconicoToolkit.Net5.xml" target="lib\net50"/>
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net6.0\NiconicoToolkit.Net5.dll" target="lib\net60"/>
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net6.0\NiconicoToolkit.Net5.pdb" target="lib\net60"/>
+    <file src="..\NiconicoToolkit.Net5\bin\Release\net6.0\NiconicoToolkit.Net5.xml" target="lib\net60"/>
 
     <file src="..\NiconicoToolkit.WinUI3\bin\Release\net6.0-windows10.0.19041.0\NiconicoToolkit.WinUI3.dll" target="lib\net6.0-windows10.0.19041"/>
     <file src="..\NiconicoToolkit.WinUI3\bin\Release\net6.0-windows10.0.19041.0\NiconicoToolkit.WinUI3.pri" target="lib\net6.0-windows10.0.19041"/>
