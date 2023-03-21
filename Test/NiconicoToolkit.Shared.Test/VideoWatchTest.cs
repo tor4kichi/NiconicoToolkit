@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Video.Watch.Dmc;
-using NiconicoToolkit.Video.Watch.NMSG_Comment;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +20,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         public void Initialize()
         {
             _context = new NiconicoContext(AccountTestHelper.Site);
+            _context.SetupDefaultRequestHeaders();
         }
 
         NiconicoContext _context;
@@ -147,13 +147,13 @@ namespace NiconicoToolkit.UWP.Test.Tests
         [TestMethod]
         [DataRow("sm38647727")]
         [DataRow("so38538458")]
-        public async Task GetCommentAsync(string videoId)
+        public async Task GetNmsgCommentAsync(string videoId)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
 
             Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
 
-            var commentSession = new CommentSession(_context, res.WatchApiResponse.WatchApiData);
+            var commentSession = new NiconicoToolkit.Video.Watch.NMSG_Comment.CommentSession(_context, res.WatchApiResponse.WatchApiData);
 
             var commentRes = await commentSession.GetCommentFirstAsync();
 
@@ -167,6 +167,22 @@ namespace NiconicoToolkit.UWP.Test.Tests
             }
         }
 
-#endregion Comment
+
+        [TestMethod]
+        [DataRow("sm38647727")]
+        [DataRow("so41926974")]
+        public async Task GetNvCommentAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
+            
+            var commentRes = await _context.Video.NvComment.GetComments(res.WatchApiResponse.WatchApiData.Comment.NvComment);
+
+            Assert.IsNotNull(commentRes.Data);
+            Assert.IsNotNull(commentRes.Data.Threads);
+            Assert.IsNotNull(commentRes.Data.GlobalComments);            
+        }
+        #endregion Comment
     }
 }

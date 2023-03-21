@@ -281,6 +281,7 @@ namespace NiconicoToolkit.Video.Watch.NMSG_Comment
 
         internal async Task<ThreadKeyResponse> GetThreadKeyAsync(int threadId)
         {
+            
             var url = $"https://flapi.nicovideo.jp/api/getthreadkey?thread={threadId}";
             var keyValuesString = await _context.GetStringAsync(url);
             var nvc = HttpUtility.ParseQueryString(keyValuesString);

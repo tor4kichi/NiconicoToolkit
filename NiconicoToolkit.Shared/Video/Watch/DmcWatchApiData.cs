@@ -179,6 +179,42 @@ namespace NiconicoToolkit.Video.Watch
 
         [JsonPropertyName("isAttentionRequired")]
         public bool IsAttentionRequired { get; set; }
+
+        [JsonPropertyName("nvComment")]
+        public NvComment NvComment { get; set; }
+
+        [JsonPropertyName("isDefaultInvisible")]
+        public bool IsDefaultInvisible { get; set; }
+    }
+
+    public class NvComment
+    {
+        [JsonPropertyName("threadKey")]
+        public string ThreadKey { get; set; }
+
+        [JsonPropertyName("server")]
+        public string Server { get; set; }
+
+        [JsonPropertyName("params")]
+        public NvCommentParams Params { get; set; }
+
+        public class NvCommentParams
+        {
+            [JsonPropertyName("targets")]
+            public List<NvCommentParamsTarget> Targets { get; set; }
+
+            [JsonPropertyName("language")]
+            public string Language { get; set; }            
+        }
+    }
+
+    public class NvCommentParamsTarget
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("fork")]
+        public string Fork { get; set; }
     }
 
     public partial class Keys
@@ -254,6 +290,12 @@ namespace NiconicoToolkit.Video.Watch
 
         [JsonPropertyName("fork")]
         public int Fork { get; set; }
+
+        [JsonPropertyName("forkLabel")]
+        public string ForkLabel { get; set; }
+
+        [JsonPropertyName("videoId")]
+        public string VideoId { get; set; }
 
         [JsonPropertyName("isActive")]
         public bool IsActive { get; set; }

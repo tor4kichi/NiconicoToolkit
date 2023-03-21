@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using NiconicoToolkit.Video.Watch.NV_Comment;
 
 namespace NiconicoToolkit.Video
 {
@@ -19,6 +20,7 @@ namespace NiconicoToolkit.Video
 
         public VideoRankingSubClient Ranking { get; }
         public VideoWatchSubClient VideoWatch { get; }
+        public NvCommentSubClient NvComment { get; }
 
         internal VideoClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
@@ -26,6 +28,7 @@ namespace NiconicoToolkit.Video
             _context = context;
             Ranking = new VideoRankingSubClient(context, _option);
             VideoWatch = new VideoWatchSubClient(context, _option);
+            NvComment = new NvCommentSubClient(context, _option);
         }
     }
 

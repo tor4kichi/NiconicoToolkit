@@ -236,6 +236,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\Protocol.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\SessionOperationAuth.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\ChatResultCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\CommentSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\CommentSession.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\NMSG_Request.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\NMSG_Response.cs" />
@@ -248,5 +249,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Live\WatchPageProp\DataPropsSource.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\" />
   </ItemGroup>
 </Project>
