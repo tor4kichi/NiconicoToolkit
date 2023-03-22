@@ -56,6 +56,34 @@ public sealed class NvCommentSubClient
     }
 
     /// <summary>
+    /// 動画に投稿されたコメントを取得します。
+    /// </summary>
+    /// <param name="threadKey"></param>
+    /// <param name="targets">取得対象とするコメント郡を指定します。参考:ThreadTargetIdConstants</param>
+    /// <param name="language"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    /// <remarks>VideoClient.VideoWatch.GetInitialWatchDataAsync() のレスポンスデータに含まれる NvComment のデータを引数に渡してください。</remarks>
+    public async Task<ThreadResponseContainer> GetCommentsAsync(string threadKey, IEnumerable<NvCommentParamsTarget> targets, string language, CancellationToken ct = default)
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadRequestContainer()
+        {
+            ThreadKey = threadKey,
+            Params = new ThreadRequestContainer.ThreadRequestParams()
+            {
+                Targets = targets.ToList(),
+                Language = language,
+            }
+        });
+        return await _context.SendJsonAsAsync<ThreadResponseContainer>(
+            HttpMethod.Post,
+            NVCommentApiUrl,
+            requestParamsJson,
+            ct: ct
+            );
+    }
+
+    /// <summary>
     /// スレッドにコメントを送信するためのポストキーを取得します。
     /// </summary>
     /// <param name="threadId">スレッドID。WatchApiResponse.WatchApiData.Comment.Threads から取得できます。</param>
@@ -137,7 +165,7 @@ public sealed class NvCommentSubClient
     }
 }
 
-public static class ThreadTargetIdConstatns
+public static class ThreadTargetForkConstants
 {
     public const string Easy = "easy";
     public const string Main = "main";

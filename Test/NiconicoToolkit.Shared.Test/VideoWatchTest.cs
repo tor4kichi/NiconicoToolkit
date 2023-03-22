@@ -165,9 +165,29 @@ namespace NiconicoToolkit.UWP.Test.Tests
             Assert.IsNotNull(commentRes.Data.GlobalComments);            
         }
 
+        [TestMethod]
+        [DataRow("sm38647727")]
+        public async Task NvGetCommentWithoutEasyPostAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
+
+            var nvComment = res.WatchApiResponse.WatchApiData.Comment.NvComment;
+            var commentRes = await _context.Video.NvComment.GetCommentsAsync(
+                nvComment.ThreadKey, 
+                nvComment.Params.Targets.Where(x => x.Fork != ThreadTargetForkConstants.Easy), 
+                nvComment.Params.Language
+                );
+
+            Assert.IsNotNull(commentRes.Data);
+            Assert.IsNotNull(commentRes.Data.Threads);            
+            Assert.IsNull(commentRes.Data.Threads.FirstOrDefault(x => x.Fork == ThreadTargetForkConstants.Easy));
+        }
+
 
         [TestMethod]
-        [DataRow("sm9", "うぽつ", ThreadTargetIdConstatns.Main)]
+        [DataRow("sm9", "うぽつ", ThreadTargetForkConstants.Main)]
         public async Task NvPostCommentAsync(string videoId, string commentBody, string threadTarget)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
@@ -194,7 +214,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         }
 
         [TestMethod]
-        [DataRow("sm9", "うぽつ", ThreadTargetIdConstatns.Main)]
+        [DataRow("sm9", "うぽつ", ThreadTargetForkConstants.Main)]
         public async Task NVPostCommentFailWithInvalidPostKeyAsync(string videoId, string commentBody, string threadTarget)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
@@ -236,7 +256,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
             var comment = res.WatchApiResponse.WatchApiData.Comment;
             var nvComment = comment.NvComment;
             int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
-            var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetIdConstatns.Easy);
+            var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetForkConstants.Easy);
             var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(easyPostKeyRes.Data);
             var commentRes = await _context.Video.NvComment.EasyPostCommentAsync(
