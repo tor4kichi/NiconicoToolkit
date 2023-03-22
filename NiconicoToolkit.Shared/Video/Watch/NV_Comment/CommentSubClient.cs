@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Linq;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -29,7 +30,8 @@ public sealed class NvCommentSubClient
 
     const string NVCommentApiUrl = "https://nvcomment.nicovideo.jp/v1/threads";
 
-    public async Task<ThreadResponseContainer> GetComments(NvComment videoComment, CancellationToken ct = default)
+
+    public async Task<ThreadResponseContainer> GetCommentsAsync(NvComment videoComment, CancellationToken ct = default)
     {
         string requestParamsJson = JsonSerializer.Serialize(new ThreadRequestContainer() 
         {
@@ -42,6 +44,89 @@ public sealed class NvCommentSubClient
         });        
         return await _context.SendJsonAsAsync<ThreadResponseContainer>(HttpMethod.Post,
                     NVCommentApiUrl, requestParamsJson);        
+    }
+
+    const string NVCommentGetPostApiUrl = "https://nvapi.nicovideo.jp/v1/comment/keys/post?threadId=";
+
+    public async Task<ThreadPostKeyResponse> GetPostKeyAsync(string threadId)
+    {
+        return await _context.GetJsonAsAsync<ThreadPostKeyResponse>($"{NVCommentGetPostApiUrl}{threadId}");
+    }
+
+    public async Task<ThreadPostResponse> PostCommentAsync(
+        string threadId,
+        VideoId videoId,
+        IEnumerable<string> commands,
+        string comment,
+        int vPosMs,
+        string postKey,
+        CancellationToken ct = default
+        )
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadPostRequest()
+        {
+            VideoId = videoId.ToString(),
+            Commands = commands.ToList(),
+            Body = comment,
+            VposMs = vPosMs,
+            PostKey = postKey,
+        });
+
+        return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
+                    $"{NVCommentApiUrl}/{threadId}/comments", requestParamsJson);        
+    }
+}
+
+public static class ThreadTargetIdConstatns
+{
+    public const string Easy = "easy";
+    public const string Main = "main";
+    public const string Owner = "owner";
+}
+
+
+public sealed class ThreadPostKeyResponse : ResponseWithMeta
+{
+    [JsonPropertyName("data")]
+    public ThreadPostKeyData? Data { get; set; }
+
+    public sealed class ThreadPostKeyData
+    {
+        [JsonPropertyName("postKey")]
+        public string PostKey { get; set; }
+    }
+}
+
+public sealed class ThreadPostRequest
+{
+    [JsonPropertyName("videoId")]
+    public string VideoId { get; set; }
+
+    [JsonPropertyName("commands")]
+    public List<string> Commands { get; set; }
+
+    [JsonPropertyName("body")]
+    public string Body { get; set; }
+
+    [JsonPropertyName("vposMs")]
+    public int VposMs { get; set; }
+
+    [JsonPropertyName("postKey")]
+    public string PostKey { get; set; }
+}
+
+public sealed class ThreadPostResponse
+{
+    [JsonPropertyName("data")]
+    public ThreadPostResponseData? Data { get; set; }
+
+    public sealed class ThreadPostResponseData
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("no")]
+        public int Number { get; set; }
     }
 }
 
