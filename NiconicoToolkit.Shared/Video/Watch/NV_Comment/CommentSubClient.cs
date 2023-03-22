@@ -30,7 +30,12 @@ public sealed class NvCommentSubClient
 
     const string NVCommentApiUrl = "https://nvcomment.nicovideo.jp/v1/threads";
 
-
+    /// <summary>
+    /// 動画に投稿されたコメントを取得します。
+    /// </summary>
+    /// <param name="videoComment">VideoClient.VideoWatch.GetInitialWatchDataAsync() のレスポンスデータに含まれる NvComment を指定します。</param>   
+    /// <param name="ct"></param>
+    /// <returns></returns>
     public async Task<ThreadResponseContainer> GetCommentsAsync(NvComment videoComment, CancellationToken ct = default)
     {
         string requestParamsJson = JsonSerializer.Serialize(new ThreadRequestContainer() 
@@ -42,17 +47,41 @@ public sealed class NvCommentSubClient
                 Language = videoComment.Params.Language,
             }
         });        
-        return await _context.SendJsonAsAsync<ThreadResponseContainer>(HttpMethod.Post,
-                    NVCommentApiUrl, requestParamsJson);        
+        return await _context.SendJsonAsAsync<ThreadResponseContainer>(
+            HttpMethod.Post,
+            NVCommentApiUrl, 
+            requestParamsJson,
+            ct: ct
+            );        
     }
 
-    const string NVCommentGetPostApiUrl = "https://nvapi.nicovideo.jp/v1/comment/keys/post?threadId=";
-
-    public async Task<ThreadPostKeyResponse> GetPostKeyAsync(string threadId)
+    /// <summary>
+    /// スレッドにコメントを送信するためのポストキーを取得します。
+    /// </summary>
+    /// <param name="threadId">スレッドID。WatchApiResponse.WatchApiData.Comment.Threads から取得できます。</param>
+    /// <returns></returns>
+    [RequireLogin]
+    public async Task<ThreadPostKeyResponse> GetPostKeyAsync(string threadId, CancellationToken ct = default)
     {
-        return await _context.GetJsonAsAsync<ThreadPostKeyResponse>($"{NVCommentGetPostApiUrl}{threadId}");
+        return await _context.GetJsonAsAsync<ThreadPostKeyResponse>(
+            $"https://nvapi.nicovideo.jp/v1/comment/keys/post?threadId={threadId}", ct: ct
+            );
     }
 
+    /// <summary>
+    /// 動画の指定スレッドに対してコメント投稿を送信します。
+    /// </summary>
+    /// <param name="threadId">スレッドID。WatchApiResponse.WatchApiData.Comment.Threads から取得できます。</param>
+    /// <param name="videoId">動画ID。stringのままでもVideoIdへの暗黙の型変換により指定可能です。</param>
+    /// <param name="commands">184などのコマンドを指定します</param>
+    /// <paramref name="commands">https://dic.nicovideo.jp/a/%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89</paramref>
+    /// <param name="comment">コメント本文。Uriエンコードは不要です。</param>
+    /// <param name="vPosMs">コメントする動画時間をマイクロ秒単位で指定します。動画秒数に対して1000を掛け算することでマイクロ秒へ変換できます。</param>
+    /// <param name="postKey">GetPostKeyAsync()を使用して予め取得してください。</param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    /// <remarks> パラメータエラーによる失敗は全て INVALID_PARAMETER としてまとめられるため、何が間違いかは判別できません。 </remarks>
+    [RequireLogin]
     public async Task<ThreadPostResponse> PostCommentAsync(
         string threadId,
         VideoId videoId,
@@ -73,7 +102,7 @@ public sealed class NvCommentSubClient
         });
 
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
-                    $"{NVCommentApiUrl}/{threadId}/comments", requestParamsJson);        
+                    $"{NVCommentApiUrl}/{threadId}/comments", requestParamsJson, ct: ct);        
     }
 }
 
@@ -115,7 +144,7 @@ public sealed class ThreadPostRequest
     public string PostKey { get; set; }
 }
 
-public sealed class ThreadPostResponse
+public sealed class ThreadPostResponse : ResponseWithMeta
 {
     [JsonPropertyName("data")]
     public ThreadPostResponseData? Data { get; set; }
