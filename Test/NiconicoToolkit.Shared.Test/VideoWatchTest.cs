@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CommunityToolkit.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Video.Watch.Dmc;
-using NiconicoToolkit.Video.Watch.NMSG_Comment;
+using NiconicoToolkit.Video.Watch.NV_Comment;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,9 +19,14 @@ namespace NiconicoToolkit.UWP.Test.Tests
     public sealed class VideoWatchTest
     {
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             _context = new NiconicoContext(AccountTestHelper.Site);
+            _context.SetupDefaultRequestHeaders();
+
+            var (status, authority, userId) = await AccountTestHelper.LogInWithTestAccountAsync(_context);
+
+            Guard.IsTrue(status == Account.NiconicoSessionStatus.Success);
         }
 
         NiconicoContext _context;
@@ -143,30 +149,79 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
 #region Comment
 
-
         [TestMethod]
         [DataRow("sm38647727")]
-        [DataRow("so38538458")]
-        public async Task GetCommentAsync(string videoId)
+        [DataRow("so41926974")]
+        public async Task NvGetCommentAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
+            
+            var commentRes = await _context.Video.NvComment.GetCommentsAsync(res.WatchApiResponse.WatchApiData.Comment.NvComment);
+
+            Assert.IsNotNull(commentRes.Data);
+            Assert.IsNotNull(commentRes.Data.Threads);
+            Assert.IsNotNull(commentRes.Data.GlobalComments);            
+        }
+
+
+        [TestMethod]
+        [DataRow("sm9", "うぽつ", ThreadTargetIdConstatns.Easy)]
+        public async Task NvPostCommentAsync(string videoId, string commentBody, string threadTarget)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+           
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
+
+            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var nvComment = comment.NvComment;            
+            int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+            var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == threadTarget);
+            var postKeyRes = await _context.Video.NvComment.GetPostKeyAsync(thread.Id.ToString());
+            Assert.IsNotNull(postKeyRes.Data);
+            var commentRes = await _context.Video.NvComment.PostCommentAsync(
+                thread.Id.ToString()
+                , thread.VideoId
+                , new string[] { "184" }
+                , commentBody
+                , vposMs
+                , postKeyRes.Data.PostKey
+                );
+            
+            Assert.IsNotNull(commentRes.Data);
+            Assert.IsNotNull(commentRes.Data.Id);            
+        }
+
+        [TestMethod]
+        [DataRow("sm9", "うぽつ", ThreadTargetIdConstatns.Easy)]
+        public async Task NVPostCommentFailWithInvalidPostKeyAsync(string videoId, string commentBody, string threadTarget)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
 
             Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
 
-            var commentSession = new CommentSession(_context, res.WatchApiResponse.WatchApiData);
+            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var nvComment = comment.NvComment;
+            int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+            var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == threadTarget);
+            var postKeyRes = await _context.Video.NvComment.GetPostKeyAsync(thread.Id.ToString());
+            Assert.IsNotNull(postKeyRes.Data);
 
-            var commentRes = await commentSession.GetCommentFirstAsync();
+            var commentRes = await _context.Video.NvComment.PostCommentAsync(
+                thread.Id.ToString()
+                , thread.VideoId
+                , new string[] { "184" }
+                , commentBody
+                , vposMs
+                , ""//postKeyRes.Data.PostKey
+                );
 
-            Assert.IsNotNull(commentRes.Comments);
-            Assert.IsNotNull(commentRes.Leaves);
-            Assert.IsNotNull(commentRes.Threads);
-
-            if (commentRes.GlobalNumRes.NumRes > 0)
-            {
-                Assert.IsTrue(commentRes.Comments.Any());
-            }
+            Assert.IsFalse(commentRes.IsSuccess);
+            Debug.WriteLine(commentRes.Meta.ErrorCode);
+            Debug.WriteLine(commentRes.Meta.Status);
         }
 
-#endregion Comment
+        #endregion Comment
     }
 }

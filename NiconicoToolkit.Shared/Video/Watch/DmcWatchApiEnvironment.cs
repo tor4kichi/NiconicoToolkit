@@ -49,9 +49,6 @@ namespace NiconicoToolkit.Video.Watch
         [JsonPropertyName("dic")]
         public Uri Dic { get; set; }
 
-        [JsonPropertyName("flapi")]
-        public Uri Flapi { get; set; }
-
         [JsonPropertyName("live")]
         public Uri Live { get; set; }
 
