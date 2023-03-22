@@ -177,9 +177,8 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
             var nvComment = res.WatchApiResponse.WatchApiData.Comment.NvComment;
             var commentRes = await _context.Video.NvComment.GetCommentsAsync(
-                nvComment.ThreadKey, 
-                nvComment.Params.Targets.Where(x => x.Fork != ThreadTargetForkConstants.Easy), 
-                nvComment.Params.Language
+                nvComment,
+                new[] { ThreadTargetForkConstants.Owner, ThreadTargetForkConstants.Main }
                 );
 
             Assert.IsNotNull(commentRes.Data);
@@ -283,7 +282,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
             var comment = res.WatchApiResponse.WatchApiData.Comment;
             var nvComment = comment.NvComment;
-            var commentRes = await _context.Video.NvComment.GetCommentsAsync(nvComment.ThreadKey, nvComment.Params.Targets.Where(x => x.Fork == ThreadTargetForkConstants.Easy), nvComment.Params.Language);
+            var commentRes = await _context.Video.NvComment.GetCommentsAsync(nvComment, new[] { ThreadTargetForkConstants.Easy });
             var postedThread = commentRes.Data.Threads.FirstOrDefault(x => x.Fork == ThreadTargetForkConstants.Easy);
             var myPostComments = postedThread.Comments.Where(x => x.IsMyPost);
             int deleteTargetCommentNumber = -1;
