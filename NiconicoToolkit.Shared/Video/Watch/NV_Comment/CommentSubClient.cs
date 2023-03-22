@@ -104,6 +104,37 @@ public sealed class NvCommentSubClient
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
                     $"{NVCommentApiUrl}/{threadId}/comments", requestParamsJson, ct: ct);        
     }
+
+
+    [RequireLogin]
+    public async Task<ThreadEasyPostKeyResponse> GetEasyPostKeyAsync(string threadId, CancellationToken ct = default)
+    {
+        return await _context.GetJsonAsAsync<ThreadEasyPostKeyResponse>(
+            $"https://nvapi.nicovideo.jp/v1/comment/keys/post-easy?threadId={threadId}", ct: ct
+            );
+    }
+
+    [RequireLogin]
+    public async Task<ThreadPostResponse> EasyPostCommentAsync(
+        string threadId,
+        VideoId videoId,
+        string comment,
+        int vPosMs,
+        string easyPostKey,
+        CancellationToken ct = default
+        )
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadEasyPostRequest()
+        {
+            VideoId = videoId.ToString(),
+            Body = comment,
+            VposMs = vPosMs,
+            EasyPostKey = easyPostKey,
+        });
+
+        return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
+                    $"{NVCommentApiUrl}/{threadId}/easy-comments", requestParamsJson, ct: ct);
+    }
 }
 
 public static class ThreadTargetIdConstatns
@@ -144,6 +175,21 @@ public sealed class ThreadPostRequest
     public string PostKey { get; set; }
 }
 
+public sealed class ThreadEasyPostRequest
+{
+    [JsonPropertyName("videoId")]
+    public string VideoId { get; set; }
+
+    [JsonPropertyName("body")]
+    public string Body { get; set; }
+
+    [JsonPropertyName("vposMs")]
+    public int VposMs { get; set; }
+
+    [JsonPropertyName("postEasyKey")]
+    public string EasyPostKey { get; set; }
+}
+
 public sealed class ThreadPostResponse : ResponseWithMeta
 {
     [JsonPropertyName("data")]
@@ -156,6 +202,18 @@ public sealed class ThreadPostResponse : ResponseWithMeta
 
         [JsonPropertyName("no")]
         public int Number { get; set; }
+    }
+}
+
+public sealed class ThreadEasyPostKeyResponse : ResponseWithMeta
+{
+    [JsonPropertyName("data")]
+    public ThreadEasyPostKeyData? Data { get; set; }
+
+    public sealed class ThreadEasyPostKeyData
+    {
+        [JsonPropertyName("postEasyKey")]
+        public string EasyPostKey { get; set; }
     }
 }
 
