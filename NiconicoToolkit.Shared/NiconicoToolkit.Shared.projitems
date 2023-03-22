@@ -235,14 +235,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\KeepMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\Protocol.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\SessionOperationAuth.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\ChatResultCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\CommentSubClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\CommentSession.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\NMSG_Request.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\NMSG_Response.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\PostCommentResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\ThreadKeyResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NMSG_Comment\ThreadType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\VideoWatchSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchDataForGuest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchPageResponse.cs" />
