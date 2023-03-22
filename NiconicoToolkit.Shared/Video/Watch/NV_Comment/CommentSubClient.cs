@@ -56,6 +56,34 @@ public sealed class NvCommentSubClient
     }
 
     /// <summary>
+    /// 動画に投稿されたコメントを取得します。
+    /// </summary>
+    /// <param name="threadKey"></param>
+    /// <param name="targets">取得対象とするコメント郡を指定します。参考:ThreadTargetIdConstants</param>
+    /// <param name="language"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    /// <remarks>VideoClient.VideoWatch.GetInitialWatchDataAsync() のレスポンスデータに含まれる NvComment のデータを引数に渡してください。</remarks>
+    public async Task<ThreadResponseContainer> GetCommentsAsync(string threadKey, IEnumerable<NvCommentParamsTarget> targets, string language, CancellationToken ct = default)
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadRequestContainer()
+        {
+            ThreadKey = threadKey,
+            Params = new ThreadRequestContainer.ThreadRequestParams()
+            {
+                Targets = targets.ToList(),
+                Language = language,
+            }
+        });
+        return await _context.SendJsonAsAsync<ThreadResponseContainer>(
+            HttpMethod.Post,
+            NVCommentApiUrl,
+            requestParamsJson,
+            ct: ct
+            );
+    }
+
+    /// <summary>
     /// スレッドにコメントを送信するためのポストキーを取得します。
     /// </summary>
     /// <param name="threadId">スレッドID。WatchApiResponse.WatchApiData.Comment.Threads から取得できます。</param>
@@ -104,9 +132,40 @@ public sealed class NvCommentSubClient
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
                     $"{NVCommentApiUrl}/{threadId}/comments", requestParamsJson, ct: ct);        
     }
+
+
+    [RequireLogin]
+    public async Task<ThreadEasyPostKeyResponse> GetEasyPostKeyAsync(string threadId, CancellationToken ct = default)
+    {
+        return await _context.GetJsonAsAsync<ThreadEasyPostKeyResponse>(
+            $"https://nvapi.nicovideo.jp/v1/comment/keys/post-easy?threadId={threadId}", ct: ct
+            );
+    }
+
+    [RequireLogin]
+    public async Task<ThreadPostResponse> EasyPostCommentAsync(
+        string threadId,
+        VideoId videoId,
+        string comment,
+        int vPosMs,
+        string easyPostKey,
+        CancellationToken ct = default
+        )
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadEasyPostRequest()
+        {
+            VideoId = videoId.ToString(),
+            Body = comment,
+            VposMs = vPosMs,
+            EasyPostKey = easyPostKey,
+        });
+
+        return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
+                    $"{NVCommentApiUrl}/{threadId}/easy-comments", requestParamsJson, ct: ct);
+    }
 }
 
-public static class ThreadTargetIdConstatns
+public static class ThreadTargetForkConstants
 {
     public const string Easy = "easy";
     public const string Main = "main";
@@ -144,6 +203,21 @@ public sealed class ThreadPostRequest
     public string PostKey { get; set; }
 }
 
+public sealed class ThreadEasyPostRequest
+{
+    [JsonPropertyName("videoId")]
+    public string VideoId { get; set; }
+
+    [JsonPropertyName("body")]
+    public string Body { get; set; }
+
+    [JsonPropertyName("vposMs")]
+    public int VposMs { get; set; }
+
+    [JsonPropertyName("postEasyKey")]
+    public string EasyPostKey { get; set; }
+}
+
 public sealed class ThreadPostResponse : ResponseWithMeta
 {
     [JsonPropertyName("data")]
@@ -156,6 +230,18 @@ public sealed class ThreadPostResponse : ResponseWithMeta
 
         [JsonPropertyName("no")]
         public int Number { get; set; }
+    }
+}
+
+public sealed class ThreadEasyPostKeyResponse : ResponseWithMeta
+{
+    [JsonPropertyName("data")]
+    public ThreadEasyPostKeyData? Data { get; set; }
+
+    public sealed class ThreadEasyPostKeyData
+    {
+        [JsonPropertyName("postEasyKey")]
+        public string EasyPostKey { get; set; }
     }
 }
 
