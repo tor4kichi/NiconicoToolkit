@@ -26,9 +26,11 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
             var (status, authority, userId) = await AccountTestHelper.LogInWithTestAccountAsync(_context);
 
+            _userId = userId;
             Guard.IsTrue(status == Account.NiconicoSessionStatus.Success);
         }
 
+        uint _userId;
         NiconicoContext _context;
 
 
@@ -270,6 +272,60 @@ namespace NiconicoToolkit.UWP.Test.Tests
             Assert.IsNotNull(commentRes.Data);
             Assert.IsNotNull(commentRes.Data.Id);
         }
+
+        [TestMethod]
+        [DataRow("sm9")]
+        public async Task NvDeleteCommentAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment, "Not avairable comment in this video : " + videoId);
+
+            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var nvComment = comment.NvComment;
+            var commentRes = await _context.Video.NvComment.GetCommentsAsync(nvComment.ThreadKey, nvComment.Params.Targets.Where(x => x.Fork == ThreadTargetForkConstants.Easy), nvComment.Params.Language);
+            var postedThread = commentRes.Data.Threads.FirstOrDefault(x => x.Fork == ThreadTargetForkConstants.Easy);
+            var myPostComments = postedThread.Comments.Where(x => x.IsMyPost);
+            int deleteTargetCommentNumber = -1;
+            if (myPostComments.Any() is false)
+            {
+                string commentBody = res.WatchApiResponse.WatchApiData.EasyComment.Phrases.FirstOrDefault()?.Text ?? "うぽつ";
+                // コメント投稿する
+                int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+                var postThread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetForkConstants.Easy);
+                var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(postThread.Id.ToString());
+                Assert.IsNotNull(easyPostKeyRes.Data, "faield post comment.");
+                var postCommentRes = await _context.Video.NvComment.EasyPostCommentAsync(
+                    postThread.Id.ToString()
+                    , postThread.VideoId
+                    , commentBody
+                    , vposMs
+                    , easyPostKeyRes.Data.EasyPostKey
+                    );
+
+                deleteTargetCommentNumber = postCommentRes.Data.Number;
+                await Task.Delay(1000);
+            }
+            else
+            {
+                deleteTargetCommentNumber = myPostComments.First().No;
+            }
+
+            var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetForkConstants.Easy);
+            var keyRes = await _context.Video.NvComment.GetDeleteKeyAsync(thread.Id.ToString(), thread.ForkLabel);
+            Assert.IsNotNull(keyRes.Data, "faield getting delete key.");
+            var deleteRes = await _context.Video.NvComment.DeleteCommentAsync(
+                thread.VideoId
+                , thread.Id.ToString()
+                , thread.ForkLabel
+                , deleteTargetCommentNumber
+                , nvComment.Params.Language
+                , keyRes.Data.DeleteKey
+                );
+
+            Assert.IsTrue(deleteRes.IsSuccess, "failed comment deletion.");
+        }
+
 
         #endregion Comment
     }

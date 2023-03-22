@@ -163,7 +163,72 @@ public sealed class NvCommentSubClient
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
                     $"{NVCommentApiUrl}/{threadId}/easy-comments", requestParamsJson, ct: ct);
     }
+
+    [RequireLogin]
+    public async Task<ThreadDeleteKeyResponse> GetDeleteKeyAsync(string threadId, string fork, CancellationToken ct = default)
+    {
+        return await _context.GetJsonAsAsync<ThreadDeleteKeyResponse>(
+            $"https://nvapi.nicovideo.jp/v1/comment/keys/delete?threadId={threadId}&fork={fork}", ct: ct
+            );
+    }
+
+    [RequireLogin]
+    public async Task<ThreadDeleteResponse> DeleteCommentAsync(
+        VideoId videoId,
+        string threadId,
+        string fork,
+        int commentNumber,
+        string language,
+        string deleteKey,
+        CancellationToken ct = default
+        )
+    {
+        string requestParamsJson = JsonSerializer.Serialize(new ThreadDeleteRequest()
+        {
+            VideoId = videoId.ToString(),
+            Fork = fork,
+            DeleteKey = deleteKey,
+            Language = language,
+            Targets = new () { new () { Number = commentNumber }}
+        });
+
+        return await _context.SendJsonAsAsync<ThreadDeleteResponse>(HttpMethod.Put,
+                    $"{NVCommentApiUrl}/{threadId}/comment-comment-owner-deletions", requestParamsJson, ct: ct);
+    }
 }
+
+public sealed class ThreadDeleteRequest
+{
+    [JsonPropertyName("videoId")]
+    public string VideoId { get; set; }
+
+    [JsonPropertyName("deleteKey")]
+    public string DeleteKey { get; set; }
+
+    [JsonPropertyName("language")]
+    public string Language { get; set; }
+
+    [JsonPropertyName("targets")]
+    public List<ThreadDeleteTarget> Targets { get; set; }
+
+    [JsonPropertyName("fork")]
+    public string Fork { get; set; }
+
+    public sealed class ThreadDeleteTarget
+    {
+        [JsonPropertyName("no")]
+        public int Number { get; set; }
+
+        [JsonPropertyName("operation")]
+        public string Operation { get; set; } = "DELETE";
+    }
+}
+
+public sealed class ThreadDeleteResponse : ResponseWithMeta
+{
+
+}
+
 
 public static class ThreadTargetForkConstants
 {
@@ -230,6 +295,18 @@ public sealed class ThreadPostResponse : ResponseWithMeta
 
         [JsonPropertyName("no")]
         public int Number { get; set; }
+    }
+}
+
+public sealed class ThreadDeleteKeyResponse : ResponseWithMeta
+{
+    [JsonPropertyName("data")]
+    public ThreadDeleteKeyData? Data { get; set; }
+
+    public sealed class ThreadDeleteKeyData
+    {
+        [JsonPropertyName("deleteKey")]
+        public string DeleteKey { get; set; }
     }
 }
 
