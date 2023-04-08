@@ -5,251 +5,213 @@ using NiconicoToolkit.Live.WatchPageProp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Search.Live
 {
-    public sealed class LiveSearchResponse
+    public sealed class LiveSearchResponse : ResponseWithMeta<LiveSearchMeta>
     {
         [JsonPropertyName("data")]
-        public LiveSearchItem[] Items { get; set; }
-
-        [JsonPropertyName("meta")]
-        public LiveSearchMeta Meta { get; set; }
+        public LiveSearchItem[] Items { get; init; }
     }
 
-    public sealed class LiveSearchMeta
+    public sealed class LiveSearchMeta : Meta
     {
-        [JsonPropertyName("status")]
-        public int Status { get; set; }
-
         [JsonPropertyName("totalCount")]
-        public int TotalCount { get; set; }
-
-        [JsonPropertyName("errorCode")]
-        public string ErrorCode { get; set; }
+        public int TotalCount { get; init; }
 
         [JsonPropertyName("errorMessage")]
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; init; }
     }
 
     public sealed class LiveSearchItem
     {
         [JsonPropertyName("programId")]
-        public LiveId ProgramId { get; set; }
+        public LiveId ProgramId { get; init; }
 
         [JsonPropertyName("program")]
-        public Program Program { get; set; }
+        public Program Program { get; init; }
 
         [JsonPropertyName("statistics")]
-        public Statistics Statistics { get; set; }
+        public Statistics Statistics { get; init; }
 
         [JsonPropertyName("taxonomy")]
-        public Taxonomy Taxonomy { get; set; }
+        public Taxonomy Taxonomy { get; init; }
 
         [JsonPropertyName("socialGroup")]
-        public SocialGroup SocialGroup { get; set; }
+        public SocialGroup SocialGroup { get; init; }
 
         [JsonPropertyName("features")]
-        public Features Features { get; set; }
+        public Features Features { get; init; }
 
         [JsonPropertyName("thumbnail")]
-        public Thumbnail Thumbnail { get; set; }
+        public Thumbnail Thumbnail { get; init; }
 
         [JsonPropertyName("programProvider")]
-        public ProgramProvider ProgramProvider { get; set; }
+        public ProgramProvider ProgramProvider { get; init; }
 
         [JsonPropertyName("timeshiftSetting")]
-        public TimeshiftSetting TimeshiftSetting { get; set; }
+        public TimeshiftSetting TimeshiftSetting { get; init; }
     }
 
     public sealed class Program
     {
         [JsonPropertyName("title")]
-        public string Title { get; set; }
+        public string Title { get; init; }
 
         [JsonPropertyName("provider")]
-        public Provider Provider { get; set; }
+        public Provider Provider { get; init; }
 
         [JsonPropertyName("schedule")]
-        public Schedule Schedule { get; set; }
+        public Schedule Schedule { get; init; }
     }
 
     public sealed class Schedule
     {
         [JsonPropertyName("status")]
-        public Status Status { get; set; }
+        public Status Status { get; init; }
 
         [JsonPropertyName("openTime")]
-        public DateTime OpenTime { get; set; }
+        public DateTime OpenTime { get; init; }
 
         [JsonPropertyName("beginTime")]
-        public DateTime BeginTime { get; set; }
+        public DateTime BeginTime { get; init; }
 
         [JsonPropertyName("endTime")]
-        public DateTime EndTime { get; set; }
+        public DateTime EndTime { get; init; }
     }
 
     public sealed class Statistics
     {
         [JsonPropertyName("viewers")]
-        public int Viewers { get; set; }
+        public int Viewers { get; init; }
 
         [JsonPropertyName("comments")]
-        public int Comments { get; set; }
+        public int Comments { get; init; }
 
         [JsonPropertyName("timeshiftReservations")]
-        public int TimeshiftReservations { get; set; }
+        public int TimeshiftReservations { get; init; }
     }
 
     public sealed class Taxonomy
     {
         [JsonPropertyName("categories")]
-        public CategoriesContainer Categories { get; set; }
+        public CategoriesContainer Categories { get; init; }
     }
 
     public sealed class CategoriesContainer
     {
         [JsonPropertyName("main")]
-        public Category[] Main { get; set; }
+        public Category[] Main { get; init; }
 
         [JsonPropertyName("sub")]
-        public Category[] Sub { get; set; }
+        public Category[] Sub { get; init; }
     }
 
     public sealed class Category
     {
         [JsonPropertyName("text")]
-        public string Text { get; set; }
+        public string Text { get; init; }
     }
 
     public sealed class SocialGroup {
         [JsonPropertyName("socialGroupId")]
-        public string SocialGroupId { get; set; }
-
-        [JsonPropertyName("type")]
-        public SocialGroupType Type { get; set; }
+        public string SocialGroupId { get; init; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
-
-        [JsonPropertyName("thumbnail")]
-        public Uri Thumbnail { get; set; }
+        public string Name { get; init; }
 
         [JsonPropertyName("thumbnailSmall")]
-        public Uri ThumbnailSmall { get; set; }
-
-        [JsonPropertyName("level")]
-        public int? Level { get; set; }
-
-        [JsonPropertyName("isFollowed")]
-        public bool IsFollowed { get; set; }
-
-        [JsonPropertyName("isJoined")]
-        public bool IsJoined { get; set; }
-
-        [JsonPropertyName("isDeleted")]
-        public bool IsDeleted { get; set; }
-
-        [JsonPropertyName("isSafeThumbnail")]
-        public bool IsSafeThumbnail { get; set; }
-
-        [JsonPropertyName("companyName")]
-        public string CompanyName { get; set; }
-
-        [JsonPropertyName("isPayChannel")]
-        public bool IsPayChannel { get; set; }
+        public Uri ThumbnailSmall { get; init; }
     }
 
     public sealed class Features
     {
         [JsonPropertyName("enabled")]
-        public Feature[] Enabled { get; set; }
+        public HashSet<Feature> Enabled { get; init; }
     }
 
     public sealed class Thumbnail
     {
         [JsonPropertyName("large")]
-        public Uri Large { get; set; }
+        public Uri Large { get; init; }
 
         [JsonPropertyName("small")]
-        public Uri Small { get; set; }
+        public Uri Small { get; init; }
 
         [JsonPropertyName("huge")]
-        public Huge Huge { get; set; }
+        public Huge Huge { get; init; }
 
         [JsonPropertyName("screenshot")]
-        public Screenshot Screenshot { get; set; }
+        public Screenshot Screenshot { get; init; }
     }
 
     public sealed class Screenshot
     {
         [JsonPropertyName("large")]
-        public Uri Large { get; set; }
+        public Uri Large { get; init; }
 
         [JsonPropertyName("small")]
-        public Uri Small { get; set; }
+        public Uri Small { get; init; }
     }
 
     public sealed class Huge
     {
         [JsonPropertyName("s1280x720")]
-        public Uri S1280X720 { get; set; }
+        public Uri S1280X720 { get; init; }
 
         [JsonPropertyName("s1920x1080")]
-        public Uri S1920X1080 { get; set; }
+        public Uri S1920X1080 { get; init; }
 
         [JsonPropertyName("s352x198")]
-        public Uri S352X198 { get; set; }
+        public Uri S352X198 { get; init; }
 
         [JsonPropertyName("s640x360")]
-        public Uri S640X360 { get; set; }
+        public Uri S640X360 { get; init; }
     }
 
     public sealed class ProgramProvider
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [JsonPropertyName("programProviderId")]
-        public string ProgramProviderId { get; set; }
+        public string ProgramProviderId { get; init; }
 
         [JsonPropertyName("large")]
-        public Icons icons { get; set; }
+        public Icons Icons { get; init; }
     }
 
     public sealed class Icons
     {
         [JsonPropertyName("uri150x150")]
-        public Uri Uri150x150 { get; set; }
+        public Uri Uri150x150 { get; init; }
 
         [JsonPropertyName("uri50x50")]
-        public Uri Uri50x50 { get; set; }
+        public Uri Uri50x50 { get; init; }
     }
 
     public sealed class TimeshiftSetting
     {
         [JsonPropertyName("watchLimit")]
-        public WatchLimit WatchLimit { get; set; }
+        public WatchLimit WatchLimit { get; init; }
 
         [JsonPropertyName("programValidDuration")]
-        public int? ProgramValidDuration { get; set; }
+        public int? ProgramValidDuration { get; init; }
 
         [JsonPropertyName("requirement")]
-        public Requirement Requirement { get; set; }
+        public Requirement Requirement { get; init; }
 
         [JsonPropertyName("status")]
-        public TimeshiftStatus Status { get; set; }
+        public TimeshiftStatus Status { get; init; }
 
         [JsonPropertyName("endTime")]
-        public DateTimeOffset? EndTime { get; set; }
+        public DateTimeOffset? EndTime { get; init; }
 
         [JsonPropertyName("reservationDeadline")]
-        public DateTimeOffset ReservationDeadline { get; set; }
+        public DateTimeOffset ReservationDeadline { get; init; }
     }
 
     public enum SocialGroupType { COMMUNITY, CHANNEL }
