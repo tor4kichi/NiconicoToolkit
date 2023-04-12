@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class RecommendTest
@@ -65,15 +65,15 @@ namespace NiconicoToolkit.UWP.Test.Tests
             TestRecommendResponse(res);
         }
 
-        [TestMethod]
-        [DataRow("so38760676")]
-        public async Task GetVideoChannelRecommendAsync(string videoId)
-        {
-            var video = await _context.SearchWithCeApi.Video.IdSearchAsync(videoId);            
-            var res = await _context.Recommend.GetVideoRecommendForChannelAsync(videoId, video.Video.CommunityId, video.Tags.TagInfo.Select(x => x.Tag));
+        //[TestMethod]
+        //[DataRow("so38760676")]
+        //public async Task GetVideoChannelRecommendAsync(string videoId)
+        //{
+        //    //var video = await _context.Search.Video.(videoId);            
+        //    var res = await _context.Recommend.GetVideoRecommendForChannelAsync(videoId, video.Video.CommunityId, video.Tags.TagInfo.Select(x => x.Tag));
             
-            TestRecommendResponse(res);
-        }
+        //    TestRecommendResponse(res);
+        //}
 
 
         [TestMethod]

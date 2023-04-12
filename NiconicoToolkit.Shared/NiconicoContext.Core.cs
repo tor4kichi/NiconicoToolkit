@@ -17,7 +17,6 @@ using NiconicoToolkit.Recommend;
 using NiconicoToolkit.Channels;
 using NiconicoToolkit.Mylist;
 using NiconicoToolkit.Follow;
-using NiconicoToolkit.SearchWithCeApi;
 using NiconicoToolkit.Series;
 using NiconicoToolkit.NicoRepo;
 using NiconicoToolkit.Likes;
@@ -26,6 +25,9 @@ using NiconicoToolkit.Ichiba;
 using NiconicoToolkit.Live.Timeshift;
 using NiconicoToolkit.SnapshotSearch;
 using NiconicoToolkit.Search;
+using System.IO;
+using U8Xml;
+using NiconicoToolkit.ExtApi.Video;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -92,7 +94,6 @@ namespace NiconicoToolkit
             Activity = new ActivityClient(this, DefaultOptions);
             Search = new SearchClient(this, DefaultOptions);
             SearchWithPage = new SearchWithPageClient(this);
-            SearchWithCeApi = new SearchWithCeApiClient(this, DefaultOptions);
             Recommend = new RecommendClient(this, DefaultOptions);
             Channel = new ChannelClient(this, DefaultOptions);
             Mylist = new MylistClient(this, DefaultOptions);
@@ -104,6 +105,7 @@ namespace NiconicoToolkit
             Ichiba = new IchibaClient(this, DefaultOptions);
             Timeshift = new TimeshiftClient(this, DefaultOptions);
             VideoSnapshotSearch = new VideoSnapshotSearchClient(this, DefaultOptions);
+            ExtApiClient = new ExtApiClient(this);
         }
 
 
@@ -116,7 +118,6 @@ namespace NiconicoToolkit
         public ActivityClient Activity { get; }
         public SearchClient Search { get; }
         public SearchWithPageClient SearchWithPage { get; }
-        public SearchWithCeApiClient SearchWithCeApi { get; }
         public RecommendClient Recommend { get; }
         public ChannelClient Channel { get; }
         public MylistClient Mylist { get; }
@@ -128,6 +129,7 @@ namespace NiconicoToolkit
         public IchibaClient Ichiba { get; }
         public TimeshiftClient Timeshift { get; }
         public VideoSnapshotSearchClient VideoSnapshotSearch { get; }
+        public ExtApiClient ExtApiClient { get; }
 
         TimeSpan _minPageAccessInterval = TimeSpan.FromSeconds(1);
         DateTime _prevPageAccessTime;
@@ -218,8 +220,25 @@ namespace NiconicoToolkit
 #else
             using var res = await HttpClient.GetAsync(path, ct);
 #endif
-            return await res.Content.ReadAsAsync<T>(options, ct);
+            return await res.Content.ReadJsonAsAsync<T>(options, ct);
         }
+
+
+        internal Task<T> GetXmlAsAsync<T>(string path, CancellationToken ct)
+        {
+            return GetXmlAsAsync<T>(new Uri(path), ct);
+        }
+
+        internal async Task<T> GetXmlAsAsync<T>(Uri path, CancellationToken ct)
+        {
+#if WINDOWS_UWP
+            using var res = await HttpClient.GetAsync(path).AsTask(ct);
+#else
+            using var res = await HttpClient.GetAsync(path, ct);
+#endif
+            return await res.Content.ReadXmlAsAsync<T>(ct);
+        }
+
 
 
 #if WINDOWS_UWP
@@ -366,7 +385,7 @@ namespace NiconicoToolkit
 #endif
         {
             using var message = await SendAsync(httpMethod, new Uri(url), httpContent, headerModifier, ct: ct);
-            return await message.Content.ReadAsAsync<T>(options, ct: ct);
+            return await message.Content.ReadJsonAsAsync<T>(options, ct: ct);
         }
 
 #if WINDOWS_UWP
@@ -376,10 +395,10 @@ namespace NiconicoToolkit
 #endif
         {
             using var message = await SendAsync(httpMethod, url, httpContent, headerModifier, ct: ct);
-            return await message.Content.ReadAsAsync<T>(options, ct: ct);
+            return await message.Content.ReadJsonAsAsync<T>(options, ct: ct);
         }
 
-#endregion
+        #endregion
     }
 
 }

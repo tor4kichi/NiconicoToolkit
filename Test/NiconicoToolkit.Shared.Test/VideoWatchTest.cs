@@ -13,7 +13,7 @@ using Windows.Media.Core;
 using Windows.Media.Streaming.Adaptive;
 #endif
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class VideoWatchTest

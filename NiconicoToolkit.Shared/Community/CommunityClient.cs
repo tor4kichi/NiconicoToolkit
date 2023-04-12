@@ -34,13 +34,6 @@ namespace NiconicoToolkit.Community
             public const string CommunityV1CommunitiesApiUrl = $"{NiconicoUrls.CommunityV1ApiUrl}communities/";
         }
 
-
-        public async Task<CommunityInfoResponse> GetCommunityInfoAsync(CommunityId communityId)
-        {
-            var res = await _context.GetJsonAsAsync<CommunityInfoResponseContainer>($"{NiconicoUrls.CeApiV1Url}community.info?id={communityId}", _options);
-            return res?.Response;
-        }
-
         public Task<CommunityAuthorityResponse> GetCommunityAuthorityForLoginUserAsync(CommunityId communityId)
         {
             var url = new StringBuilder(Urls.CommunityV1CommunitiesApiUrl)

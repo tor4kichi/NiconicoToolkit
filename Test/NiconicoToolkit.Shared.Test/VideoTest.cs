@@ -10,7 +10,7 @@ using NiconicoToolkit.Rss.Video;
 using System.Diagnostics;
 using CommunityToolkit.Diagnostics;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class VideoTest

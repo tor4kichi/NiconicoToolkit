@@ -133,7 +133,7 @@ namespace NiconicoToolkit.Video.Watch
                     throw new WebException("require payment.");
                 }
 
-                return await res.Content.ReadAsAsync<DmcWatchApiData>(_options);
+                return await res.Content.ReadJsonAsAsync<DmcWatchApiData>(_options);
             }
             catch (Exception e)
             {
