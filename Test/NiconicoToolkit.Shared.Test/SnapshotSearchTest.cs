@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class SnapshotSearchTest

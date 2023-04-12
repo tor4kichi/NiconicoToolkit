@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public class SnapshotFilterSearializeTest

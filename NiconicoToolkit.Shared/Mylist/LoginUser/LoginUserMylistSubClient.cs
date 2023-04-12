@@ -185,7 +185,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
-            return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -193,7 +193,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
-            return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
         #endregion
@@ -281,7 +281,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
-            return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -289,7 +289,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
-            return await res.Content.ReadAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
         }
 
         private Task<HttpResponseMessage> MoveMylistItemsAsync_Internal(string from, string to, IEnumerable<long> itemIds)

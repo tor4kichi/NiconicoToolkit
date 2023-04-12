@@ -24,7 +24,6 @@ namespace NiconicoToolkit.User
 
         internal static class Urls
         {
-            public const string CeApiV1UserDetailsApiUrlFormat = $"{NiconicoUrls.CeApiV1Url}user.info?__format=json&user_id={{0}}";
             public const string LiveApiV1NicknameApiUrlFormat = $"{NiconicoUrls.LiveApiV1Url}user/nickname?userId={{0}}";
         }
 
@@ -33,14 +32,6 @@ namespace NiconicoToolkit.User
         {
             var res = await _context.GetJsonAsAsync<UserNicknameResponse>(string.Format(Urls.LiveApiV1NicknameApiUrlFormat, id), _options);
             return res.User;
-        }
-
-
-
-        public async Task<NicovideoUserResponse> GetUserInfoAsync(UserId id)
-        {
-            var res = await _context.GetJsonAsAsync<NicovideoUserResponseContainer>(string.Format(Urls.CeApiV1UserDetailsApiUrlFormat, id), _options);
-            return res.Response;
         }
 
               

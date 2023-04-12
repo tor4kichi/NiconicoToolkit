@@ -13,7 +13,7 @@ using Windows.Storage;
 #else
 #endif
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     public class AccountInfo
     {

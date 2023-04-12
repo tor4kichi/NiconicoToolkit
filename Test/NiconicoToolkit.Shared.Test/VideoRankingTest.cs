@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class VideoRankingTest

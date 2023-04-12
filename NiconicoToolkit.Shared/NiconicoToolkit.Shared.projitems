@@ -41,6 +41,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeserializationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumDescriptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtApi\ExtApiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtApi\Video\ThumbInfoResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Follow\ChannelAuthorityResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Follow\ChannelFollowResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Follow\FollowChannelResponse.cs" />
@@ -133,17 +135,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ReponseMeta.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RequireLoginAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rss\Video\RssVideoResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Mylist\MylistSearchClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\SearchWithCeApiClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\ThreadItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoIdSearchResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoIdSearchSingleResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoListingResponseContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoProviderType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoSearchSubClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoSortKey.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchWithCeApi\Video\VideoSortOrder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\Live\LiveSearchClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\SearchWithPageClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchWithPage\Video\Order.cs" />

@@ -2,7 +2,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public class ExtractContenntIdTest
