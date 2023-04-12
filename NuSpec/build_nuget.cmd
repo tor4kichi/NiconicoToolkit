@@ -1,1 +1,1 @@
-nuget pack Package.nuspec -outputDirectory "C:\Users\tor4k\local_nuget" -p version=0.3.2
+nuget pack Package.nuspec -outputDirectory "C:\Users\tor4k\local_nuget" -p version=0.4.1

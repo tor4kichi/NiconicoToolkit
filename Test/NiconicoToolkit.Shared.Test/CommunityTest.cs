@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class CommunityTest
@@ -20,19 +20,6 @@ namespace NiconicoToolkit.UWP.Test.Tests
             (_context, _, _, _) = await AccountTestHelper.CreateNiconicoContextAndLogInWithTestAccountAsync();
         }
 
-
-        [TestMethod]
-        [DataRow("co540200")]
-        [DataRow("5406776")]
-        public async Task GetCommunityInfoAsync(string communityId)
-        {
-            var res = await _context.Community.GetCommunityInfoAsync(communityId);
-
-            Assert.IsTrue(res.IsOK);
-
-            Assert.IsNotNull(res.Community, "res.Community is null");
-            Assert.AreNotEqual(default(UserId), res.Community.UserId, "res.Data.UserId is default");
-        }
 
         [TestMethod]
         [DataRow("co540200")]

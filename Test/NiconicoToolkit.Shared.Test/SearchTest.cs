@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class SearchTest
@@ -112,7 +112,7 @@ namespace NiconicoToolkit.UWP.Test.Tests
         [DataRow("歌")]
         public async Task LiveSearchAsync(string keyword)
         {
-            var res = await _searchClient.Live.LiveSearchAsync(keyword, status: Search.Live.Status.ENDED);
+            var res = await _searchClient.Live.LiveSearchAsync(keyword, status: Search.Live.Status.ENDED, sort: Search.Live.Sort.RecentAsc);
 
             Assert.IsNotNull(res.Meta.TotalCount);
 

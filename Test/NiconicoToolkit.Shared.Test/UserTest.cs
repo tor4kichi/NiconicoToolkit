@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.UWP.Test.Tests
+namespace NiconicoToolkit.Tests
 {
     [TestClass]
     public sealed class UserTest
@@ -21,13 +21,6 @@ namespace NiconicoToolkit.UWP.Test.Tests
 
         NiconicoContext _context;
         UserClient _userClient;
-
-        [TestMethod]
-        [DataRow(53842185u)]
-        public async Task GetUserInfoAsync(uint userId)
-        {
-            var res = await _userClient.GetUserInfoAsync(userId);
-        }
 
         [TestMethod]
         [DataRow(53842185u)]

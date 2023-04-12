@@ -330,7 +330,7 @@ namespace NiconicoToolkit.Follow
                     headers.Add("X-Requested-By", communityJoinPageUrl.OriginalString);
                 });
 
-                var result = await res.Content.ReadAsAsync<ResponseWithMeta>();
+                var result = await res.Content.ReadJsonAsAsync<ResponseWithMeta>();
                 return result.Meta.IsSuccess ? ContentManageResult.Success : ContentManageResult.Failed;
             }
 
@@ -443,7 +443,7 @@ namespace NiconicoToolkit.Follow
                 headers.Add("X-Request-With", "https://www.nicovideo.jp/my/follow");
             });
 
-            var result = await res.Content.ReadAsAsync<FollowedResultResponce>(_defaultOptions);
+            var result = await res.Content.ReadJsonAsAsync<FollowedResultResponce>(_defaultOptions);
             return result.Data.IsFollowing;
         }
 

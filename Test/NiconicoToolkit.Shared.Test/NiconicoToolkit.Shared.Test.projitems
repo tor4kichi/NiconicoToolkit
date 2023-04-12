@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ActivityTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChannelTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunityTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtApiTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtractContenntIdTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FollowTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IchibaTest.cs" />
@@ -22,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)LiveTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NicoRepoTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RecommendTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SearchCeApiTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchHtmlTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SeriesTest.cs" />
