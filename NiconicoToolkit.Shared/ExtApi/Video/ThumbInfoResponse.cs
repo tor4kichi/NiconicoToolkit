@@ -65,8 +65,11 @@ public class ThumbInfoData
     [XmlElement(ElementName = "thumbnail_url")]
     public string ThumbnailUrlNotHttps { get; set; }
 
+    [XmlIgnore]
     string? _thumbnailUrl;
-    public string ThumbnailUrl => _thumbnailUrl ??= ThumbnailUrl.Replace("http://", "https://");
+    
+    [XmlIgnore]
+    public string ThumbnailUrl => _thumbnailUrl ??= ThumbnailUrlNotHttps.Replace("http://", "https://");
 
     [XmlElement(ElementName = "first_retrieve")]
     public DateTime PostAt { get; set; }
