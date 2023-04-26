@@ -30,6 +30,8 @@ public class ExtApiTest
         Guard.IsNull(res.Error, nameof(res.Error));
         Guard.IsNotNullOrWhiteSpace(res.Data.Title, nameof(res.Data.Title));
 
+        Guard.IsNotNullOrWhiteSpace(res.Data.ThumbnailUrl, nameof(res.Data.ThumbnailUrl));
+
         var niconicoId = new NiconicoId(videoId);
         var (providerType, providerId, providerName, providerIconUrl) = res.Data.GetProviderData();
         

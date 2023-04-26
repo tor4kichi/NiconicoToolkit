@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Live;
+using NiconicoToolkit.Search.Video;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +26,13 @@ namespace NiconicoToolkit.Tests
 
 
         [TestMethod]
-        [DataRow("モンハン")]
-        public async Task VideoKeywordSearchAsync(string keyword)
+        [DataRow("モンハン", SortKey.Hot)]
+        [DataRow("WoWS", SortKey.ViewCount)]
+        [DataRow("Splatoon", SortKey.RegisteredAt)]
+        [DataRow("歌", SortKey.Personalized)]
+        public async Task VideoKeywordSearchAsync(string keyword, SortKey sort)
         {
-            var res = await _searchClient.Video.VideoSearchAsync(keyword);
+            var res = await _searchClient.Video.VideoSearchAsync(keyword, pageCountStartWith1: 2);
 
             Assert.IsTrue(res.Meta.IsSuccess);
 
@@ -47,9 +51,11 @@ namespace NiconicoToolkit.Tests
 
         [TestMethod]
         [DataRow("アニメ")]
+        [DataRow("歌ってみた")]
+        [DataRow("エンターテイメント")]
         public async Task VideoTagSearchAsync(string keyword)
         {
-            var res = await _searchClient.Video.VideoSearchAsync(keyword, true);
+            var res = await _searchClient.Video.VideoSearchAsync(keyword, true, pageCountStartWith1: 2);
 
             Assert.IsTrue(res.Meta.IsSuccess);
 

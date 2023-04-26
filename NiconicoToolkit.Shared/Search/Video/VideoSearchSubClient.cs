@@ -30,7 +30,7 @@ namespace NiconicoToolkit.Search.Video
         public Task<VideoSearchResponse> VideoSearchAsync(
             string keyword,
             bool isTagSearch = false,
-            int? pageCount = null,
+            int? pageCountStartWith1 = null,
             SortKey sortKey = SortKey.Hot,
             SortOrder sortOrder = SortOrder.None,
             RankingGenre[] genres = null,
@@ -51,8 +51,8 @@ namespace NiconicoToolkit.Search.Video
                 query.Add("keyword", keyword);
             }
 
-            if (pageCount is not null)
-                query.Add("page", pageCount.ToString());
+            if (pageCountStartWith1 is not null)
+                query.Add("page", pageCountStartWith1.ToString());
 
             if (sortKey == SortKey.Hot || sortKey == SortKey.Personalized)
             {
