@@ -19,6 +19,24 @@ namespace NiconicoToolkit.Tests
             _context = result.niconicoContext;
         }
 
+        [TestMethod]
+        public async Task IsFollowedUserAsync()
+        {
+            var res = await _context.Follow.User.GetFollowUsersAsync(3);
+            Assert.IsTrue(res.IsSuccess);
+
+            Assert.IsNotNull(res.Data, "Data is null");
+            Assert.IsNotNull(res.Data.Items, "Data.Items is null");
+
+            if (res.Data.Items.Any())
+            {
+                var user = res.Data.Items[0];
+                var followed = await _context.Follow.User.IsFollowingUserAsync(user.Id);
+                Assert.IsTrue(followed, nameof(followed));
+                Assert.IsNotNull(user.Nickname, "user.Nickname is null");
+                Assert.IsNotNull(user.Description, "tag.Description is null");
+            }
+        }
 
         [TestMethod]
         public async Task GetFollowTagsAsync()

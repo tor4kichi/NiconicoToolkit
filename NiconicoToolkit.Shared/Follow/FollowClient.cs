@@ -151,7 +151,7 @@ namespace NiconicoToolkit.Follow
             [RequireLogin]
             public Task<bool> IsFollowingUserAsync(UserId userId)
             {
-                return _followClient.GetFollowedInternalAsync($"https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
+                return _followClient.GetFollowedInternalAsync($"https://user-follow-api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
             }
         }
 
