@@ -29,6 +29,7 @@ namespace NiconicoToolkit
         public const string PublicApiV1Url = "https://public.api.nicovideo.jp/v1/";
         public const string UserApiV1Url = "https://user-follow-api.nicovideo.jp/v1/";
         public const string LiveApiV1Url = "https://api.live2.nicovideo.jp/api/v1/";
+        public const string NicorepoApiV1Url = "https://api.repoline.nicovideo.jp/v1/";
 
         public const string NicoChannelHost = $"ch.{NicoDomain}";
         public const string ChannelPageUrl = $"https://{NicoChannelHost}/";
