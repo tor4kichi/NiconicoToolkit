@@ -94,7 +94,7 @@ namespace NiconicoToolkit.Video.Watch
 
 
 
-        public async Task<DmcWatchApiData> GetDmcWatchJsonAsync(VideoId videoId, bool isLoggedIn, string actionTrackId)
+        public async Task<WatchJsonResponse> GetDmcWatchJsonAsync(VideoId videoId, bool isLoggedIn, string actionTrackId)
         {
             var dict = new NameValueCollection();
             dict.Add("_frontendId", "6");
@@ -133,7 +133,7 @@ namespace NiconicoToolkit.Video.Watch
                     throw new WebException("require payment.");
                 }
 
-                return await res.Content.ReadJsonAsAsync<DmcWatchApiData>(_options);
+                return await res.Content.ReadJsonAsAsync<WatchJsonResponse>(_options);
             }
             catch (Exception e)
             {
