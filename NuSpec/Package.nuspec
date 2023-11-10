@@ -60,9 +60,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm\lib\uap10.0.16299"/>
-    <file src="..\NiconicoToolkit.UWP\bin\ARM\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm\lib\uap10.0.16299"/>
-
     <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.dll" target="runtimes\win10-arm64\lib\uap10.0.16299"/>
     <file src="..\NiconicoToolkit.UWP\bin\ARM64\Release\NiconicoToolkit.UWP.pri" target="runtimes\win10-arm64\lib\uap10.0.16299"/>
 

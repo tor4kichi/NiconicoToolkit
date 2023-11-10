@@ -33,7 +33,27 @@ namespace NiconicoToolkit.Tests
         uint _userId;
         NiconicoContext _context;
 
+        #region Domand Hls video
 
+        [TestMethod]
+        [DataRow("so42997483")]
+        public async Task Domand_PlayVideoAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Domand);
+
+            var accessRight= await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+                videoId,
+                res.WatchApiResponse.WatchApiData.Media.Domand,
+                res.WatchApiResponse.WatchApiData.Media.Domand.Videos.First(x => x.IsAvailable ?? false),
+                res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false),
+                res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
+                );
+            Assert.IsTrue(accessRight.IsSuccess);
+            Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+        }
+
+        #endregion
 
         #region Watch Video
 

@@ -414,11 +414,116 @@ namespace NiconicoToolkit.Video.Watch
 
     public partial class Media
     {
+        [JsonPropertyName("domand")]
+        public MediaDomand? Domand { get; set; }
+
         [JsonPropertyName("delivery")]
-        public Delivery Delivery { get; set; }
+        public Delivery? Delivery { get; set; }
 
         [JsonPropertyName("deliveryLegacy")]
         public object DeliveryLegacy { get; set; }
+    }
+
+    public class MediaDomand
+    {
+        [JsonPropertyName("videos")]
+        public List<DomandVideo> Videos { get; set; }
+
+        [JsonPropertyName("audios")]
+        public List<DomandAudio> Audios { get; set; }
+
+        [JsonPropertyName("isStoryboardAvailable")]
+        public bool? IsStoryboardAvailable { get; set; }
+
+        [JsonPropertyName("accessRightKey")]
+        public string AccessRightKey { get; set; }
+    }
+
+    public class DomandVideo
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("isAvailable")]
+        public bool? IsAvailable { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        [JsonPropertyName("bitRate")]
+        public int? BitRate { get; set; }
+
+        [JsonPropertyName("width")]
+        public int? Width { get; set; }
+
+        [JsonPropertyName("height")]
+        public int? Height { get; set; }
+
+        [JsonPropertyName("qualityLevel")]
+        public int? QualityLevel { get; set; }
+
+        [JsonPropertyName("recommendedHighestAudioQualityLevel")]
+        public int? RecommendedHighestAudioQualityLevel { get; set; }
+
+        [JsonPropertyName("metadata")]
+        public DomandMetadata Metadata { get; set; }
+    }
+
+    public class DomandAudio
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("isAvailable")]
+        public bool? IsAvailable { get; set; }
+
+        [JsonPropertyName("bitRate")]
+        public int? BitRate { get; set; }
+
+        [JsonPropertyName("samplingRate")]
+        public int? SamplingRate { get; set; }
+
+        [JsonPropertyName("integratedLoudness")]
+        public double? IntegratedLoudness { get; set; }
+
+        [JsonPropertyName("truePeak")]
+        public double? TruePeak { get; set; }
+
+        [JsonPropertyName("qualityLevel")]
+        public int? QualityLevel { get; set; }
+
+        [JsonPropertyName("loudnessCollection")]
+        public List<LoudnessCollection> LoudnessCollection { get; set; }
+
+        [JsonPropertyName("metadata")]
+        public DomandMetadata Metadata { get; set; }
+    }
+
+    public class DomandMetadata
+    {
+        [JsonPropertyName("bitrate")]
+        public int? Bitrate { get; set; }
+
+        [JsonPropertyName("samplingRate")]
+        public int? SamplingRate { get; set; }
+
+        [JsonPropertyName("loudness")]
+        public Loudness Loudness { get; set; }
+
+        [JsonPropertyName("levelIndex")]
+        public int? LevelIndex { get; set; }
+
+        [JsonPropertyName("loudnessCollection")]
+        public List<LoudnessCollection> LoudnessCollection { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        [JsonPropertyName("resolution")]
+        public Resolution Resolution { get; set; }
+
+        [JsonPropertyName("recommendedHighestAudioLevelIndex")]
+        public int? RecommendedHighestAudioLevelIndex { get; set; }
     }
 
     public partial class Delivery
