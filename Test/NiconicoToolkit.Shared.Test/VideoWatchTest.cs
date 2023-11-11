@@ -53,6 +53,24 @@ namespace NiconicoToolkit.Tests
             Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
         }
 
+        [TestMethod]
+        [DataRow("so42997483")]
+        public async Task Domand_PlayVideoOnlyAudioAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Domand);
+
+            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+                videoId,
+                res.WatchApiResponse.WatchApiData.Media.Domand,
+                null,
+                res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id,
+                res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
+                );
+            Assert.IsTrue(accessRight.IsSuccess);
+            Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+        }
+
         #endregion
 
         #region Watch Video

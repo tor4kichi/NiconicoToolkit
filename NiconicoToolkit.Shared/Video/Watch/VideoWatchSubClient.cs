@@ -151,15 +151,24 @@ namespace NiconicoToolkit.Video.Watch
         public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
             VideoId videoId,
             MediaDomand domand,
-            string videoQualityId,
-            string audioQualityId,
+            string? videoQualityId,
+            string? audioQualityId,
             string? watchTrackId = null,
             CancellationToken ct = default)
-        {            
+        {
+            List<string> qualities = new ();
+            if (videoQualityId != null)
+            {
+                qualities.Add(videoQualityId);
+            }
+            if (audioQualityId != null)
+            {
+                qualities.Add(audioQualityId);
+            }            
             return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
                 HttpMethod.Post,
                 $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
-                $"{{\"outputs\":[[\"{videoQualityId}\",\"{audioQualityId}\"]]}}", 
+                $"{{\"outputs\":[[{string.Join(',', qualities.Select(x => $"\"{x}\""))}]]}}",
                 null, 
                 (header) => 
                 {
@@ -174,25 +183,13 @@ namespace NiconicoToolkit.Video.Watch
         public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
             VideoId videoId,
             MediaDomand domand, 
-            DomandVideo videoQuality, 
-            DomandAudio audioQuality,
+            DomandVideo? videoQuality, 
+            DomandAudio? audioQuality,
             string? watchTrackId = null,
             CancellationToken ct = default
             )
         {
-            return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
-                HttpMethod.Post,
-                $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
-                $"{{\"outputs\":[[\"{videoQuality.Id}\",\"{audioQuality.Id}\"]]}}",
-                null,
-                (header) =>
-                {
-                    header.Add("X-Access-Right-Key", domand.AccessRightKey);
-                    header.Add("X-Frontend-Version", "0");
-                    header.Add("X-Frontend-Id", "6");
-                    header.Add("X-Request-With", "https://www.nicovideo.jp");
-                },
-                ct);
+            return await GetDomandHlsAccessRightAsync(videoId, domand, videoQuality?.Id, audioQuality?.Id, watchTrackId, ct);
         }
 
         #endregion
