@@ -226,12 +226,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\KeepMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\Protocol.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Dmc\SessionOperationAuth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\Domand\DomandHlsAccessRightResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\NvCommentSubClient.Core.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\NvCommentSubClient.Delete.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\NvCommentSubClient.Get.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\NV_Comment\NvCommentSubClient.Post.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\VideoWatchSubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchDataForGuest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchJsonResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchPageResponse.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@ using System.Text.Json;
 using System.Net;
 using System.Collections.Specialized;
 using NiconicoToolkit.Video.Watch.Dmc;
+using NiconicoToolkit.Video.Watch.Domand;
+using CommunityToolkit.Diagnostics;
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -94,7 +96,7 @@ namespace NiconicoToolkit.Video.Watch
 
 
 
-        public async Task<DmcWatchApiData> GetDmcWatchJsonAsync(VideoId videoId, bool isLoggedIn, string actionTrackId)
+        public async Task<WatchJsonResponse> GetDmcWatchJsonAsync(VideoId videoId, bool isLoggedIn, string actionTrackId)
         {
             var dict = new NameValueCollection();
             dict.Add("_frontendId", "6");
@@ -133,13 +135,74 @@ namespace NiconicoToolkit.Video.Watch
                     throw new WebException("require payment.");
                 }
 
-                return await res.Content.ReadJsonAsAsync<DmcWatchApiData>(_options);
+                return await res.Content.ReadJsonAsAsync<WatchJsonResponse>(_options);
             }
             catch (Exception e)
             {
                 throw new WebException("access failed watch/" + videoId, e);
             }
         }
+
+
+
+        #region Domand Video Play
+
+
+        public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
+            VideoId videoId,
+            MediaDomand domand,
+            string? videoQualityId,
+            string? audioQualityId,
+            string? watchTrackId = null,
+            CancellationToken ct = default)
+        {
+            List<string> qualities = new ();
+            if (videoQualityId != null)
+            {
+                qualities.Add(videoQualityId);
+            }
+            if (audioQualityId != null)
+            {
+                qualities.Add(audioQualityId);
+            }            
+            return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
+                HttpMethod.Post,
+                $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
+                $"{{\"outputs\":[[{string.Join(',', qualities.Select(x => $"\"{x}\""))}]]}}",
+                null, 
+                (header) => 
+                {
+                    header.Add("X-Access-Right-Key", domand.AccessRightKey);
+                    header.Add("X-Frontend-Version", "0");
+                    header.Add("X-Frontend-Id", "6");
+                    header.Add("X-Request-With", "https://www.nicovideo.jp");
+                },
+                ct);
+        }
+
+        public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
+            VideoId videoId,
+            MediaDomand domand, 
+            DomandVideo? videoQuality, 
+            DomandAudio? audioQuality,
+            string? watchTrackId = null,
+            CancellationToken ct = default
+            )
+        {
+            return await GetDomandHlsAccessRightAsync(videoId, domand, videoQuality?.Id, audioQuality?.Id, watchTrackId, ct);
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
 
         public async Task<DmcSessionResponse> GetDmcSessionResponseAsync(
             DmcWatchApiData watchData,

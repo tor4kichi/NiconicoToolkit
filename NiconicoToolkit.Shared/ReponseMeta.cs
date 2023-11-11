@@ -38,6 +38,28 @@ namespace NiconicoToolkit
         public bool IsSuccess => Meta.IsSuccess;
     }
 
+    public class ResponseWithMetaAndData<MetaClassType, DataType> where MetaClassType : Meta
+    {
+        [JsonPropertyName("meta")]
+        public MetaClassType Meta { get; set; }
+
+        public bool IsSuccess => Meta.IsSuccess;
+
+        [JsonPropertyName("data")]
+        public DataType Data { get; set; }
+    }
+
+    public class ResponseWithData<DataType>
+    {
+        [JsonPropertyName("meta")]
+        public Meta Meta { get; set; }
+
+        public bool IsSuccess => Meta.IsSuccess;
+
+        [JsonPropertyName("data")]
+        public DataType Data { get; set; }
+    }
+
     public class Meta
     {
         [JsonPropertyName("status")]

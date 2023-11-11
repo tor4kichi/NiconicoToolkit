@@ -23,7 +23,7 @@ namespace NiconicoToolkit.NicoRepo
 
         internal static class Urls
         {
-            public const string NicorepoTimelineApiUrl = $"{NiconicoUrls.PublicApiV1Url}timelines/nicorepo/last-1-month/my/pc/entries.json";
+            public const string NicorepoTimelineApiUrl = $"{NiconicoUrls.NicorepoApiV1Url}timelines/nicorepo/last-1-month/my/pc/entries.json";
         }
 
         /// <remarks>[Require Login]</remarks>

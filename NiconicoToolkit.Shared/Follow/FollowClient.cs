@@ -54,6 +54,7 @@ namespace NiconicoToolkit.Follow
             public const string NvapiV1FollowingApiUrl = $"{NiconicoUrls.NvApiV1Url}users/me/following/";
             
             public const string PublicV1FollowingApiUrl = $"{NiconicoUrls.PublicApiV1Url}user/followees/";
+            public const string UserFollowingApiUrl = $"{NiconicoUrls.UserApiV1Url}user/followees/";
         }
 
 
@@ -136,7 +137,7 @@ namespace NiconicoToolkit.Follow
             [RequireLogin]
             public Task<ContentManageResult> AddFollowUserAsync(UserId userId)
             {
-                return _followClient.AddFollowInternalAsync($"{Urls.PublicV1FollowingApiUrl}niconico-users/{userId}.json");
+                return _followClient.AddFollowInternalAsync($"{Urls.UserFollowingApiUrl}niconico-users/{userId}.json");
             }
 
 
@@ -144,14 +145,14 @@ namespace NiconicoToolkit.Follow
             [RequireLogin]
             public Task<ContentManageResult> RemoveFollowUserAsync(UserId userId)
             {
-                return _followClient.RemoveFollowInternalAsync($"{Urls.PublicV1FollowingApiUrl}niconico-users/{userId}.json");
+                return _followClient.RemoveFollowInternalAsync($"{Urls.UserFollowingApiUrl}niconico-users/{userId}.json");
             }
 
             /// <remarks>[Require Login]</remarks>
             [RequireLogin]
             public Task<bool> IsFollowingUserAsync(UserId userId)
             {
-                return _followClient.GetFollowedInternalAsync($"https://public.api.nicovideo.jp/v1/user/followees/niconico-users/{userId}.json");
+                return _followClient.GetFollowedInternalAsync($"{Urls.UserFollowingApiUrl}niconico-users/{userId}.json");
             }
         }
 
