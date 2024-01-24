@@ -38,7 +38,7 @@ public partial class NvCommentSubClient
         });
         return await _context.SendJsonAsAsync<ThreadResponse>(
             HttpMethod.Post,
-            NVCommentThreadsUrl,
+            MakeNVCommentThreadsUrl(videoComment.Server),
             requestParamsJson,
             ct: ct
             );
@@ -66,7 +66,7 @@ public partial class NvCommentSubClient
         });
         return await _context.SendJsonAsAsync<ThreadResponse>(
             HttpMethod.Post,
-            NVCommentThreadsUrl,
+            MakeNVCommentThreadsUrl(videoComment.Server),
             requestParamsJson,
             ct: ct
             );

@@ -47,6 +47,7 @@ public partial class NvCommentSubClient
     /// <remarks> パラメータエラーによる失敗は全て INVALID_PARAMETER としてまとめられるため、何が間違いかは判別できません。 </remarks>
     [RequireLogin]
     public async Task<ThreadPostResponse> PostCommentAsync(
+        string server,
         string threadId,
         VideoId videoId,
         IEnumerable<string> commands,
@@ -66,7 +67,7 @@ public partial class NvCommentSubClient
         });
 
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
-                    $"{NVCommentThreadsUrl}/{threadId}/comments", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comments", requestParamsJson, ct: ct);
     }
 
 
@@ -80,6 +81,7 @@ public partial class NvCommentSubClient
 
     [RequireLogin]
     public async Task<ThreadPostResponse> EasyPostCommentAsync(
+        string server,
         string threadId,
         VideoId videoId,
         string comment,
@@ -97,7 +99,7 @@ public partial class NvCommentSubClient
         });
 
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
-                    $"{NVCommentThreadsUrl}/{threadId}/easy-comments", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/easy-comments", requestParamsJson, ct: ct);
     }
 }
 

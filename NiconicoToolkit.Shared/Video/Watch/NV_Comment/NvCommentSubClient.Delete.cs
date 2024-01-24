@@ -46,6 +46,7 @@ public partial class NvCommentSubClient
     /// <returns></returns>
     [RequireLogin]
     public async Task<ThreadDeleteResponse> DeleteCommentAsync(
+        string server,
         VideoId videoId,
         string threadId,
         string fork,
@@ -65,7 +66,7 @@ public partial class NvCommentSubClient
         });
 
         return await _context.SendJsonAsAsync<ThreadDeleteResponse>(HttpMethod.Put,
-                    $"{NVCommentThreadsUrl}/{threadId}/comment-comment-owner-deletions", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comment-comment-owner-deletions", requestParamsJson, ct: ct);
     }
 }
 
