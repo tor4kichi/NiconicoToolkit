@@ -1,5 +1,4 @@
-﻿using NeoSmart.AsyncLock;
-using NiconicoToolkit.Live.WatchPageProp;
+﻿using NiconicoToolkit.Live.WatchPageProp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

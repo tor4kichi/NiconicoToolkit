@@ -15,7 +15,7 @@ using System.Net.WebSockets;
 
 namespace NiconicoToolkit.Live.WatchSession
 {
-    using AsyncLock = NeoSmart.AsyncLock.AsyncLock;
+    using AsyncLock = AsyncKeyedLock.AsyncNonKeyedLocker;
 
     public static class NiwavidedNicoLiveMessageHelper
     {
@@ -195,6 +195,7 @@ namespace NiconicoToolkit.Live.WatchSession
             _connectionCts?.Cancel();
             _connectionCts?.Dispose();
             _ws?.Dispose();
+            _CommentSessionLock.Dispose();
             StopHeartbeatTimer();
             StopCommentPullTimingTimer();
         }

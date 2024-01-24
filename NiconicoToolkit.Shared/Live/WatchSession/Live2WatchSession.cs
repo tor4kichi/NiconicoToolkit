@@ -7,13 +7,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using NeoSmart.AsyncLock;
 using NiconicoToolkit.Live.WatchSession;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
 using NiconicoToolkit.Live.WatchSession.ToClientMessage;
 using System.Net.WebSockets;
+using AsyncKeyedLock;
 
 namespace NiconicoToolkit.Live.WatchSession
 {
@@ -108,7 +108,7 @@ namespace NiconicoToolkit.Live.WatchSession
     public sealed class Live2WatchSession : IDisposable
     {
         private readonly ClientWebSocket _ws;
-        private readonly AsyncLock _WebSocketLock = new AsyncLock();
+        private readonly AsyncNonKeyedLocker _WebSocketLock = new AsyncNonKeyedLocker();
         public readonly bool IsWatchWithTimeshift;
         private readonly string _webSocketUrl;
         private readonly JsonSerializerOptions _SocketJsonDeserializerOptions;
@@ -231,6 +231,7 @@ namespace NiconicoToolkit.Live.WatchSession
         public async void Dispose()
         {
             _ws.Dispose();
+            _WebSocketLock.Dispose();
             await CloseAsync();
         }
 
