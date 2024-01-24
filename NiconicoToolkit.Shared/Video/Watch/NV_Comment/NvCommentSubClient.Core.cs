@@ -27,7 +27,12 @@ public sealed partial class NvCommentSubClient
         _option = option;
     }
 
-    public const string NVCommentThreadsUrl = "https://nvcomment.nicovideo.jp/v1/threads";
+    public string MakeNVCommentThreadsUrl(string server)
+    {
+        return $"{server}/v1/threads";
+    }
+
+    //public const string NVCommentThreadsUrl = "https://nv-comment.nicovideo.jp/v1/threads";
     public const string NvApiCommentKeysUrl = "https://nvapi.nicovideo.jp/v1/comment/keys/";
 }
 

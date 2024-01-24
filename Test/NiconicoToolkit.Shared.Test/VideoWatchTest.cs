@@ -43,11 +43,11 @@ namespace NiconicoToolkit.Tests
             Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Domand);
 
             var accessRight= await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
-                videoId,
-                res.WatchApiResponse.WatchApiData.Media.Domand,
-                res.WatchApiResponse.WatchApiData.Media.Domand.Videos.First(x => x.IsAvailable ?? false),
-                res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false),
-                res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
+                videoId
+                , res.WatchApiResponse.WatchApiData.Media.Domand
+                , res.WatchApiResponse.WatchApiData.Media.Domand.Videos.First(x => x.IsAvailable ?? false)
+                , res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false)
+                , res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
             Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
@@ -240,7 +240,8 @@ namespace NiconicoToolkit.Tests
             var postKeyRes = await _context.Video.NvComment.GetPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(postKeyRes.Data);
             var commentRes = await _context.Video.NvComment.PostCommentAsync(
-                thread.Id.ToString()
+                nvComment.Server
+                , thread.Id.ToString()
                 , thread.VideoId
                 , new string[] { "184" }
                 , commentBody
@@ -268,7 +269,8 @@ namespace NiconicoToolkit.Tests
             Assert.IsNotNull(postKeyRes.Data);
 
             var commentRes = await _context.Video.NvComment.PostCommentAsync(
-                thread.Id.ToString()
+                nvComment.Server
+                , thread.Id.ToString()
                 , thread.VideoId
                 , new string[] { "184" }
                 , commentBody
@@ -299,7 +301,8 @@ namespace NiconicoToolkit.Tests
             var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(easyPostKeyRes.Data);
             var commentRes = await _context.Video.NvComment.EasyPostCommentAsync(
-                thread.Id.ToString()
+                nvComment.Server
+                , thread.Id.ToString()
                 , thread.VideoId
                 , commentBody
                 , vposMs
@@ -333,7 +336,8 @@ namespace NiconicoToolkit.Tests
                 var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(postThread.Id.ToString());
                 Assert.IsNotNull(easyPostKeyRes.Data, "faield post comment.");
                 var postCommentRes = await _context.Video.NvComment.EasyPostCommentAsync(
-                    postThread.Id.ToString()
+                    nvComment.Server
+                    , postThread.Id.ToString()
                     , postThread.VideoId
                     , commentBody
                     , vposMs
@@ -352,7 +356,8 @@ namespace NiconicoToolkit.Tests
             var keyRes = await _context.Video.NvComment.GetDeleteKeyAsync(thread.Id.ToString(), thread.ForkLabel);
             Assert.IsNotNull(keyRes.Data, "faield getting delete key.");
             var deleteRes = await _context.Video.NvComment.DeleteCommentAsync(
-                thread.VideoId
+                nvComment.Server
+                , thread.VideoId
                 , thread.Id.ToString()
                 , thread.ForkLabel
                 , deleteTargetCommentNumber
