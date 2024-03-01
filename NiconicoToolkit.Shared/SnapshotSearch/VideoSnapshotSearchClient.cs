@@ -32,8 +32,8 @@ namespace NiconicoToolkit.SnapshotSearch
 
 	public static class SearchConstants
 	{
-		public static readonly string VideoSearchApiUrl = "https://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search";
-		public static readonly string SearchApiVersionUrl = "https://api.search.nicovideo.jp/api/v2/snapshot/version";
+		public static readonly string VideoSearchApiUrl = "https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search";
+		public static readonly string SearchApiVersionUrl = "https://snapshot.search.nicovideo.jp/api/v2/snapshot/version";
 
 		public static readonly int MaxSearchOffset = 100_000;
 		public static readonly int MaxSearchLimit = 100;
