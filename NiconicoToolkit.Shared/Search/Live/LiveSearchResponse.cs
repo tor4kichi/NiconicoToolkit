@@ -92,7 +92,7 @@ namespace NiconicoToolkit.Search.Live
         public int Comments { get; init; }
 
         [JsonPropertyName("timeshiftReservations")]
-        public int TimeshiftReservations { get; init; }
+        public int? TimeshiftReservations { get; init; }
     }
 
     public sealed class Taxonomy
