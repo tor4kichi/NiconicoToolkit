@@ -36,7 +36,8 @@ namespace NiconicoToolkit.Tests
         #region Domand Hls video
 
         [TestMethod]
-        [DataRow("so42997483")]
+        //[DataRow("so42997483")]
+        [DataRow("sm43420972")]
         public async Task Domand_PlayVideoAsync(string videoId)
         {
             var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
