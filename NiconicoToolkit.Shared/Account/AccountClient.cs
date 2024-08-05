@@ -114,10 +114,14 @@ namespace NiconicoToolkit.Account
                     return (NiconicoSessionStatus.ServiceUnavailable, NiconicoAccountAuthority.NotSignedIn, default);
                 }
 
-                var signInStatus = __IsSignedInAsync_Internal(res);
-                if (signInStatus == NiconicoSessionStatus.Success)
+                var (signInStatus, _) = __GetAccountAuthority_Internal(res);
+                if (signInStatus != NiconicoAccountAuthority.NotSignedIn)
                 {
-                    await SignOutAsync();
+                    try
+                    {
+                        await SignOutAsync();
+                    }
+                    catch { }
                     await Task.Delay(100);
                 }
             }
