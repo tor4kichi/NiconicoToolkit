@@ -16,6 +16,73 @@ using Windows.Media.Streaming.Adaptive;
 namespace NiconicoToolkit.Tests
 {
     [TestClass]
+    public sealed class VideoWatchTest_Guest
+    {
+        [TestInitialize]
+        public async Task Initialize()
+        {
+            _context = new NiconicoContext(AccountTestHelper.Site);
+            _context.SetupDefaultRequestHeaders();
+        }
+
+        uint _userId;
+        NiconicoContext _context;
+
+        #region Domand Hls video
+
+        [TestMethod]
+        [DataRow("sm43420972")]
+        public async Task Domand_PlayVideoAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsNotNull(res.Data);
+
+            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+                videoId
+                , res.Data.Response.Media.Domand
+                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable).Id
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
+                , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
+                );
+            Assert.IsTrue(accessRight.IsSuccess);
+            Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+        }
+
+        [TestMethod]
+        [DataRow("sm43420972")]
+        public async Task Domand_PlayVideoOnlyAudioAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsNotNull(res.Data);
+
+            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+                videoId
+                , res.Data.Response.Media.Domand
+                , null
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
+                , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
+                );
+            Assert.IsTrue(accessRight.IsSuccess);
+            Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+        }
+
+        #endregion
+
+        #region Watch Video
+
+        [TestMethod]
+        [DataRow("so38750114")]
+        public async Task GetAdmissionRequireWatchAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            
+            Assert.IsNull(res.Data.Response.Media.Delivery);
+        }
+
+        #endregion
+    }
+
+    [TestClass]
     public sealed class VideoWatchTest
     {
         [TestInitialize]
@@ -36,37 +103,38 @@ namespace NiconicoToolkit.Tests
         #region Domand Hls video
 
         [TestMethod]
-        //[DataRow("so42997483")]
         [DataRow("sm43420972")]
         public async Task Domand_PlayVideoAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Domand);
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Media.Domand);
 
-            var accessRight= await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
                 videoId
-                , res.WatchApiResponse.WatchApiData.Media.Domand
-                , res.WatchApiResponse.WatchApiData.Media.Domand.Videos.First(x => x.IsAvailable ?? false)
-                , res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false)
-                , res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
+                , res.Data.Response.Media.Domand
+                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable).Id
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
+                , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
             Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
         }
 
         [TestMethod]
-        [DataRow("so42997483")]
+        [DataRow("sm43889198")]
         public async Task Domand_PlayVideoOnlyAudioAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Domand);
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Media.Domand);
 
-            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+            Video.Watch.Domand.DomandHlsAccessRightResponse accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
                 videoId,
-                res.WatchApiResponse.WatchApiData.Media.Domand,
+                res.Data.Response.Media.Domand,
                 null,
-                res.WatchApiResponse.WatchApiData.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id,
-                res.WatchApiResponse.WatchApiData.VideoAds.AdditionalParams.WatchTrackId
+                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id,
+                res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
             Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
@@ -79,69 +147,56 @@ namespace NiconicoToolkit.Tests
 #if WINDOWS_UWP
 
         [TestMethod]
-        [DataRow("sm36403134")]
-        public async Task PlayVideoProgressiveMp4Async(string videoId)
-        {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Delivery);
-
-            var movie = res.WatchApiResponse.WatchApiData.Media.Delivery.Movie;
-            var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
-                res.WatchApiResponse.WatchApiData, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
-                );
-
-            await OpenProgressiveMp4Async(session);
-        }
-
-        [TestMethod]
         [DataRow("sm38647727")]
-        public async Task PlayVideoForceHlsAsync(string videoId)
-        {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Delivery);
-
-            var movie = res.WatchApiResponse.WatchApiData.Media.Delivery.Movie;
-            var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
-                res.WatchApiResponse.WatchApiData, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
-                , hlsMode: true
-                );
-
-            await OpenHlsAsync(session);
-        }
-
-        // TooManyRequestで失敗するためIgnore
-        [Ignore]
-        [TestMethod]
-        [DataRow("so38538458")]
         public async Task PlayVideoHlsAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Delivery);
-            var movie = res.WatchApiResponse.WatchApiData.Media.Delivery.Movie;
-            var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
-                res.WatchApiResponse.WatchApiData, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
-                , hlsMode: true
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsNotNull(res.Data.Response.Media.Domand);
+
+            var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
+                videoId,
+                res.Data.Response.Media.Domand,
+                null,
+                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id,
+                res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
 
-            await OpenHlsAsync(session);
+            await OpenHlsAsync(accessRight);
         }
 
-        // TooManyRequestで失敗するためIgnore
-        [Ignore]
-        [TestMethod]
-        [DataRow("so38538458")]
-        public async Task PlayVideoForceProgressiveMp4Async(string videoId)
-        {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Media.Delivery);
-            var movie = res.WatchApiResponse.WatchApiData.Media.Delivery.Movie;
-            var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
-                res.WatchApiResponse.WatchApiData, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
-                , hlsMode: false
-                );
+        //// TooManyRequestで失敗するためIgnore
+        //[Ignore]
+        //[TestMethod]
+        //[DataRow("so38538458")]
+        //public async Task PlayVideoHlsAsync(string videoId)
+        //{
+        //    var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+        //    Assert.IsNotNull(res.Data.Response.Media.Delivery);
+        //    var movie = res.Data.Response.Media.Delivery.Movie;
+        //    var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
+        //        res.Data.Response, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
+        //        , hlsMode: true
+        //        );
 
-            await OpenProgressiveMp4Async(session);
-        }
+        //    await OpenHlsAsync(session);
+        //}
+
+        //// TooManyRequestで失敗するためIgnore
+        //[Ignore]
+        //[TestMethod]
+        //[DataRow("so38538458")]
+        //public async Task PlayVideoForceProgressiveMp4Async(string videoId)
+        //{
+        //    var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
+        //    Assert.IsNotNull(res.Data.Response.Media.Delivery);
+        //    var movie = res.Data.Response.Media.Delivery.Movie;
+        //    var session = await _context.Video.VideoWatch.GetDmcSessionResponseAsync(
+        //        res.Data.Response, movie.Videos.FirstOrDefault(x => x.IsAvailable), movie.Audios.FirstOrDefault(x => x.IsAvailable)
+        //        , hlsMode: false
+        //        );
+
+        //    await OpenProgressiveMp4Async(session);
+        //}
 
         private async Task OpenProgressiveMp4Async(DmcSessionResponse session)
         {
@@ -173,55 +228,67 @@ namespace NiconicoToolkit.Tests
             }
         }
 
+        private async Task OpenHlsAsync(Video.Watch.Domand.DomandHlsAccessRightResponse accessRight)
+        {
+            Assert.IsTrue(HttpStatusCodeHelper.IsSuccessStatusCode(accessRight.Meta.Status));
+            Debug.WriteLineIf(accessRight.Meta.Code is not null, accessRight.Meta.Code);
+            Assert.IsNotNull(accessRight.Data.ContentUrl);
+            
+            // Try open media
+            var ams = await AdaptiveMediaSource.CreateFromUriAsync(new Uri(accessRight.Data.ContentUrl), _context.HttpClient);
+            Assert.AreEqual(ams.Status, AdaptiveMediaSourceCreationStatus.Success);
+
+            using (var mediaSource = MediaSource.CreateFromAdaptiveMediaSource(ams.MediaSource))
+            {
+                await mediaSource.OpenAsync();
+            }
+        }
+
 #endif
 
         [TestMethod]
         [DataRow("so38750114")]
         public async Task GetAdmissionRequireWatchAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNull(res.WatchApiResponse.WatchApiData.Media.Delivery);
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNull(res.Data.Response.Media.Delivery);
         }
 
-#endregion
+        #endregion
 
 
 
-#region Comment
+        #region Comment
 
         [TestMethod]
         [DataRow("sm38647727")]
         [DataRow("so41926974")]
         public async Task NvGetCommentAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
-            
-            var commentRes = await _context.Video.NvComment.GetCommentsAsync(res.WatchApiResponse.WatchApiData.Comment.NvComment);
-
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
+            var commentRes = await _context.Video.NvComment.GetCommentsAsync(res.Data.Response.Comment.NvComment);
             Assert.IsNotNull(commentRes.Data);
             Assert.IsNotNull(commentRes.Data.Threads);
-            Assert.IsNotNull(commentRes.Data.GlobalComments);            
+            Assert.IsNotNull(commentRes.Data.GlobalComments);
         }
 
         [TestMethod]
         [DataRow("sm38647727")]
         public async Task NvGetCommentWithoutEasyPostAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
-
-            var nvComment = res.WatchApiResponse.WatchApiData.Comment.NvComment;
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
             var commentRes = await _context.Video.NvComment.GetCommentsAsync(
-                nvComment,
+                res.Data.Response.Comment.NvComment,
                 new[] { ThreadTargetForkConstants.Owner, ThreadTargetForkConstants.Main }
                 );
 
             Assert.IsNotNull(commentRes.Data);
-            Assert.IsNotNull(commentRes.Data.Threads);            
+            Assert.IsNotNull(commentRes.Data.Threads);
             Assert.IsNull(commentRes.Data.Threads.FirstOrDefault(x => x.Fork == ThreadTargetForkConstants.Easy));
         }
 
@@ -230,13 +297,12 @@ namespace NiconicoToolkit.Tests
         [DataRow("sm9", "うぽつ", ThreadTargetForkConstants.Main)]
         public async Task NvPostCommentAsync(string videoId, string commentBody, string threadTarget)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-           
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
-
-            var comment = res.WatchApiResponse.WatchApiData.Comment;
-            var nvComment = comment.NvComment;            
-            int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
+            var comment = res.Data.Response.Comment;
+            var nvComment = comment.NvComment;
+            int vposMs = new Random().Next(res.Data.Response.Video.Duration * 1000);
             var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == threadTarget);
             var postKeyRes = await _context.Video.NvComment.GetPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(postKeyRes.Data);
@@ -249,22 +315,21 @@ namespace NiconicoToolkit.Tests
                 , vposMs
                 , postKeyRes.Data.PostKey
                 );
-            
+
             Assert.IsNotNull(commentRes.Data);
-            Assert.IsNotNull(commentRes.Data.Id);            
+            Assert.IsNotNull(commentRes.Data.Id);
         }
 
         [TestMethod]
         [DataRow("sm9", "うぽつ", ThreadTargetForkConstants.Main)]
         public async Task NVPostCommentFailWithInvalidPostKeyAsync(string videoId, string commentBody, string threadTarget)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
-
-            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
+            var comment = res.Data.Response.Comment;
             var nvComment = comment.NvComment;
-            int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+            int vposMs = new Random().Next(res.Data.Response.Video.Duration * 1000);
             var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == threadTarget);
             var postKeyRes = await _context.Video.NvComment.GetPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(postKeyRes.Data);
@@ -289,15 +354,13 @@ namespace NiconicoToolkit.Tests
         [DataRow("sm9")]
         public async Task NvEasyPostCommentAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment);
-
-            string commentBody = res.WatchApiResponse.WatchApiData.EasyComment.Phrases.FirstOrDefault()?.Text ?? "うぽつ";
-
-            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
+            string commentBody = res.Data.Response.EasyComment.Phrases.FirstOrDefault()?.Text ?? "うぽつ";
+            var comment = res.Data.Response.Comment;
             var nvComment = comment.NvComment;
-            int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+            int vposMs = new Random().Next(res.Data.Response.Video.Duration * 1000);
             var thread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetForkConstants.Easy);
             var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(thread.Id.ToString());
             Assert.IsNotNull(easyPostKeyRes.Data);
@@ -318,11 +381,10 @@ namespace NiconicoToolkit.Tests
         [DataRow("sm9")]
         public async Task NvDeleteCommentAsync(string videoId)
         {
-            var res = await _context.Video.VideoWatch.GetInitialWatchDataAsync(videoId, false, false);
-
-            Assert.IsNotNull(res.WatchApiResponse.WatchApiData.Comment, "Not avairable comment in this video : " + videoId);
-
-            var comment = res.WatchApiResponse.WatchApiData.Comment;
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsTrue(res.IsSuccess);
+            Assert.IsNotNull(res.Data.Response.Comment);
+            var comment = res.Data.Response.Comment;
             var nvComment = comment.NvComment;
             var commentRes = await _context.Video.NvComment.GetCommentsAsync(nvComment, new[] { ThreadTargetForkConstants.Easy });
             var postedThread = commentRes.Data.Threads.FirstOrDefault(x => x.Fork == ThreadTargetForkConstants.Easy);
@@ -330,9 +392,9 @@ namespace NiconicoToolkit.Tests
             int deleteTargetCommentNumber = -1;
             if (myPostComments.Any() is false)
             {
-                string commentBody = res.WatchApiResponse.WatchApiData.EasyComment.Phrases.FirstOrDefault()?.Text ?? "うぽつ";
+                string commentBody = res.Data.Response.EasyComment.Phrases.FirstOrDefault()?.Text ?? "うぽつ";
                 // コメント投稿する
-                int vposMs = new Random().Next(res.WatchApiResponse.WatchApiData.Video.Duration * 1000);
+                int vposMs = new Random().Next(res.Data.Response.Video.Duration * 1000);
                 var postThread = comment.Threads.FirstOrDefault(x => x.ForkLabel == ThreadTargetForkConstants.Easy);
                 var easyPostKeyRes = await _context.Video.NvComment.GetEasyPostKeyAsync(postThread.Id.ToString());
                 Assert.IsNotNull(easyPostKeyRes.Data, "faield post comment.");

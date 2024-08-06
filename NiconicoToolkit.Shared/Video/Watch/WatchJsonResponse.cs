@@ -5,8 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Video.Watch;
 
-public sealed class WatchJsonResponse : ResponseWithMeta
+public sealed class WatchJsonResponse : ResponseWithData<WatchResponse>
 {
-    [JsonPropertyName("data")]
-    public DmcWatchApiData Data { get; init; }
 }

@@ -93,7 +93,7 @@ class ThreadRequest
     public class ThreadRequestParams
     {
         [JsonPropertyName("targets")]
-        public List<NvCommentParamsTarget> Targets { get; set; }
+        public List<ThreadTarget> Targets { get; set; }
 
         [JsonPropertyName("language")]
         public string Language { get; set; }
