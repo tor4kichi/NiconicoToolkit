@@ -103,7 +103,7 @@ public sealed class VideoWatchSubClient
 
     public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
         VideoId videoId,
-        NicoVideoWatchApiResponse.Domand domand,
+        WatchDomand domand,
         string? videoQualityId,
         string? audioQualityId,
         string? watchTrackId = null,
@@ -135,9 +135,9 @@ public sealed class VideoWatchSubClient
 
     public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(
         VideoId videoId,
-        NicoVideoWatchApiResponse.Domand domand,
-        NicoVideoWatchApiResponse.Video? videoQuality,
-        NicoVideoWatchApiResponse.Audio? audioQuality,
+        WatchDomand domand,
+        VideoContent? videoQuality,
+        AudioContent? audioQuality,
         string? watchTrackId = null,
         CancellationToken ct = default
         )

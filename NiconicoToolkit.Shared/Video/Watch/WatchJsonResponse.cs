@@ -5,6 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Video.Watch;
 
-public sealed class WatchJsonResponse : ResponseWithData<NicoVideoWatchApiResponse.Response>
+public sealed class WatchJsonResponse : ResponseWithData<WatchResponse>
 {
 }

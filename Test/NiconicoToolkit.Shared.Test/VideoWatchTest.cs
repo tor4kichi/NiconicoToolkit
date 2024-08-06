@@ -40,8 +40,8 @@ namespace NiconicoToolkit.Tests
             var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
                 videoId
                 , res.Data.Response.Media.Domand
-                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable ?? false).Id
-                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id
+                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable).Id
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
                 , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
@@ -59,7 +59,7 @@ namespace NiconicoToolkit.Tests
                 videoId
                 , res.Data.Response.Media.Domand
                 , null
-                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
                 , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
@@ -113,8 +113,8 @@ namespace NiconicoToolkit.Tests
             var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
                 videoId
                 , res.Data.Response.Media.Domand
-                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable ?? false).Id
-                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id
+                , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable).Id
+                , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
                 , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
@@ -133,7 +133,7 @@ namespace NiconicoToolkit.Tests
                 videoId,
                 res.Data.Response.Media.Domand,
                 null,
-                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id,
+                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id,
                 res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
             Assert.IsTrue(accessRight.IsSuccess);
@@ -157,7 +157,7 @@ namespace NiconicoToolkit.Tests
                 videoId,
                 res.Data.Response.Media.Domand,
                 null,
-                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable ?? false).Id,
+                res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id,
                 res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
                 );
 

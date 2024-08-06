@@ -25,7 +25,7 @@ public partial class NvCommentSubClient
     /// <param name="videoComment">VideoClient.VideoWatch.GetInitialWatchDataAsync() のレスポンスデータに含まれる NvComment を指定します。</param>   
     /// <param name="ct"></param>
     /// <returns></returns>
-    public async Task<ThreadResponse> GetCommentsAsync(NicoVideoWatchApiResponse.NvComment videoComment, CancellationToken ct = default)
+    public async Task<ThreadResponse> GetCommentsAsync(NvComment videoComment, CancellationToken ct = default)
     {
         string requestParamsJson = JsonSerializer.Serialize(new ThreadRequest()
         {
@@ -52,7 +52,7 @@ public partial class NvCommentSubClient
     /// <param name="ct"></param>
     /// <returns></returns>
     /// <remarks>VideoClient.VideoWatch.GetInitialWatchDataAsync() のレスポンスデータに含まれる NvComment のデータを引数に渡してください。</remarks>
-    public async Task<ThreadResponse> GetCommentsAsync(NicoVideoWatchApiResponse.NvComment videoComment, IEnumerable<string> targetForks, CancellationToken ct = default)
+    public async Task<ThreadResponse> GetCommentsAsync(NvComment videoComment, IEnumerable<string> targetForks, CancellationToken ct = default)
     {
         var forks = targetForks.ToHashSet();
         string requestParamsJson = JsonSerializer.Serialize(new ThreadRequest()
@@ -93,7 +93,7 @@ class ThreadRequest
     public class ThreadRequestParams
     {
         [JsonPropertyName("targets")]
-        public List<NicoVideoWatchApiResponse.Target> Targets { get; set; }
+        public List<ThreadTarget> Targets { get; set; }
 
         [JsonPropertyName("language")]
         public string Language { get; set; }
