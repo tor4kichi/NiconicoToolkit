@@ -21,7 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IdTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LikesTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LiveTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NicoRepoTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FollowingsActivityTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RecommendTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchHtmlTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchTest.cs" />

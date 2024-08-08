@@ -18,7 +18,6 @@ using NiconicoToolkit.Channels;
 using NiconicoToolkit.Mylist;
 using NiconicoToolkit.Follow;
 using NiconicoToolkit.Series;
-using NiconicoToolkit.NicoRepo;
 using NiconicoToolkit.Likes;
 using NiconicoToolkit.Community;
 using NiconicoToolkit.Ichiba;
@@ -28,6 +27,9 @@ using NiconicoToolkit.Search;
 using System.IO;
 using U8Xml;
 using NiconicoToolkit.ExtApi.Video;
+using NiconicoToolkit.FollowingsActivity;
+
+
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -91,7 +93,7 @@ namespace NiconicoToolkit
             Account = new AccountClient(this);
             User = new UserClient(this, DefaultOptions);
             Video = new VideoClient(this, DefaultOptions);
-            Activity = new ActivityClient(this, DefaultOptions);
+            History = new HistoryClient(this, DefaultOptions);
             Search = new SearchClient(this, DefaultOptions);
             SearchWithPage = new SearchWithPageClient(this);
             Recommend = new RecommendClient(this, DefaultOptions);
@@ -99,7 +101,7 @@ namespace NiconicoToolkit
             Mylist = new MylistClient(this, DefaultOptions);
             Follow = new FollowClient(this, DefaultOptions);
             Series = new SeriesClient(this, DefaultOptions);
-            NicoRepo = new NicoRepoClient(this, DefaultOptions);
+            FollowingsActivity = new FollowingsActivityClient(this, DefaultOptions);
             Likes = new LikesClient(this, DefaultOptions);
             Community = new CommunityClient(this, DefaultOptions);
             Ichiba = new IchibaClient(this, DefaultOptions);
@@ -115,7 +117,7 @@ namespace NiconicoToolkit
         public LiveClient Live { get; }
         public UserClient User { get; }
         public VideoClient Video { get; }
-        public ActivityClient Activity { get; }
+        public HistoryClient History { get; }
         public SearchClient Search { get; }
         public SearchWithPageClient SearchWithPage { get; }
         public RecommendClient Recommend { get; }
@@ -123,7 +125,7 @@ namespace NiconicoToolkit
         public MylistClient Mylist { get; }
         public FollowClient Follow { get; }
         public SeriesClient Series { get; }
-        public NicoRepoClient NicoRepo { get; }
+        public FollowingsActivityClient FollowingsActivity { get; }
         public LikesClient Likes { get; }
         public CommunityClient Community { get; }
         public IchibaClient Ichiba { get; }

@@ -14,8 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Account\MailAndPasswordAuthToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Account\NiconicoAccountAuthority.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Account\NiconicoSessionStatus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Activity\ActivityClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Activity\VideoWatchHistory\VideoWatchHisotrySubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)History\HistoryClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)History\VideoWatchHistory\VideoWatchHisotrySubClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CeApiResponseBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Channels\ChannelAdmissionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Channels\ChannelClient.cs" />
@@ -114,10 +114,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoToolkitException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NiconicoUrls.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoDisplayTarget.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoEntriesResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NicoRepo\NicoRepoMuteContextTrigger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FollowingsActivity\FollowingsActivityClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FollowingsActivity\FollowingsActivityResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\HotTopicResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ranking\Video\PopularTagResponse.cs" />
