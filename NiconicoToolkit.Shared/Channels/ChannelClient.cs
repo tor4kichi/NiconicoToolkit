@@ -120,22 +120,20 @@ namespace NiconicoToolkit.Channels
                             var imageAnchorNode = itemNode.QuerySelector("div.item_left > a");
                             var imageNode = imageAnchorNode.QuerySelector("img");
                             var lastResNode = imageAnchorNode.QuerySelector("span.last_res");
-                            var lengthNode = imageAnchorNode.QuerySelector("span.length");
+                            var lengthNode = imageAnchorNode.QuerySelector("span[data-style='videoLength']");
 
                             item.ThumbnailUrl = imageNode.GetAttribute("src");
                             item.Length = lengthNode.TextContent.ToTimeSpan();
                             item.CommentSummary = lastResNode?.TextContent ?? string.Empty;
-                            var ppv = imageAnchorNode.QuerySelector(".purchase_type > span");
-                            if (ppv != null)
+                            var ppv = imageAnchorNode.QuerySelector("span[data-style='paymentType']");
+                            if (ppv != null && ppv.TextContent is { } token)
                             {
-                                foreach (var token in ppv.ClassList)
+                                switch (token)
                                 {
-                                    switch (token)
-                                    {
-                                        case "all_pay": item.IsRequirePayment = true; break;
-                                        case "free_for_member": item.IsFreeForMember = true; break;
-                                        case "member_unlimited_access": item.IsMemberUnlimitedAccess = true; break;
-                                    }
+                                    case "all_pay": item.IsRequirePayment = true; break;
+                                    case "会員無料": item.IsFreeForMember = true; break;
+                                    case "member_unlimited_access": item.IsMemberUnlimitedAccess = true; break;
+                                    case "無料": break;
                                 }
                             }
                         }
