@@ -22,7 +22,7 @@ namespace NiconicoToolkit.Tests
         [TestMethod]
         public async Task GetVideoWatchHitoryAsync()
         {
-            var res = await _context.Activity.VideoWachHistory.GetWatchHistoryAsync(0, 100);
+            var res = await _context.History.VideoWachHistory.GetWatchHistoryAsync(0, 100);
 
             Assert.IsTrue(res.Meta.IsSuccess);
 
