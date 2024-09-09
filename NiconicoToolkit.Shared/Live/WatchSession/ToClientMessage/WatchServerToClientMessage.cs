@@ -64,43 +64,46 @@ namespace NiconicoToolkit.Live.WatchSession.ToClientMessage
     }
 
 
-    internal sealed class Room_WatchSessionToClientMessage : WatchServerToClientMessage
+    //internal sealed class Room_WatchSessionToClientMessage : WatchServerToClientMessage
+    //{
+    //    [JsonPropertyName("messageServer")]
+    //    public MessageServer MessageServer { get; set; }
+
+    //    [JsonPropertyName("name")]
+    //    public string Name { get; set; }
+
+    //    [JsonPropertyName("threadId")]
+    //    public string ThreadId { get; set; }
+
+    //    [JsonPropertyName("isFirst")]
+    //    public bool IsFirst { get; set; }
+
+    //    [JsonPropertyName("waybackkey")]
+    //    [Obsolete("※ 部屋統合後はキーなしで取得できるようにするため空になります")]
+    //    public string waybackkey { get; set; }
+
+    //    [JsonPropertyName("yourPostKey")]
+    //    [Obsolete("※ 部屋統合までは不要のため空になります")]
+    //    public string YourPostKey { get; set; }
+    //}
+
+    internal sealed class MessageServer_WatchSessionToClientMessage : WatchServerToClientMessage
     {
-        [JsonPropertyName("messageServer")]
-        public MessageServer MessageServer { get; set; }
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("threadId")]
-        public string ThreadId { get; set; }
-
-        [JsonPropertyName("isFirst")]
-        public bool IsFirst { get; set; }
-
-        [JsonPropertyName("waybackkey")]
-        [Obsolete("※ 部屋統合後はキーなしで取得できるようにするため空になります")]
-        public string waybackkey { get; set; }
-
-        [JsonPropertyName("yourPostKey")]
-        [Obsolete("※ 部屋統合までは不要のため空になります")]
-        public string YourPostKey { get; set; }
-    }
-
-    public sealed class MessageServer
-    {
-        [JsonPropertyName("uri")]
-        public Uri Uri { get; set; }
+        [JsonPropertyName("viewUri")]
+        public Uri ViewUri { get; set; }
 
         [JsonPropertyName("type")]
         public string Type { get; set; }
+
+        [JsonPropertyName("vposBaseTime")]
+        public DateTimeOffset VposBaseTime { get; set; }
     }
 
-    internal sealed class Rooms_WatchSessionToClientMessage : WatchServerToClientMessage
-    {
-        [JsonPropertyName("rooms")]
-        public Room_WatchSessionToClientMessage[] Rooms { get; set; }
-    }
+    //internal sealed class Rooms_WatchSessionToClientMessage : WatchServerToClientMessage
+    //{
+    //    [JsonPropertyName("rooms")]
+    //    public Room_WatchSessionToClientMessage[] Rooms { get; set; }
+    //}
 
     internal sealed class ServerTime_WatchSessionToClientMessage : WatchServerToClientMessage
     {

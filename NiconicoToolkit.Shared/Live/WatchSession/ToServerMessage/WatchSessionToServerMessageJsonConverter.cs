@@ -42,6 +42,9 @@ namespace NiconicoToolkit.Live.WatchSession
                 case PostComment_ToServerMessageData postComment:
                     JsonSerializer.Serialize(writer, postComment, options);
                     break;
+                case NotifyNewVisit_ToServerMessageData notifyNewVisit:
+                    JsonSerializer.Serialize(writer, notifyNewVisit, options);
+                    break;
                 default:
                     throw new NotSupportedException(value.GetType().FullName);
             }

@@ -21,8 +21,9 @@ namespace NiconicoToolkit.Live.WatchSession
     public delegate void LiveStreamRecieveServerTimeHandler(DateTime serverTime);
     public delegate void LiveStreamRecievePermitHandler(string parmit);
     public delegate void LiveStreamRecieveStreamHandler(Live2CurrentStreamEventArgs e);
-    public delegate void LiveStreamRecieveRoomHandler(Live2CurrentRoomEventArgs e);
-    public delegate void LiveStreamRecieveRoomsHandler(Live2RoomsEventArgs e);
+    //public delegate void LiveStreamRecieveRoomHandler(Live2CurrentRoomEventArgs e);
+    //public delegate void LiveStreamRecieveRoomsHandler(Live2RoomsEventArgs e);
+    public delegate void LiveStreamMessageServerHandler(Live2MessageServerEventArgs e);
     public delegate void LiveStreamRecieveStatisticsHandler(Live2StatisticsEventArgs e);
     public delegate void LiveStreamReceiveTagUpdatedHandler(Live2TagUpdatedEventArgs e);
     public delegate void LiveStreamRecieveScheduleHandler(Live2ScheduleEventArgs e);
@@ -46,31 +47,6 @@ namespace NiconicoToolkit.Live.WatchSession
         public string MediaServerType { get; set; }
         public string MediaServerAuth { get; set; }
         public string Protocol { get; set; }
-    }
-
-    public class Live2RoomsEventArgs
-    {
-        public Live2CurrentRoomEventArgs[] Rooms { get; set; }
-    }
-
-
-    public class Live2CurrentRoomEventArgs
-    {
-        public Uri MessageServerUrl { get; set; }
-        public string MessageServerType { get; set; }
-        public string RoomName { get; set; }
-        public string ThreadId { get; set; }
-        public bool IsFirst { get; set; }
-        public string WaybackKey { get; set; }
-
-        public LiveCommentSession CreateCommentClientForTimeshift(string userAgent, string userId, DateTimeOffset startTime, DateTimeOffset endTime)
-        {
-            return LiveCommentSession.CreateForTimeshift(MessageServerUrl.OriginalString, ThreadId, userId, userAgent, WaybackKey, startTime, endTime);
-        }
-        public LiveCommentSession CreateCommentClientForLiveStreaming(string userAgent, string userId)
-        {
-            return LiveCommentSession.CreateForLiveStream(MessageServerUrl.OriginalString, ThreadId, userId, userAgent);
-        }
     }
 
     public class Live2StatisticsEventArgs
@@ -98,6 +74,12 @@ namespace NiconicoToolkit.Live.WatchSession
         public TimeSpan WaitTime { get; set; }
     }
 
+    public class Live2MessageServerEventArgs
+    {
+        public Uri ViewUri { get; set; }
+        public DateTimeOffset VposBaseTime { get; set; }
+    }
+
     public class Live2TagUpdatedEventArgs
     {
         public TagUpdated_TagItem[] TagItems { get; set; }
@@ -119,8 +101,7 @@ namespace NiconicoToolkit.Live.WatchSession
         public event LiveStreamRecieveErrorHandler RecieveError;
         public event LiveStreamRecieveServerTimeHandler RecieveServerTime;
         public event LiveStreamRecieveStreamHandler RecieveStream;
-        public event LiveStreamRecieveRoomHandler RecieveRoom;
-        public event LiveStreamRecieveRoomsHandler RecieveRooms;
+        public event LiveStreamMessageServerHandler MessageServer;
         public event LiveStreamRecieveStatisticsHandler RecieveStatistics;
         public event LiveStreamReceiveTagUpdatedHandler RecieveTagUpdated;
         public event LiveStreamRecieveScheduleHandler RecieveSchedule;
@@ -249,8 +230,7 @@ namespace NiconicoToolkit.Live.WatchSession
                 Seat_WatchSessionToClientMessage seat => ProcessSeatData(seat),
                 Akashic_WatchSessionToClientMessage akashic => ProcessAkashicData(akashic),
                 Stream_WatchSessionToClientMessage stream => ProcessStreamData(stream),
-                Room_WatchSessionToClientMessage room => ProcessRoomData(room),
-                Rooms_WatchSessionToClientMessage rooms => ProcessRoomsData(rooms),
+                MessageServer_WatchSessionToClientMessage messageServer => ProcessMessageServer(messageServer),
                 ServerTime_WatchSessionToClientMessage serverTime => ProcessServerTimeData(serverTime),
                 Statistics_WatchSessionToClientMessage statistics => ProcessStatisticsData(statistics),
                 Schedule_WatchSessionToClientMessage schedule => ProcessScheduleData(schedule),
@@ -263,6 +243,15 @@ namespace NiconicoToolkit.Live.WatchSession
             };
         }
 
+        private bool ProcessMessageServer(MessageServer_WatchSessionToClientMessage messageServer)
+        {
+            MessageServer?.Invoke(new()
+            {
+                ViewUri = messageServer.ViewUri,
+                VposBaseTime = messageServer.VposBaseTime,
+            });
+            return true;
+        }
 
         private bool ProcessErrorData(Error_WatchSessionToClientMessage error)
         {
@@ -299,35 +288,6 @@ namespace NiconicoToolkit.Live.WatchSession
                 AvailableQualities = stream.AvailableQualities,
                 Protocol = stream.Protocol
             });
-            return true;
-        }
-
-        private bool ProcessRoomData(Room_WatchSessionToClientMessage room)
-        {
-            RecieveRoom?.Invoke(new Live2CurrentRoomEventArgs()
-            {
-                MessageServerUrl = room.MessageServer.Uri,
-                MessageServerType = room.MessageServer.Type,
-                RoomName = room.Name,
-                ThreadId = room.ThreadId,
-                IsFirst = room.IsFirst,
-                WaybackKey = room.waybackkey
-            });
-            return true;
-        }
-
-        private bool ProcessRoomsData(Rooms_WatchSessionToClientMessage rooms)
-        {
-            RecieveRooms?.Invoke(new Live2RoomsEventArgs()
-            {
-                Rooms = rooms.Rooms.Select(x => new Live2CurrentRoomEventArgs() 
-                {
-                    MessageServerUrl = x.MessageServer.Uri,
-                    MessageServerType = x.MessageServer.Type,
-                    RoomName = x.Name,
-                    ThreadId = x.ThreadId,
-                }).ToArray()   
-            }) ;
             return true;
         }
 
@@ -447,6 +407,15 @@ namespace NiconicoToolkit.Live.WatchSession
             });
 
             return true;
+        }
+
+        public async Task SendNotifyNewVisitAsync(bool nicoAd, bool checkKonomiTagMatching)
+        {
+            await SendMessageAsync(new NotifyNewVisit_ToServerMessageData()
+            {
+                NicoAd = nicoAd,
+                CheckKonomiTagMatching = checkKonomiTagMatching,
+            });
         }
 
         public async Task ChangeStreamAsync(LiveQualityType requestQuality, bool isLowLatency, LiveQualityLimitType? limit = null, bool? chasePlay = false)

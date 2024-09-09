@@ -233,6 +233,24 @@ namespace NiconicoToolkit.Live.WatchSession
         public string Font { get; set; }
     }
 
+    //    {
+    //  "type": "notifyNewVisit",
+    //  "data": {
+    //    "nicoad": true,
+    //    "checkKonomiTagMatching": true
+    //  }
+    //}
+    internal sealed class NotifyNewVisit_ToServerMessageData : WatchClientToServerMessageDataBase
+    {
+        public NotifyNewVisit_ToServerMessageData() : base("notifyNewVisit") { }
+
+        [JsonPropertyName("nicoad")]
+        public bool NicoAd { get; set; } = true;
+        [JsonPropertyName("checkKonomiTagMatching")]
+        public bool CheckKonomiTagMatching { get; set; } = true;
+    }
+
+
     public enum LiveCommentSize
     {
         Big,
