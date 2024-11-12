@@ -58,12 +58,6 @@ namespace NiconicoToolkit.Channels
             return await _context.GetJsonAsAsync<ChannelAdmissionResponse>(url, _options);
         }
 
-
-        public Task<ChannelInfo> GetChannelInfoAsync(ChannelId channelId)
-        {
-            return _context.GetJsonAsAsync<ChannelInfo>($"{NiconicoUrls.ChannelApiUrl}ch.info/{channelId.ToStringWithoutPrefix()}", _options);
-        }
-
         public const int OneTimeItemsCountOnGetChannelVideoAsync = 20;
 
         public Task<ChannelVideoResponse> GetChannelVideoAsync(ChannelId channelId, int page, ChannelVideoSortKey? sortKey = null, ChannelVideoSortOrder? sortOrder = null)
