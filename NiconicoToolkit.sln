@@ -21,16 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NiconicoToolkit.WinUI3", "N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{7BB1F84F-9A28-41E5-A2A0-9E6C0446A9AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.Net9", "NiconicoToolkit.Net9\NiconicoToolkit.Net9.csproj", "{4A4987D2-0042-4CCD-B013-068E1AA88489}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiconicoToolkit.UWPNet9", "NiconicoToolkit.UWPNet9\NiconicoToolkit.UWPNet9.csproj", "{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{157b2fce-b2e7-4e30-958a-55aecd6fd6d7}*SharedItemsImports = 13
-		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{1ca46ebc-c163-472c-9f98-5d65d2bbbe8b}*SharedItemsImports = 4
-		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{1e3a1d63-1808-4b92-9456-d3c0fb39042d}*SharedItemsImports = 13
-		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{6f8d50b6-735f-49b3-99e2-1330fa3a8416}*SharedItemsImports = 5
-		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{7027fe60-2c91-4c28-a2fd-ec0dfc3d4b0c}*SharedItemsImports = 5
-		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{89a32377-05c1-4239-b943-051bd72114f2}*SharedItemsImports = 5
-		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{9ec6b1ba-1896-4516-b0f4-1c3701566d16}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -150,6 +145,46 @@ Global
 		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x64.Build.0 = Release|Any CPU
 		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x86.ActiveCfg = Release|Any CPU
 		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C}.Release|x86.Build.0 = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|x64.Build.0 = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Debug|x86.Build.0 = Debug|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|ARM.Build.0 = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|ARM64.Build.0 = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|x64.ActiveCfg = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|x64.Build.0 = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|x86.ActiveCfg = Release|Any CPU
+		{4A4987D2-0042-4CCD-B013-068E1AA88489}.Release|x86.Build.0 = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|ARM.Build.0 = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|x64.Build.0 = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Debug|x86.Build.0 = Debug|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|ARM.ActiveCfg = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|ARM.Build.0 = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|ARM64.Build.0 = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|x64.ActiveCfg = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|x64.Build.0 = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|x86.ActiveCfg = Release|Any CPU
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,8 +196,21 @@ Global
 		{157B2FCE-B2E7-4E30-958A-55AECD6FD6D7} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
 		{1CA46EBC-C163-472C-9F98-5D65D2BBBE8B} = {CA250975-CB65-4739-BD3D-1C48DD00195E}
 		{7027FE60-2C91-4C28-A2FD-EC0DFC3D4B0C} = {7BB1F84F-9A28-41E5-A2A0-9E6C0446A9AC}
+		{4A4987D2-0042-4CCD-B013-068E1AA88489} = {7BB1F84F-9A28-41E5-A2A0-9E6C0446A9AC}
+		{20C8BD61-DE2E-45E7-8134-A581F61BFEF9} = {7BB1F84F-9A28-41E5-A2A0-9E6C0446A9AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A811891-3838-448F-B8C7-4250E1BC40AC}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{157b2fce-b2e7-4e30-958a-55aecd6fd6d7}*SharedItemsImports = 13
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{1ca46ebc-c163-472c-9f98-5d65d2bbbe8b}*SharedItemsImports = 4
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{1e3a1d63-1808-4b92-9456-d3c0fb39042d}*SharedItemsImports = 13
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{20c8bd61-de2e-45e7-8134-a581f61bfef9}*SharedItemsImports = 5
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{4a4987d2-0042-4ccd-b013-068e1aa88489}*SharedItemsImports = 5
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{6f8d50b6-735f-49b3-99e2-1330fa3a8416}*SharedItemsImports = 5
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{7027fe60-2c91-4c28-a2fd-ec0dfc3d4b0c}*SharedItemsImports = 5
+		Test\NiconicoToolkit.Shared.Test\NiconicoToolkit.Shared.Test.projitems*{89a32377-05c1-4239-b943-051bd72114f2}*SharedItemsImports = 5
+		NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems*{9ec6b1ba-1896-4516-b0f4-1c3701566d16}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
