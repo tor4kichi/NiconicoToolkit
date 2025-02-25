@@ -5,6 +5,7 @@
 
     <IsPackable>false</IsPackable>
     <LangVersion>preview</LangVersion>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
   <ItemGroup>

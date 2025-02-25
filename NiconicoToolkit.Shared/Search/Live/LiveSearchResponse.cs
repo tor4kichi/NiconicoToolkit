@@ -32,46 +32,46 @@ namespace NiconicoToolkit.Search.Live
         public LiveId ProgramId { get; init; }
 
         [JsonPropertyName("program")]
-        public Program Program { get; init; }
+        public LiveProgram Program { get; init; }
 
         [JsonPropertyName("statistics")]
-        public Statistics Statistics { get; init; }
+        public LiveStatistics Statistics { get; init; }
 
         [JsonPropertyName("taxonomy")]
-        public Taxonomy Taxonomy { get; init; }
+        public LiveTaxonomy Taxonomy { get; init; }
 
         [JsonPropertyName("socialGroup")]
-        public SocialGroup SocialGroup { get; init; }
+        public LiveSocialGroup SocialGroup { get; init; }
 
         [JsonPropertyName("features")]
-        public Features Features { get; init; }
+        public LiveFeatures Features { get; init; }
 
         [JsonPropertyName("thumbnail")]
-        public Thumbnail Thumbnail { get; init; }
+        public LiveThumbnail Thumbnail { get; init; }
 
         [JsonPropertyName("programProvider")]
-        public ProgramProvider ProgramProvider { get; init; }
+        public LiveProgramProvider ProgramProvider { get; init; }
 
         [JsonPropertyName("timeshiftSetting")]
-        public TimeshiftSetting TimeshiftSetting { get; init; }
+        public LiveTimeshiftSetting TimeshiftSetting { get; init; }
     }
 
-    public sealed class Program
+    public sealed class LiveProgram
     {
         [JsonPropertyName("title")]
         public string Title { get; init; }
 
         [JsonPropertyName("provider")]
-        public Provider Provider { get; init; }
+        public LiveProvider Provider { get; init; }
 
         [JsonPropertyName("schedule")]
-        public Schedule Schedule { get; init; }
+        public LiveSchedule Schedule { get; init; }
     }
 
-    public sealed class Schedule
+    public sealed class LiveSchedule
     {
         [JsonPropertyName("status")]
-        public Status Status { get; init; }
+        public SearchLiveStatus Status { get; init; }
 
         [JsonPropertyName("openTime")]
         public DateTime OpenTime { get; init; }
@@ -83,7 +83,7 @@ namespace NiconicoToolkit.Search.Live
         public DateTime EndTime { get; init; }
     }
 
-    public sealed class Statistics
+    public sealed class LiveStatistics
     {
         [JsonPropertyName("viewers")]
         public int Viewers { get; init; }
@@ -95,28 +95,29 @@ namespace NiconicoToolkit.Search.Live
         public int? TimeshiftReservations { get; init; }
     }
 
-    public sealed class Taxonomy
+    public sealed class LiveTaxonomy
     {
         [JsonPropertyName("categories")]
-        public CategoriesContainer Categories { get; init; }
+        public LiveCategoriesContainer Categories { get; init; }
     }
 
-    public sealed class CategoriesContainer
+    public sealed class LiveCategoriesContainer
     {
         [JsonPropertyName("main")]
-        public Category[] Main { get; init; }
+        public LiveCategory[] Main { get; init; }
 
         [JsonPropertyName("sub")]
-        public Category[] Sub { get; init; }
+        public LiveCategory[] Sub { get; init; }
     }
 
-    public sealed class Category
+    public sealed class LiveCategory
     {
         [JsonPropertyName("text")]
         public string Text { get; init; }
     }
 
-    public sealed class SocialGroup {
+    public sealed class LiveSocialGroup 
+    {
         [JsonPropertyName("socialGroupId")]
         public string SocialGroupId { get; init; }
 
@@ -127,13 +128,13 @@ namespace NiconicoToolkit.Search.Live
         public Uri ThumbnailSmall { get; init; }
     }
 
-    public sealed class Features
+    public sealed class LiveFeatures
     {
         [JsonPropertyName("enabled")]
-        public HashSet<Feature> Enabled { get; init; }
+        public HashSet<LiveFeature> Enabled { get; init; }
     }
 
-    public sealed class Thumbnail
+    public sealed class LiveThumbnail
     {
         [JsonPropertyName("large")]
         public Uri Large { get; init; }
@@ -142,13 +143,13 @@ namespace NiconicoToolkit.Search.Live
         public Uri Small { get; init; }
 
         [JsonPropertyName("huge")]
-        public Huge Huge { get; init; }
+        public LiveHugeThumbnail Huge { get; init; }
 
         [JsonPropertyName("screenshot")]
-        public Screenshot Screenshot { get; init; }
+        public LiveScreenshot Screenshot { get; init; }
     }
 
-    public sealed class Screenshot
+    public sealed class LiveScreenshot
     {
         [JsonPropertyName("large")]
         public Uri Large { get; init; }
@@ -157,7 +158,7 @@ namespace NiconicoToolkit.Search.Live
         public Uri Small { get; init; }
     }
 
-    public sealed class Huge
+    public sealed class LiveHugeThumbnail
     {
         [JsonPropertyName("s1280x720")]
         public Uri S1280X720 { get; init; }
@@ -172,7 +173,7 @@ namespace NiconicoToolkit.Search.Live
         public Uri S640X360 { get; init; }
     }
 
-    public sealed class ProgramProvider
+    public sealed class LiveProgramProvider
     {
         [JsonPropertyName("name")]
         public string Name { get; init; }
@@ -181,10 +182,10 @@ namespace NiconicoToolkit.Search.Live
         public string ProgramProviderId { get; init; }
 
         [JsonPropertyName("large")]
-        public Icons Icons { get; init; }
+        public LiveIcons Icons { get; init; }
     }
 
-    public sealed class Icons
+    public sealed class LiveIcons
     {
         [JsonPropertyName("uri150x150")]
         public Uri Uri150x150 { get; init; }
@@ -193,19 +194,19 @@ namespace NiconicoToolkit.Search.Live
         public Uri Uri50x50 { get; init; }
     }
 
-    public sealed class TimeshiftSetting
+    public sealed class LiveTimeshiftSetting
     {
         [JsonPropertyName("watchLimit")]
-        public WatchLimit WatchLimit { get; init; }
+        public LiveWatchLimit WatchLimit { get; init; }
 
         [JsonPropertyName("programValidDuration")]
         public int? ProgramValidDuration { get; init; }
 
         [JsonPropertyName("requirement")]
-        public Requirement Requirement { get; init; }
+        public LiveRequirement Requirement { get; init; }
 
         [JsonPropertyName("status")]
-        public TimeshiftStatus Status { get; init; }
+        public LiveTimeshiftStatus Status { get; init; }
 
         [JsonPropertyName("endTime")]
         public DateTimeOffset? EndTime { get; init; }
@@ -216,7 +217,7 @@ namespace NiconicoToolkit.Search.Live
 
     public enum SocialGroupType { COMMUNITY, CHANNEL }
 
-    public enum Provider {
+    public enum LiveProvider {
         [Description("community")]
         COMMUNITY,
 
@@ -227,7 +228,7 @@ namespace NiconicoToolkit.Search.Live
         OFFICIAL
     }
 
-    public enum Status {
+    public enum SearchLiveStatus {
         [Description("beforeReleased")]
         BEFORE_RELEASE,
 
@@ -241,13 +242,13 @@ namespace NiconicoToolkit.Search.Live
         ENDED
     }
 
-    public enum WatchLimit { ONCE, UNLIMITED }
+    public enum LiveWatchLimit { ONCE, UNLIMITED }
 
-    public enum TimeshiftStatus { BEFORE_OPEN, OPENED, CLOSED }
+    public enum LiveTimeshiftStatus { BEFORE_OPEN, OPENED, CLOSED }
 
-    public enum Requirement { RESERVATION, PAYMENT, NONE }
+    public enum LiveRequirement { RESERVATION, PAYMENT, NONE }
 
-    public enum Feature
+    public enum LiveFeature
     {
         OPERATORONLY,
         MEMBER_ONLY,

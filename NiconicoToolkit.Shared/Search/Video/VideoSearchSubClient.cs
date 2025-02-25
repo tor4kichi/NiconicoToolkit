@@ -5,108 +5,120 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NiconicoToolkit.Search.Video
-{
-    public sealed class VideoSearchSubClient
-    {
-        private readonly NiconicoContext _context;
-        private readonly JsonSerializerOptions _option;
+namespace NiconicoToolkit.Search.Video;
 
-        public VideoSearchSubClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
+
+[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata)]
+[JsonSerializable(typeof(VideoSearchResponse))]
+public sealed partial class VideoSearchJsonSourceGenerationContext : JsonSerializerContext
+{
+}
+
+
+
+public sealed class VideoSearchSubClient
+{
+    private readonly NiconicoContext _context;
+    private readonly JsonSerializerOptions _option;
+
+    public VideoSearchSubClient(NiconicoContext context, JsonSerializerOptions options)
+    {
+        _context = context;
+        _option = new(options)
         {
-            _context = context;
-            _option = defaultOptions;
+            TypeInfoResolverChain = { VideoSearchJsonSourceGenerationContext.Default }
+        };
+    }
+
+    /// <summary>
+    /// キーワードかタグで動画を検索します<br />
+    /// sortKeyがHot/PersonalizedのときはsortOrderはNoneになります<br />
+    /// (min/max)RegisteredAtよりもrangeが優先されます
+    /// </summary>
+    /// <returns></returns>
+    public Task<VideoSearchResponse> VideoSearchAsync(
+        string keyword,
+        bool isTagSearch = false,
+        int? pageCountStartWith1 = null,
+        SortKey sortKey = SortKey.Hot,
+        SortOrder sortOrder = SortOrder.None,
+        RankingGenre[] genres = null,
+        Range? range = null,
+        DateTime? minRegisteredAt = null,
+        DateTime? maxRegisteredAt = null,
+        int? maxDuration = null,
+        CancellationToken ct = default)
+    {
+        var query = new NameValueCollection() { };
+        
+        if (isTagSearch)
+        {
+            query.Add("tag", keyword);
+        }
+        else
+        {
+            query.Add("keyword", keyword);
         }
 
-        /// <summary>
-        /// キーワードかタグで動画を検索します<br />
-        /// sortKeyがHot/PersonalizedのときはsortOrderはNoneになります<br />
-        /// (min/max)RegisteredAtよりもrangeが優先されます
-        /// </summary>
-        /// <returns></returns>
-        public Task<VideoSearchResponse> VideoSearchAsync(
-            string keyword,
-            bool isTagSearch = false,
-            int? pageCountStartWith1 = null,
-            SortKey sortKey = SortKey.Hot,
-            SortOrder sortOrder = SortOrder.None,
-            RankingGenre[] genres = null,
-            Range? range = null,
-            DateTime? minRegisteredAt = null,
-            DateTime? maxRegisteredAt = null,
-            int? maxDuration = null,
-            CancellationToken ct = default)
+        if (pageCountStartWith1 is not null)
+            query.Add("page", pageCountStartWith1.ToString());
+
+        if (sortKey == SortKey.Hot || sortKey == SortKey.Personalized)
         {
-            var query = new NameValueCollection() { };
-            
-            if (isTagSearch)
-            {
-                query.Add("tag", keyword);
-            }
-            else
-            {
-                query.Add("keyword", keyword);
-            }
-
-            if (pageCountStartWith1 is not null)
-                query.Add("page", pageCountStartWith1.ToString());
-
-            if (sortKey == SortKey.Hot || sortKey == SortKey.Personalized)
+            query.Add("sortKey", sortKey.GetDescription());
+            query.Add("sortOrder", "none");
+        }
+        else
+        {
+            if(sortOrder == SortOrder.None)
             {
                 query.Add("sortKey", sortKey.GetDescription());
-                query.Add("sortOrder", "none");
+                query.Add("sortOrder", "desc");
             }
             else
             {
-                if(sortOrder == SortOrder.None)
-                {
-                    query.Add("sortKey", sortKey.GetDescription());
-                    query.Add("sortOrder", "desc");
-                }
-                else
-                {
-                    query.Add("sortKey", sortKey.GetDescription());
-                    query.Add("sortOrder", sortOrder.GetDescription());
-                }
+                query.Add("sortKey", sortKey.GetDescription());
+                query.Add("sortOrder", sortOrder.GetDescription());
             }
+        }
 
-            if (genres is not null && genres.Length >= 1)
-                query.Add("genres", string.Join(",", genres));
+        if (genres is not null && genres.Length >= 1)
+            query.Add("genres", string.Join(",", genres));
 
-            if (range is not null)
+        if (range is not null)
+        {
+            query.Add(
+                "minRegisteredAt",
+                RangeExtention.ToDateTime(range.Value).ToString("yyyy-MM-ddTHH:mm:sszzz"));
+        }
+        else
+        {
+            if (minRegisteredAt is not null)
             {
                 query.Add(
                     "minRegisteredAt",
-                    RangeExtention.ToDateTime(range.Value).ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                    minRegisteredAt.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             }
-            else
+            if (maxRegisteredAt is not null)
             {
-                if (minRegisteredAt is not null)
-                {
-                    query.Add(
-                        "minRegisteredAt",
-                        minRegisteredAt.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
-                }
-                if (maxRegisteredAt is not null)
-                {
-                    query.Add(
-                        "maxRegisteredAt",
-                        minRegisteredAt.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
-                }
+                query.Add(
+                    "maxRegisteredAt",
+                    minRegisteredAt.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             }
-
-            if (maxDuration is not null)
-                query.Add("maxDuration", maxDuration.ToString());
-
-            var url = new StringBuilder(NiconicoUrls.NvApiV2Url)
-                .Append("search/video")
-                .AppendQueryString(query)
-                .ToString();
-
-            return _context.GetJsonAsAsync<VideoSearchResponse>(url, _option, ct);
         }
+
+        if (maxDuration is not null)
+            query.Add("maxDuration", maxDuration.ToString());
+
+        var url = new StringBuilder(NiconicoUrls.NvApiV2Url)
+            .Append("search/video")
+            .AppendQueryString(query)
+            .ToString();
+
+        return _context.GetJsonAsAsync<VideoSearchResponse>(url, _option, ct);
     }
 }

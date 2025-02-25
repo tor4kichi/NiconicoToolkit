@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Channels;
-using NiconicoToolkit.Community;
 using NiconicoToolkit.Live;
 using NiconicoToolkit.Mylist;
 using NiconicoToolkit.User;
@@ -32,7 +31,6 @@ namespace NiconicoToolkit.Tests
             Assert.IsTrue(id_test.IsVideoId);
             Assert.IsFalse(id_test.IsVideoAliasId);
             Assert.IsFalse(id_test.IsLiveId);
-            Assert.IsFalse(id_test.IsCommunityId);
             Assert.IsFalse(id_test.IsChannelId);
             Assert.IsFalse(id_test.IsMylistId);
         }
@@ -52,7 +50,6 @@ namespace NiconicoToolkit.Tests
             Assert.IsTrue(id_test.IsVideoId);
             Assert.IsFalse(id_test.IsVideoAliasId);
             Assert.IsFalse(id_test.IsLiveId);
-            Assert.IsFalse(id_test.IsCommunityId);
             Assert.IsFalse(id_test.IsChannelId);
             Assert.IsFalse(id_test.IsMylistId);
 
@@ -75,7 +72,6 @@ namespace NiconicoToolkit.Tests
             Assert.IsFalse(id_test.IsVideoId);
             Assert.IsFalse(id_test.IsVideoAliasId);
             Assert.IsTrue(id_test.IsLiveId);
-            Assert.IsFalse(id_test.IsCommunityId);
             Assert.IsFalse(id_test.IsChannelId);
             Assert.IsFalse(id_test.IsMylistId);
         }
@@ -89,26 +85,6 @@ namespace NiconicoToolkit.Tests
         }
 
         [TestMethod]
-        public void NiconicoId_CommunityId()
-        {
-            var id_test = new NiconicoId("co1234567", NiconicoIdType.Community);
-            Assert.IsFalse(id_test.IsUserId);
-            Assert.IsFalse(id_test.IsVideoId);
-            Assert.IsFalse(id_test.IsVideoAliasId);
-            Assert.IsFalse(id_test.IsLiveId);
-            Assert.IsTrue(id_test.IsCommunityId);
-            Assert.IsFalse(id_test.IsChannelId);
-            Assert.IsFalse(id_test.IsMylistId);
-        }
-
-        [TestMethod]
-        public void NiconicoId_CommuniyId_ParsePrefix()
-        {
-            var id_test = new NiconicoId("co1234567");
-            Assert.AreEqual(NiconicoIdType.Community, id_test.IdType);
-        }
-
-        [TestMethod]
         public void NiconicoId_UserId()
         {
             var id_test = new NiconicoId(1234567, NiconicoIdType.User);
@@ -116,7 +92,6 @@ namespace NiconicoToolkit.Tests
             Assert.IsFalse(id_test.IsVideoId);
             Assert.IsFalse(id_test.IsVideoAliasId);
             Assert.IsFalse(id_test.IsLiveId);
-            Assert.IsFalse(id_test.IsCommunityId);
             Assert.IsFalse(id_test.IsChannelId);
             Assert.IsFalse(id_test.IsMylistId);
         }
@@ -315,31 +290,6 @@ namespace NiconicoToolkit.Tests
 
         #endregion
 
-
-
-        #region Test CommunityId
-
-        [TestMethod]
-        public void CommunityId_Equeal()
-        {
-            var idA = new CommunityId(123456);
-            var idB = new CommunityId("co123456");
-
-            Assert.AreEqual(idA, idB);
-        }
-
-
-        [TestMethod]
-        public void CommunityId_ToNiconicoId()
-        {
-            var idA = new CommunityId(123456);
-            NiconicoId idB = new CommunityId("co123456");
-
-            Assert.AreEqual(NiconicoIdType.Community, idB.IdType);
-            Assert.AreEqual(idA, idB);
-        }
-
-        #endregion
 
     }
 }

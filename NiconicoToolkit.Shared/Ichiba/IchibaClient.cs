@@ -73,7 +73,7 @@ namespace NiconicoToolkit.Ichiba
 
             try
             {
-                var res = await _context.GetJsonAsAsync<IchibaResponse_Internal>(url);
+                var res = await _context.GetJsonAsAsync<IchibaResponse_Internal>(url, _defaultOptions);
 
                 static IchibaItem ToIchibaItem(AngleSharp.Dom.IElement itemNode)
                 {
@@ -134,7 +134,7 @@ namespace NiconicoToolkit.Ichiba
         public int MaxNoChangeCount { get; set; }
     }
 
-    internal sealed class IchibaResponse_Internal
+    public sealed class IchibaResponse_Internal
     {
         [JsonPropertyName("pickup")]
         public string Pickup { get; set; }

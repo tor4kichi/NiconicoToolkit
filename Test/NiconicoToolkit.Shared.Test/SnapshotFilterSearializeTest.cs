@@ -19,10 +19,12 @@ namespace NiconicoToolkit.Tests
             var jsonFilter = "{\"type\":\"and\",\"filters\":[{\"type\":\"equal\",\"field\":\"genre\",\"value\":\"アニメ\"},{\"type\":\"range\",\"field\":\"lengthSeconds\",\"from\":\"1200\"}]}";
             var deserialized = JsonSerializer.Deserialize<IJsonSearchFilterData>(jsonFilter, new JsonSerializerOptions()
             {
+                TypeInfoResolver = SnapshotSearchFiltersJsonSourceGenerationContext.Default,
                 Converters =
                 {
-                    new JsonFilterDataJsonConverter()
+                    //new JsonFilterDataJsonConverter()
                 }
+                , AllowOutOfOrderMetadataProperties = true,
             });
 
             Guard.IsOfType<AndJsonFilterData>(deserialized, nameof(deserialized));

@@ -132,6 +132,7 @@ namespace NiconicoToolkit.Live.WatchSession
 
             _SocketJsonDeserializerOptions = new System.Text.Json.JsonSerializerOptions()
             {
+                TypeInfoResolver = WatchSessionToClientMessageSourceGenerationContext.Default,
                 Converters =
                 {
                     new JsonStringEnumMemberConverter(JsonSnakeCaseNamingPolicy.Instance),
@@ -141,6 +142,7 @@ namespace NiconicoToolkit.Live.WatchSession
 
             _SocketJsonSerializerOptions = new System.Text.Json.JsonSerializerOptions()
             {
+                TypeInfoResolver = WatchClientToServerMessageSourceGenerationContext.Default,
                 Converters =
                 {
                     new JsonStringEnumMemberConverter(JsonSnakeCaseNamingPolicy.Instance),

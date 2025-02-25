@@ -29,19 +29,19 @@ namespace NiconicoToolkit.Ranking.Video
         public string Label { get; set; }
 
         [JsonPropertyName("conditions")]
-        public Condition[] Conditions { get; set; }
+        public HotTopicCondition[] Conditions { get; set; }
     }
 
-    public sealed class Condition
+    public sealed class HotTopicCondition
     {
         [JsonPropertyName("genre")]
-        public Genre Genre { get; set; }
+        public HotTopicGenre Genre { get; set; }
 
         [JsonPropertyName("tag")]
         public string Tag { get; set; }
     }
 
-    public sealed class Genre
+    public sealed class HotTopicGenre
     {
         [JsonPropertyName("key")]
         public string Key { get; set; }

@@ -28,7 +28,9 @@ public partial class NvCommentSubClient
     public async Task<ThreadDeleteKeyResponse> GetDeleteKeyAsync(string threadId, string fork, CancellationToken ct = default)
     {
         return await _context.GetJsonAsAsync<ThreadDeleteKeyResponse>(
-            $"{NvApiCommentKeysUrl}delete?threadId={threadId}&fork={fork}", ct: ct
+            $"{NvApiCommentKeysUrl}delete?threadId={threadId}&fork={fork}",
+            _options,
+            ct: ct
             );
     }
 
@@ -63,10 +65,13 @@ public partial class NvCommentSubClient
             DeleteKey = deleteKey,
             Language = language,
             Targets = new() { new() { Number = commentNumber } }
-        });
+        }, _options);
 
         return await _context.SendJsonAsAsync<ThreadDeleteResponse>(HttpMethod.Put,
-                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comment-comment-owner-deletions", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comment-comment-owner-deletions", 
+                    requestParamsJson,
+                    _options,
+                    ct: ct);
     }
 }
 

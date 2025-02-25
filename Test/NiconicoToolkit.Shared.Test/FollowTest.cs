@@ -92,24 +92,6 @@ namespace NiconicoToolkit.Tests
             }
         }
 
-
-        [TestMethod]
-        public async Task GetFollowCommunitiesAsync()
-        {
-            var res = await _context.Follow.Community.GetFollowCommunityAsync();
-            Assert.IsTrue(res.IsSuccess);
-
-            Assert.IsNotNull(res.Data, "Data is null");
-            
-            if (res.Data.Any())
-            {
-                var community = res.Data[0];
-                Assert.IsNotNull(community.Name, "community.Name is null");
-                Assert.IsNotNull(community.GlobalId, "community.GlobalId is null");
-            }
-        }
-
-
         [TestMethod]
         public async Task GetFollowChannelsAsync()
         {

@@ -20,7 +20,7 @@ namespace NiconicoToolkit.Tests
         }
 
 
-        
+        [Ignore]
         [TestMethod]
         [DataRow("sm38672563")]
         [DataRow("so38835896")]

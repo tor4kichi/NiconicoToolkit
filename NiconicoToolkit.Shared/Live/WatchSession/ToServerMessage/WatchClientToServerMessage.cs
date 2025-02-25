@@ -5,9 +5,22 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Live.WatchSession
 {
-   
+    [JsonSourceGenerationOptions()]
+    [JsonSerializable(typeof(WatchClientToServerMessagePayload))]
+    [JsonSerializable(typeof(StartWatching_ToServerMessageData))]
+    [JsonSerializable(typeof(KeepSeat_ToServerMessageData))]
+    [JsonSerializable(typeof(GetAkashic_ToServerMessageData))]
+    [JsonSerializable(typeof(ChangeStream_ToServerMessageData))]
+    [JsonSerializable(typeof(AnswerEnquete_ToServerMessageData))]
+    [JsonSerializable(typeof(Pong_ToServerMessageData))]
+    [JsonSerializable(typeof(PostComment_ToServerMessageData))]
+    [JsonSerializable(typeof(NotifyNewVisit_ToServerMessageData))]
+    public sealed partial class WatchClientToServerMessageSourceGenerationContext : JsonSerializerContext
+    {
 
-    internal sealed class WatchClientToServerMessagePayload
+    }
+
+    public sealed class WatchClientToServerMessagePayload
     {
         public WatchClientToServerMessagePayload(WatchClientToServerMessageDataBase data)
         {
@@ -23,7 +36,7 @@ namespace NiconicoToolkit.Live.WatchSession
     }
 
 
-    internal abstract class WatchClientToServerMessageDataBase
+    public abstract class WatchClientToServerMessageDataBase
     {
         [JsonIgnore]
         public string Type { get; set; }
@@ -39,7 +52,7 @@ namespace NiconicoToolkit.Live.WatchSession
     /// 成功の場合、ストリームやメッセージサーバー情報など複数メッセージが順番で返されます。<br />
     /// 失敗の場合、エラーメッセージが返されます。
     /// </summary>
-    internal sealed class StartWatching_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class StartWatching_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public StartWatching_ToServerMessageData() : base("startWatching") {}
 
@@ -59,7 +72,7 @@ namespace NiconicoToolkit.Live.WatchSession
         public bool Reconnect { get; set; }
     }
 
-    internal sealed class StartWatchingStream
+    public sealed class StartWatchingStream
     {
         /// <summary>
         /// 視聴する画質。
@@ -95,7 +108,7 @@ namespace NiconicoToolkit.Live.WatchSession
     }
 
 
-    internal sealed class Room
+    public sealed class Room
     {
         [JsonPropertyName("protocol")]
         public string Protocol { get; set; } = "webSocket";
@@ -107,7 +120,7 @@ namespace NiconicoToolkit.Live.WatchSession
     /// <summary>
     /// 座席を維持するためのハートビートメッセージ 継続に視聴するため、定期に(seat.keepIntervalSecごとに)サーバーに送る必要がある
     /// </summary>
-    internal sealed class KeepSeat_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class KeepSeat_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public KeepSeat_ToServerMessageData() : base("keepSeat") { }
     }
@@ -116,7 +129,7 @@ namespace NiconicoToolkit.Live.WatchSession
     /// <summary>
     /// 新市場機能、生放送ゲームを起動するための情報を取得するためのメッセージです。
     /// </summary>
-    internal sealed class GetAkashic_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class GetAkashic_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public GetAkashic_ToServerMessageData() : base("getAkashic") { }
 
@@ -131,7 +144,7 @@ namespace NiconicoToolkit.Live.WatchSession
     /// 視聴ストリームの送信をサーバーに求めるメッセージです。 <br />
     /// 有効な視聴セッションが既に存在する場合には作成しなおして返します。
     /// </summary>
-    internal sealed class ChangeStream_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class ChangeStream_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public ChangeStream_ToServerMessageData() : base("changeStream") { }
 
@@ -164,7 +177,7 @@ namespace NiconicoToolkit.Live.WatchSession
     /// <summary>
     /// アンケートの回答を送信するメッセージです。
     /// </summary>
-    internal sealed class AnswerEnquete_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class AnswerEnquete_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public AnswerEnquete_ToServerMessageData() : base("answerEnquete") { }
 
@@ -178,13 +191,13 @@ namespace NiconicoToolkit.Live.WatchSession
     /// <summary>
     /// websocket接続維持のための応答メッセージです。
     /// </summary>
-    internal sealed class Pong_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class Pong_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public Pong_ToServerMessageData() : base("pong") { }
     }
 
 
-    internal sealed class PostComment_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class PostComment_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public PostComment_ToServerMessageData() : base("postComment") { }
 
@@ -240,7 +253,7 @@ namespace NiconicoToolkit.Live.WatchSession
     //    "checkKonomiTagMatching": true
     //  }
     //}
-    internal sealed class NotifyNewVisit_ToServerMessageData : WatchClientToServerMessageDataBase
+    public sealed class NotifyNewVisit_ToServerMessageData : WatchClientToServerMessageDataBase
     {
         public NotifyNewVisit_ToServerMessageData() : base("notifyNewVisit") { }
 

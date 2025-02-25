@@ -25,10 +25,21 @@ namespace NiconicoToolkit.Tests
 
     }
 
+    [JsonSourceGenerationOptions()]
+    [JsonSerializable(typeof(AccountInfo))]
+    public sealed partial class AccountInfoSourceGenerationContext : JsonSerializerContext
+    {
+
+    }
+
     public static class AccountTestHelper 
     {
         public const string Site = "https://github.com/tor4kichi/NiconicoToolkit";
 
+        static readonly JsonSerializerOptions _options = new JsonSerializerOptions() 
+        {
+            TypeInfoResolver = AccountInfoSourceGenerationContext.Default,
+        };
         public static async Task<AccountInfo> AccountLoadingAsync()
         {
 #if WINDOWS_UWP
@@ -39,7 +50,7 @@ namespace NiconicoToolkit.Tests
             }
 #else
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"TestAccount.json");
-            return await JsonSerializer.DeserializeAsync<AccountInfo>(File.OpenRead(path));
+            return await JsonSerializer.DeserializeAsync<AccountInfo>(File.OpenRead(path), _options);
 #endif
         }
 

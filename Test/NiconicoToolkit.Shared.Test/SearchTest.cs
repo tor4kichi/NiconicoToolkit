@@ -118,7 +118,7 @@ namespace NiconicoToolkit.Tests
         [DataRow("歌")]
         public async Task LiveSearchAsync(string keyword)
         {
-            var res = await _searchClient.Live.LiveSearchAsync(keyword, status: Search.Live.Status.ENDED, sort: Search.Live.Sort.RecentAsc);
+            var res = await _searchClient.Live.LiveSearchAsync(keyword, status: Search.Live.SearchLiveStatus.ENDED, sort: Search.Live.Sort.RecentAsc);
 
             Assert.IsNotNull(res.Meta.TotalCount);
 

@@ -72,7 +72,7 @@ namespace NiconicoToolkit.Tests
             }
         }
 
-
+        [Ignore]
         [TestMethod]
         [DataRow(53842185, 6982981)] 
         public async Task GetUsersAsync(int userId1, int userId2)

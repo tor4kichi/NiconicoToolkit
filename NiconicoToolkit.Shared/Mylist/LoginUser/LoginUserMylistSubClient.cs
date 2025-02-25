@@ -27,12 +27,12 @@ namespace NiconicoToolkit.Mylist.LoginUser
     public sealed class LoginUserMylistSubClient
     {
         private readonly NiconicoContext _context;
-        private readonly JsonSerializerOptions _defaultOptions;
+        private readonly JsonSerializerOptions _options;
 
         public LoginUserMylistSubClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
-            _defaultOptions = defaultOptions;
+            _options = defaultOptions;
         }
 
         internal static class Urls
@@ -54,7 +54,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         [RequireLogin]
         public Task<LoginUserMylistsResponse> GetMylistGroupsAsync(int sampleItemCount = 0)
         {
-            return _context.GetJsonAsAsync<LoginUserMylistsResponse>($"{Urls.NvApiV1MylistApiUrl}?sampleItemCount={sampleItemCount}", _defaultOptions);
+            return _context.GetJsonAsAsync<LoginUserMylistsResponse>($"{Urls.NvApiV1MylistApiUrl}?sampleItemCount={sampleItemCount}", _options);
         }
 
 
@@ -69,7 +69,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
                 { "isPublic", isPublic.ToString() },
                 { "defaultSortKey", sortKey.GetDescription() },
                 { "defaultSortOrder", sortOrder.GetDescription() },
-            });
+            }, _options);
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -108,7 +108,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
             return await _context.SendJsonAsAsync<ChangeMylistGroupsOrderResponse>(HttpMethod.Put, Urls.NvApiV1MylistOrderApiUrl, new Dictionary<string, string>()
             {
                 { "order", string.Join(',', orderedMylistIds) }
-            });
+            }, _options);
         }
 
 
@@ -129,7 +129,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
             var uri = new StringBuilder(Urls.NvApiV1WatchAfterApiUrl)
                 .AppendQueryString(dict)
                 .ToString();
-            return _context.GetJsonAsAsync<WatchAfterItemsResponse>(uri, _defaultOptions);
+            return _context.GetJsonAsAsync<WatchAfterItemsResponse>(uri, _options);
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -185,7 +185,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
-            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>(options: _options);
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -193,7 +193,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsFromWatchAfterAsync(string mylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: "deflist", to: mylistId, itemIds);
-            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>(options: _options);
         }
 
         #endregion
@@ -212,7 +212,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
                 .Append(mylistId)
                 .AppendQueryString(dict)
                 .ToString();
-            return _context.GetJsonAsAsync<GetMylistItemsResponse>(uri, _defaultOptions);
+            return _context.GetJsonAsAsync<GetMylistItemsResponse>(uri, _options);
         }
 
 
@@ -281,7 +281,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> MoveMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await MoveMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
-            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>(options: _options);
         }
 
         /// <remarks>[Require Login]</remarks>
@@ -289,7 +289,7 @@ namespace NiconicoToolkit.Mylist.LoginUser
         public async Task<MoveOrCopyMylistItemsResponse> CopyMylistItemsAsync(string fromMylistId, string toMylistId, IEnumerable<long> itemIds)
         {
             using var res = await CopyMylistItemsAsync_Internal(from: fromMylistId, to: toMylistId, itemIds);
-            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>();
+            return await res.Content.ReadJsonAsAsync<MoveOrCopyMylistItemsResponse>(options: _options);
         }
 
         private Task<HttpResponseMessage> MoveMylistItemsAsync_Internal(string from, string to, IEnumerable<long> itemIds)

@@ -36,10 +36,6 @@ namespace NiconicoToolkit
         public const string ChannelPublicApiV2Url = "https://public-api.ch.nicovideo.jp/v2/";
         public const string ChannelApiUrl = $"{ChannelPageUrl}api/";
 
-        public const string CommunityHost = $"com.{NicoDomain}";
-        public const string CommunityPageUrl = $"https://{CommunityHost}/";
-        public const string CommunityV1ApiUrl = $"{CommunityPageUrl}api/v1/";
-
         public const string IchibaPageUrl = "https://ichiba.nicovideo.jp/";
 
 
@@ -63,13 +59,6 @@ namespace NiconicoToolkit
         {
             return $"{NicoHomePageUrl}user/{userId}";
         }
-
-
-        public static string MakeCommunityPageUrl(string communityId)
-        {
-            return $"{CommunityPageUrl}community/{communityId}";
-        }
-
 
         public static string MakeMylistPageUrl(string mylistId)
         {
@@ -157,15 +146,6 @@ namespace NiconicoToolkit
                         else
                         {
                             return new NiconicoId(contentId, NiconicoIdType.Channel);
-                        }
-                    }
-                    else if (hostNameGroup.Value == NiconicoUrls.CommunityHost)
-                    {
-                        var contentType = contentTypeGroup.Value;
-                        switch (contentType)
-                        {
-                            case "community":
-                                return new NiconicoId(contentId, NiconicoIdType.Community);
                         }
                     }
                 }

@@ -23,14 +23,14 @@ namespace NiconicoToolkit.Mylist
     public sealed class MylistClient
     {
         private readonly NiconicoContext _context;
-        private readonly JsonSerializerOptions _defaultOptions;
+        private readonly JsonSerializerOptions _options;
 
         public LoginUserMylistSubClient LoginUser { get; }
 
         public MylistClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
-            _defaultOptions = defaultOptions;
+            _options = defaultOptions;
             LoginUser = new LoginUserMylistSubClient(context, defaultOptions);
         }
 
@@ -43,7 +43,7 @@ namespace NiconicoToolkit.Mylist
 
         public Task<GetUserMylistGroupsResponse> GetUserMylistGroupsAsync(UserId userId, int sampleItemCount = 0)
         {
-            return _context.GetJsonAsAsync<GetUserMylistGroupsResponse>($"{NiconicoUrls.NvApiV1Url}users/{userId}/mylists?sampleItemCount={sampleItemCount}", _defaultOptions);
+            return _context.GetJsonAsAsync<GetUserMylistGroupsResponse>($"{NiconicoUrls.NvApiV1Url}users/{userId}/mylists?sampleItemCount={sampleItemCount}", _options);
         }
 
 
@@ -60,7 +60,7 @@ namespace NiconicoToolkit.Mylist
                 .AppendQueryString(dict)
                 .ToString();
 
-            return _context.GetJsonAsAsync<GetMylistItemsResponse>(url, _defaultOptions);
+            return _context.GetJsonAsAsync<GetMylistItemsResponse>(url, _options);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.SnapshotSearch.JsonFilters
 {
-    public sealed class JsonFilterDataJsonConverter : JsonConverter<IJsonSearchFilterData>
+    public sealed partial class JsonFilterDataJsonConverter : JsonConverter<IJsonSearchFilterData>
     {
         public override bool CanConvert(Type typeToConvert) =>
             typeof(IJsonSearchFilterData).IsAssignableFrom(typeToConvert);
@@ -22,7 +22,7 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
                     {
                         NotJsonFilterData not = new();
                         var filter = document.RootElement.GetProperty("filter");
-                        not.Filter = filter.ToObject<IJsonSearchFilterData>(options);
+                        not.Filter = filter.Deserialize<IJsonSearchFilterData>(options);
                         return not;
                     }
                 case "or" :
@@ -31,7 +31,7 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
                         var filters = document.RootElement.GetProperty("filters");
                         foreach (var filterJson in filters.EnumerateArray())
                         {
-                            or.Filters.Add(filterJson.ToObject<IJsonSearchFilterData>(options));
+                            or.Filters.Add(filterJson.Deserialize<IJsonSearchFilterData>(options));
                         }
                         return or;
                     }
@@ -41,15 +41,15 @@ namespace NiconicoToolkit.SnapshotSearch.JsonFilters
                         var filters = document.RootElement.GetProperty("filters");
                         foreach (var filterJson in filters.EnumerateArray())
                         {
-                            and.Filters.Add(filterJson.ToObject<IJsonSearchFilterData>(options));
+                            and.Filters.Add(filterJson.Deserialize<IJsonSearchFilterData>(options));
                         }
                         return and;
                     }
                 case "range" : 
-                    return document.RootElement.ToObject<RangeJsonFilterData>(); 
+                    return document.RootElement.Deserialize<RangeJsonFilterData>(); 
 
                 case "equal" :
-                    return document.RootElement.ToObject<EqualJsonFilterData>();
+                    return document.RootElement.Deserialize<EqualJsonFilterData>();
 
                 default:
                     throw new JsonException();

@@ -28,7 +28,7 @@ public partial class NvCommentSubClient
     public async Task<ThreadPostKeyResponse> GetPostKeyAsync(string threadId, CancellationToken ct = default)
     {
         return await _context.GetJsonAsAsync<ThreadPostKeyResponse>(
-            $"{NvApiCommentKeysUrl}post?threadId={threadId}", ct: ct
+            $"{NvApiCommentKeysUrl}post?threadId={threadId}", _options, ct: ct
             );
     }
 
@@ -64,10 +64,13 @@ public partial class NvCommentSubClient
             Body = comment,
             VposMs = vPosMs,
             PostKey = postKey,
-        });
+        }, _options);
 
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
-                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comments", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/comments", 
+                    requestParamsJson, 
+                    options: _options,
+                    ct: ct);
     }
 
 
@@ -75,7 +78,9 @@ public partial class NvCommentSubClient
     public async Task<ThreadEasyPostKeyResponse> GetEasyPostKeyAsync(string threadId, CancellationToken ct = default)
     {
         return await _context.GetJsonAsAsync<ThreadEasyPostKeyResponse>(
-            $"{NvApiCommentKeysUrl}post-easy?threadId={threadId}", ct: ct
+            $"{NvApiCommentKeysUrl}post-easy?threadId={threadId}", 
+            _options,
+            ct: ct
             );
     }
 
@@ -96,10 +101,13 @@ public partial class NvCommentSubClient
             Body = comment,
             VposMs = vPosMs,
             EasyPostKey = easyPostKey,
-        });
+        }, _options);
 
         return await _context.SendJsonAsAsync<ThreadPostResponse>(HttpMethod.Post,
-                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/easy-comments", requestParamsJson, ct: ct);
+                    $"{MakeNVCommentThreadsUrl(server)}/{threadId}/easy-comments", 
+                    requestParamsJson, 
+                    _options,
+                    ct: ct);
     }
 }
 
@@ -115,7 +123,7 @@ public sealed class ThreadPostKeyResponse : ResponseWithMeta
     }
 }
 
-sealed class ThreadPostRequest
+public sealed class ThreadPostRequest
 {
     [JsonPropertyName("videoId")]
     public string VideoId { get; set; }
@@ -133,7 +141,7 @@ sealed class ThreadPostRequest
     public string PostKey { get; set; }
 }
 
-sealed class ThreadEasyPostRequest
+public sealed class ThreadEasyPostRequest
 {
     [JsonPropertyName("videoId")]
     public string VideoId { get; set; }

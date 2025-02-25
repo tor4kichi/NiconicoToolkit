@@ -8,6 +8,12 @@
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
+  </PropertyGroup>
   <Import Project="..\NiconicoToolkit.Shared\NiconicoToolkit.Shared.projitems" Label="Shared" />
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.16.0" />
@@ -16,7 +22,7 @@
     <PackageReference Include="Microsoft.Windows.SDK.CPP" Version="10.0.26100.2161" />
     <PackageReference Include="NeoSmart.AsyncLock" Version="3.1.0" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="6.0.0" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="System.Text.Json" Version="9.0.2" />
     <PackageReference Include="U8XmlParser" Version="1.4.0" />
   </ItemGroup>
 </Project>

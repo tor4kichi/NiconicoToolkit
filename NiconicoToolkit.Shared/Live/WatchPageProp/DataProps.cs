@@ -526,7 +526,7 @@ namespace NiconicoToolkit.Live.WatchPageProp
     {
         [J("message_server_urls")] public MessageServerUrls MessageServerUrls { get; set; }
         [J("channel")] public ThreadsChannel Channel { get; set; }
-        [J("default")] public Default Default { get; set; }
+        [J("default")] public ThreadsDefault Default { get; set; }
     }
 
     public partial class ThreadsChannel
@@ -545,7 +545,7 @@ namespace NiconicoToolkit.Live.WatchPageProp
         [J("write")] public PermissionType Write { get; set; }
     }
 
-    public partial class Default
+    public partial class ThreadsDefault
     {
         [J("id")] public long Id { get; set; }
         [J("comment_count")] public long CommentCount { get; set; }

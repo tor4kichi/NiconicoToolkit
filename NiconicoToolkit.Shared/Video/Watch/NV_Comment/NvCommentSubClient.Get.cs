@@ -35,11 +35,12 @@ public partial class NvCommentSubClient
                 Targets = videoComment.Params.Targets,
                 Language = videoComment.Params.Language,
             }
-        });
+        }, options: _options);
         return await _context.SendJsonAsAsync<ThreadResponse>(
             HttpMethod.Post,
             MakeNVCommentThreadsUrl(videoComment.Server),
             requestParamsJson,
+            options: _options,
             ct: ct
             );
     }
@@ -63,18 +64,19 @@ public partial class NvCommentSubClient
                 Targets = videoComment.Params.Targets.Where(x => forks.Contains(x.Fork)).ToList(),
                 Language = videoComment.Params.Language,
             }
-        });
+        }, options: _options);
         return await _context.SendJsonAsAsync<ThreadResponse>(
             HttpMethod.Post,
             MakeNVCommentThreadsUrl(videoComment.Server),
             requestParamsJson,
+            options: _options,
             ct: ct
             );
     }
 }
 
 
-class ThreadRequest
+public class ThreadRequest
 {
     [JsonPropertyName("params")]
     public ThreadRequestParams Params { get; set; }

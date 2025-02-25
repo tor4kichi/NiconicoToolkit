@@ -16,15 +16,34 @@ using System.Net.Http.Headers;
 
 namespace NiconicoToolkit.Video.Watch.NV_Comment;
 
+
+[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata)]
+[JsonSerializable(typeof(ThreadDeleteRequest))]
+[JsonSerializable(typeof(ThreadDeleteKeyResponse))]
+[JsonSerializable(typeof(ThreadDeleteResponse))]
+[JsonSerializable(typeof(ThreadResponse))]
+[JsonSerializable(typeof(ThreadRequest))]
+[JsonSerializable(typeof(ThreadPostKeyResponse))]
+[JsonSerializable(typeof(ThreadPostResponse))]
+[JsonSerializable(typeof(ThreadPostRequest))]
+[JsonSerializable(typeof(ThreadEasyPostKeyResponse))]
+[JsonSerializable(typeof(ThreadEasyPostRequest))]
+public sealed partial class NV_CommentJsonSourceGenerationContext : JsonSerializerContext
+{
+}
+
 public sealed partial class NvCommentSubClient
 {
     private readonly NiconicoContext _context;
-    private readonly JsonSerializerOptions _option;
+    private readonly JsonSerializerOptions _options;
 
     public NvCommentSubClient(NiconicoContext context, JsonSerializerOptions option)
     {
         _context = context;
-        _option = option;
+        _options = new(option)
+        {
+            TypeInfoResolverChain = { NV_CommentJsonSourceGenerationContext.Default }
+        };
     }
 
     public string MakeNVCommentThreadsUrl(string server)

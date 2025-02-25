@@ -14,13 +14,13 @@ namespace NiconicoToolkit.Live.Notify
     public sealed class LiveNotifyClient
     {
         private readonly NiconicoContext _context;
-        private readonly JsonSerializerOptions _jsonSerializeOptions;
+        private readonly JsonSerializerOptions _options;
 
         public LiveNotifyClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
 
-            _jsonSerializeOptions = new JsonSerializerOptions(defaultOptions)
+            _options = new JsonSerializerOptions(defaultOptions)
             {
                 Converters =
                 {
@@ -41,12 +41,12 @@ namespace NiconicoToolkit.Live.Notify
 
         public async Task<LiveNotifyUnreadResponse> GetUnreadLiveNotifyAsync()
         {
-            return await _context.GetJsonAsAsync<LiveNotifyUnreadResponse>(Urls.P_LiveNotifyboxUnreadApiUrl);
+            return await _context.GetJsonAsAsync<LiveNotifyUnreadResponse>(Urls.P_LiveNotifyboxUnreadApiUrl, _options);
         }
 
         public async Task<LiveNotifyContentResponse> GetLiveNotifyAsync(int rows = 100)
         {
-            return await _context.GetJsonAsAsync<LiveNotifyContentResponse>($"{Urls.P_LiveNotifyboxApiUrl}.content?rows={rows}", _jsonSerializeOptions);
+            return await _context.GetJsonAsAsync<LiveNotifyContentResponse>($"{Urls.P_LiveNotifyboxApiUrl}.content?rows={rows}", _options);
         }
     }
     

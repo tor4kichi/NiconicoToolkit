@@ -80,11 +80,11 @@ public sealed class FollowingsActivityClient
     public async Task<bool> ReadActivityAsync(NiconicoActivityActor actor, CancellationToken ct = default)
     {
         var res = await _context.PostAsync($"https://api.feed.nicovideo.jp/v1/read/{actor.ActorType.GetDescription()}/{actor.ActorId}", ct);
-        var code = await res.Content.ReadJsonAsAsync<CodeOnly>(ct: ct);
+        var code = await res.Content.ReadJsonAsAsync<CodeOnly>(_options, ct: ct);
         return code.Code == "ok";
     }
 
-    record class CodeOnly
+    public record class CodeOnly
     {
         [JsonPropertyName("code")]
         public string Code { get; set; }

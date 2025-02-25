@@ -22,6 +22,7 @@ namespace NiconicoToolkit.Tests
             var (context, status, authority, userId) = await AccountTestHelper.CreateNiconicoContextAndLogInWithTestAccountAsync();
 
             _context = context;
+            _context.SetupDefaultRequestHeaders();
             _loginUserId = userId;
         }
 

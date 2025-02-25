@@ -29,7 +29,7 @@ namespace NiconicoToolkit.Search.Video
         public string Tag { get; set; }
 
         [JsonPropertyName("genres")]
-        public Genre[] Genres { get; set; }
+        public HotTopicGenre[] Genres { get; set; }
 
         [JsonPropertyName("searchId")]
         public string SearchId { get; set; }

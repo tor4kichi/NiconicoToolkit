@@ -72,7 +72,7 @@ namespace NiconicoToolkit.Tests
         public async Task ConnectLiveCommentSessionWithSearchResultAsync()
         {
             var query = LiveSearchOptionsQuery.Create("ゲーム", LiveStatus.Onair);
-            var searchResult = await _context.Search.Live.LiveSearchAsync("ゲーム", null, Search.Live.Status.ON_AIR);
+            var searchResult = await _context.Search.Live.LiveSearchAsync("ゲーム", null, Search.Live.SearchLiveStatus.ON_AIR);
             //var searchResult = await _context.SearchWithPage.Live.GetLiveSearchPageScrapingResultAsync(query, CancellationToken.None);
             var watchPageRes = await _liveClient.GetLiveWatchPageDataPropAsync(searchResult.Items[0].ProgramId);
             using (var session = LiveClient.CreateWatchSession(watchPageRes, _context.UserAgent))
@@ -103,15 +103,10 @@ namespace NiconicoToolkit.Tests
 
                 session.MessageServer += Session_RecieveRoom;
                 session.RecieveStatistics += Session_RecieveStatistics;
-                await session.StartWachingAsync(Live.WatchSession.LiveQualityType.Abr, isLowLatency: false);
-
-                var end = await Task.WhenAny(
-                    tcs.Task,
-                    Task.Delay(5000)
-                    );
-
-                var result = await tcs.Task;
+                var result = await session.StartWachingAsync(Live.WatchSession.LiveQualityType.Abr, isLowLatency: false);
                 Assert.IsTrue(result);
+                await Task.Delay(3000);
+                await session.CloseAsync();
             }
         }        
     }

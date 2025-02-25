@@ -19,15 +19,15 @@ namespace NiconicoToolkit.SearchWithPage.Video
 
 			if (!isTagSearch)
             {
-				Count = document.QuerySelector("div.message > p > span.searchTotal").TextContent.ToInt();
+				Count = document.QuerySelector("div.message > p > span.searchTotal")?.TextContent?.ToInt() ?? 0;
 			}
 			else
             {
-				Count = document.QuerySelector("body > div.BaseLayout > section > div > div.contentBody > div.contentsData > p > span").TextContent.ToInt();
+				Count = document.QuerySelector("body > div.BaseLayout > div.BaseLayout-container > div.BaseLayout-contents > section > div > div.contentBody > div.contentsData > p > span")?.TextContent?.ToInt() ?? 0;
 			}
 
 
-			Page = document.QuerySelector("div.toolbar > div.pager > a.pagerBtn.switchingBtn.active").TextContent.ToInt();
+			Page = document.QuerySelector("div.toolbar > div.pager > a.pagerBtn.switchingBtn.active")?.TextContent?.ToInt() ?? 0;
         }
 
 

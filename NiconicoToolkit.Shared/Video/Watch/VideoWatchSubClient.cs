@@ -22,16 +22,26 @@ using System.Net.Http.Headers;
 
 namespace NiconicoToolkit.Video.Watch;
 
+[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata)]
+[JsonSerializable(typeof(NicoVideoWatchApiResponse))]
+[JsonSerializable(typeof(WatchJsonResponse))]
+[JsonSerializable(typeof(DomandHlsAccessRightResponse))]
+public sealed partial class VideoWatchJsonSourceGenerationContext : JsonSerializerContext
+{
+}
+
 public sealed class VideoWatchSubClient
 {
     private readonly NiconicoContext _context;
     private readonly JsonSerializerOptions _options;
-    private readonly JsonSerializerOptions _dmcSessionSerializerOptions;
+
     public VideoWatchSubClient(NiconicoContext context, JsonSerializerOptions options)
     {
         _context = context;
-        _options = options;
-        _dmcSessionSerializerOptions = new JsonSerializerOptions() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+        _options = new JsonSerializerOptions(options)
+        {
+            TypeInfoResolverChain = { VideoWatchJsonSourceGenerationContext.Default }
+        };
     }
 
 
@@ -51,15 +61,17 @@ public sealed class VideoWatchSubClient
 
     public async Task<WatchJsonResponse> GetDmcWatchJsonAsync(VideoId videoId, bool isLoggedIn, string actionTrackId)
     {
-        var dict = new NameValueCollection();
-        dict.Add("_frontendId", "6");
-        dict.Add("_frontendVersion", "0");
-        dict.Add("actionTrackId", actionTrackId);
-        dict.Add("skips", "harmful");
-        dict.Add("additionals", WebUtility.UrlEncode("pcWatchPage,external,marquee,series"));
-        dict.Add("isContinueWatching", "true");
-        dict.Add("i18nLanguage", "ja-jp");
-        dict.Add("t", DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
+        var dict = new NameValueCollection
+        {
+            { "_frontendId", "6" },
+            { "_frontendVersion", "0" },
+            { "actionTrackId", actionTrackId },
+            { "skips", "harmful" },
+            { "additionals", WebUtility.UrlEncode("pcWatchPage,external,marquee,series") },
+            { "isContinueWatching", "true" },
+            { "i18nLanguage", "ja-jp" },
+            { "t", DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString() }
+        };
 
         var url = new StringBuilder("https://www.nicovideo.jp/api/watch/")
             .Append(isLoggedIn ? "v3" : "v3_guest")
@@ -117,13 +129,14 @@ public sealed class VideoWatchSubClient
         if (audioQualityId != null)
         {
             qualities.Add(audioQualityId);
-        }            
+        }
+
         return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
             HttpMethod.Post,
             $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
             $"{{\"outputs\":[[{string.Join(',', qualities.Select(x => $"\"{x}\""))}]]}}",
-            null, 
-            (header) => 
+            _options,
+            (header) =>
             {
                 header.Add("X-Access-Right-Key", domand.AccessRightKey);
                 header.Add("X-Frontend-Version", "0");
@@ -131,6 +144,40 @@ public sealed class VideoWatchSubClient
                 header.Add("X-Request-With", "https://www.nicovideo.jp");
             },
             ct);
+    }
+
+    public async Task<DomandHlsAccessRightResponse> GetSecondaryDomandHlsAccessRightAsync(
+        VideoId videoId,
+        WatchDomand domand,
+        string? videoQualityId,
+        string? audioQualityId,
+        string? watchTrackId = null,
+        CancellationToken ct = default)
+    {
+        List<string> qualities = new();
+        if (videoQualityId != null)
+        {
+            qualities.Add(videoQualityId);
+        }
+        if (audioQualityId != null)
+        {
+            qualities.Add(audioQualityId);
+        }
+
+        return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
+            HttpMethod.Post,
+            $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
+            $"{{\"outputs\":[[{string.Join(',', qualities.Select(x => $"\"{x}\""))}]]}}",
+            _options,
+            (header) =>
+            {
+                header.Add("X-Access-Right-Key", domand.AccessRightKey);
+                header.Add("X-Frontend-Version", "0");
+                header.Add("X-Frontend-Id", "6");
+                header.Add("X-Request-With", "https://www.nicovideo.jp");
+            },
+            ct);
+
     }
 
     public async Task<DomandHlsAccessRightResponse> GetDomandHlsAccessRightAsync(

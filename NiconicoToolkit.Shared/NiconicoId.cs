@@ -90,10 +90,6 @@ namespace NiconicoToolkit
             {
                 return (idWithPrefix.Skip(2).ToUInt(), NiconicoIdType.Live);
             }
-            else if (prefix.SequenceEqual(ContentIdHelper.CommunityIdPrefix.AsSpan()))
-            {
-                return (idWithPrefix.Skip(2).ToUInt(), NiconicoIdType.Community);
-            }
             else if (prefix.SequenceEqual(ContentIdHelper.ChannelIdPrefix.AsSpan()))
             {
                 return (idWithPrefix.Skip(2).ToUInt(), NiconicoIdType.Channel);
@@ -197,7 +193,6 @@ namespace NiconicoToolkit
                 NiconicoIdType.Video => StrId ?? throw new InvalidOperationException(),
                 NiconicoIdType.VideoAlias => RawId.ToString(),
                 NiconicoIdType.Live => StrId ?? ContentIdHelper.LiveIdPrefix + RawId.ToString(),
-                NiconicoIdType.Community => StrId ?? ContentIdHelper.CommunityIdPrefix + RawId.ToString(),
                 NiconicoIdType.Channel => StrId ?? ContentIdHelper.ChannelIdPrefix + RawId.ToString(),
                 NiconicoIdType.Mylist => RawId.ToString(),
                 _ => RawId.ToString(),
@@ -217,7 +212,6 @@ namespace NiconicoToolkit
         public readonly bool IsVideoId => IdType is NiconicoIdType.Video;
         public readonly bool IsVideoAliasId => IdType is NiconicoIdType.VideoAlias;
         public readonly bool IsLiveId => IdType is NiconicoIdType.Live;
-        public readonly bool IsCommunityId => IdType is NiconicoIdType.Community;
         public readonly bool IsChannelId => IdType is NiconicoIdType.Channel;
         public readonly bool IsMylistId => IdType is NiconicoIdType.Mylist;
     }
@@ -230,7 +224,6 @@ namespace NiconicoToolkit
         Video,
         VideoAlias,
         Live,
-        Community,
         Channel,
         Mylist,
         Series,

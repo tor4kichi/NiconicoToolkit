@@ -19,7 +19,6 @@ using NiconicoToolkit.Mylist;
 using NiconicoToolkit.Follow;
 using NiconicoToolkit.Series;
 using NiconicoToolkit.Likes;
-using NiconicoToolkit.Community;
 using NiconicoToolkit.Ichiba;
 using NiconicoToolkit.Live.Timeshift;
 using NiconicoToolkit.SnapshotSearch;
@@ -54,6 +53,7 @@ namespace NiconicoToolkit
 
         internal static readonly JsonSerializerOptions DefaultOptions = new JsonSerializerOptions()
         {
+            TypeInfoResolver = GlobalJsonSourceGenerationContext.Default,
             Converters =
             {
                 new JsonStringEnumMemberConverter(),
@@ -63,13 +63,13 @@ namespace NiconicoToolkit
                 new LiveIdJsonConverter(),
                 new MylistIdJsonConverter(),
                 new ChannelIdJsonConverter(),
-                new CommunityIdJsonConverter(),
             },
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         };
 
         internal static readonly JsonSerializerOptions DefaultOptionsSnakeCase = new JsonSerializerOptions()
         {
+            TypeInfoResolver = GlobalJsonSourceGenerationContext.Default,
             Converters =
             {
                 new JsonStringEnumMemberConverter(JsonSnakeCaseNamingPolicy.Instance),
@@ -79,7 +79,6 @@ namespace NiconicoToolkit
                 new LiveIdJsonConverter(),
                 new MylistIdJsonConverter(),
                 new ChannelIdJsonConverter(),
-                new CommunityIdJsonConverter(),
             }
         };
 
@@ -103,7 +102,6 @@ namespace NiconicoToolkit
             Series = new SeriesClient(this, DefaultOptions);
             FollowingsActivity = new FollowingsActivityClient(this, DefaultOptions);
             Likes = new LikesClient(this, DefaultOptions);
-            Community = new CommunityClient(this, DefaultOptions);
             Ichiba = new IchibaClient(this, DefaultOptions);
             Timeshift = new TimeshiftClient(this, DefaultOptions);
             VideoSnapshotSearch = new VideoSnapshotSearchClient(this, DefaultOptions);
@@ -127,7 +125,6 @@ namespace NiconicoToolkit
         public SeriesClient Series { get; }
         public FollowingsActivityClient FollowingsActivity { get; }
         public LikesClient Likes { get; }
-        public CommunityClient Community { get; }
         public IchibaClient Ichiba { get; }
         public TimeshiftClient Timeshift { get; }
         public VideoSnapshotSearchClient VideoSnapshotSearch { get; }

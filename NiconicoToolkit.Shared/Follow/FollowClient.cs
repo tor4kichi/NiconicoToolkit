@@ -1,6 +1,5 @@
 ﻿using NiconicoToolkit.Account;
 using NiconicoToolkit.Channels;
-using NiconicoToolkit.Community;
 using NiconicoToolkit.Mylist;
 using NiconicoToolkit.User;
 using System;
@@ -34,7 +33,6 @@ namespace NiconicoToolkit.Follow
         public UserFollowSubClient User { get; }
         public MylistFollowSubClient Mylist { get; }
         public ChannelFollowSubClient Channel { get; }
-        public CommunityFollowSubClient Community { get; }
 
         public FollowClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
@@ -45,7 +43,6 @@ namespace NiconicoToolkit.Follow
             User = new UserFollowSubClient(this, _context, _defaultOptions);
             Mylist = new MylistFollowSubClient(this, _context, _defaultOptions);
             Channel = new ChannelFollowSubClient(this, _context, _defaultOptions);
-            Community = new CommunityFollowSubClient(this, _context, _defaultOptions);
         }
 
 
@@ -276,165 +273,6 @@ namespace NiconicoToolkit.Follow
             }
         }
 
-
-        public sealed class CommunityFollowSubClient
-        {
-            private readonly FollowClient _followClient;
-            private readonly NiconicoContext _context;
-            private readonly JsonSerializerOptions _options;
-
-            internal CommunityFollowSubClient(FollowClient followClient, NiconicoContext context, JsonSerializerOptions options)
-            {
-                _followClient = followClient;
-                _context = context;
-                _options = options;
-            }
-
-            /// <remarks>[Require Login]</remarks>
-            [RequireLogin]
-            public async Task<FollowCommunityResponse> GetFollowCommunityAsync(int page = 0, int limit = 25)
-            {
-                var uri = $"{Urls.PublicV1FollowingApiUrl}communities.json?limit={limit}&page={page}";
-                await _context.PrepareCorsAsscessAsync(HttpMethod.Get, uri);
-                return await _context.GetJsonAsAsync<FollowCommunityResponse>(uri, _options);
-            }
-
-            /// <remarks>[Require Login]</remarks>
-            [RequireLogin]
-            public Task<UserOwnedCommunityResponse> GetUserOwnedCommunitiesAsync(UserId userId)
-            {
-                return _context.GetJsonAsAsync<UserOwnedCommunityResponse>(
-                    $"{NiconicoUrls.PublicApiV1Url}user/{userId}/communities.json", _options
-                    );
-            }
-
-            /// <remarks>[Require Login]</remarks>
-            [RequireLogin]
-            public async Task<ContentManageResult> AddFollowCommunityAsync(CommunityId communityId)
-            {
-                var nonPrefixCommunityId = communityId.ToStringWithoutPrefix();
-                var communityJoinPageUrl = new Uri($"{NiconicoUrls.CommunityPageUrl}motion/{communityId}");
-
-                var uri = $"{NiconicoUrls.CommunityV1ApiUrl}communities/{nonPrefixCommunityId}/follows.json";
-                //            await PrepareCorsAsscessAsync(HttpMethod.Post, uri);
-
-                using var res = await _context.SendAsync(HttpMethod.Post, uri, content: null, headers =>
-                {
-#if WINDOWS_UWP
-                    headers.Referer = communityJoinPageUrl;
-                    headers.Host = new Windows.Networking.HostName("com.nicovideo.jp");
-#else
-                headers.Referrer = communityJoinPageUrl;
-                headers.Host = "com.nicovideo.jp";
-#endif
-                    headers.Add("Origin", "https://com.nicovideo.jp");
-                    headers.Add("X-Requested-By", communityJoinPageUrl.OriginalString);
-                });
-
-                var result = await res.Content.ReadJsonAsAsync<ResponseWithMeta>();
-                return result.Meta.IsSuccess ? ContentManageResult.Success : ContentManageResult.Failed;
-            }
-
-
-
-            // 成功すると 200 
-            // http://com.nicovideo.jp/motion/co2128730/done
-            // にリダイレクトされる
-
-            // 失敗すると
-            // 404
-
-            // 申請に許可が必要な場合は未調査
-
-
-            // Communityからの登録解除
-            // http://com.nicovideo.jp/leave/co2128730
-            // にアクセスして、フォームから timeとcommit_keyを抽出して
-            // time: UNIX_TIME
-            // commit_key
-            // commit
-            // http://com.nicovideo.jp/leave/co2128730 にPOSTする
-            // 成功したら200、失敗したら404
-
-            // コミュニティオーナーとしてフォロー解除を行うとコミュニティの解散になるため、注意が必要
-
-
-            private async Task<CommunityLeaveToken> GetCommunityLeaveTokenAsync(string url, CommunityId communityId)
-            {
-                using var res = await _context.GetAsync(url);
-                var token = await res.Content.ReadHtmlDocumentActionAsync(document =>
-                {
-                    CommunityLeaveToken leaveToken = new CommunityLeaveToken();
-                    var hiddenInputs = document.QuerySelectorAll("body > main > div > form > input");
-
-                    foreach (var hiddenInput in hiddenInputs)
-                    {
-                        var nameAttr = hiddenInput.GetAttribute("name");
-                        if (nameAttr == "time")
-                        {
-                            var timeValue = hiddenInput.GetAttribute("value");
-                            leaveToken.Time = timeValue;
-                        }
-                        else if (nameAttr == "commit_key")
-                        {
-                            var commit_key = hiddenInput.GetAttribute("value");
-                            leaveToken.CommitKey = commit_key;
-                        }
-                        else if (nameAttr == "commit")
-                        {
-                            var commit = hiddenInput.GetAttribute("value");
-                            leaveToken.Commit = commit;
-                        }
-                    }
-
-                    return leaveToken;
-                });
-
-                token.CommunityId = communityId;
-                return token;
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="communityId"></param>
-            /// <remarks>[Require Login] コミュニティオーナーがフォロー解除を行うとコミュニティ解散という重大な操作になるため注意</remarks>
-            /// <returns></returns>
-            [RequireLogin]
-            public async Task<ContentManageResult> RemoveFollowCommunityAsync(CommunityId communityId)
-            {
-                var url = $"{NiconicoUrls.CommunityPageUrl}leave/{communityId}";
-                var token = await GetCommunityLeaveTokenAsync(url, communityId);
-                var dict = new Dictionary<string, string>();
-                dict.Add("time", token.Time);
-                dict.Add("commit_key", token.CommitKey);
-                dict.Add("commit", token.Commit);
-
-#if WINDOWS_UWP
-                using var content = new HttpFormUrlEncodedContent(dict);
-#else
-            var content = new FormUrlEncodedContent(dict);
-#endif
-
-                using var postResult = await _context.SendAsync(HttpMethod.Post, url, content: content, headers =>
-                {
-                    headers.Add("Upgrade-Insecure-Requests", "1");
-                    headers.Add("Referer", url);
-                    headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                }, HttpCompletionOption.ResponseHeadersRead);
-
-                return postResult.IsSuccessStatusCode ? ContentManageResult.Success : ContentManageResult.Failed;
-            }
-
-            public class CommunityLeaveToken
-            {
-                public CommunityId CommunityId { get; set; }
-                public string Time { get; set; }
-                public string CommitKey { get; set; }
-                public string Commit { get; set; }
-            }
-
-        }
 
 
         private async Task<bool> GetFollowedInternalAsync(string uri)

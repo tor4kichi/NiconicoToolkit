@@ -66,24 +66,6 @@ namespace NiconicoToolkit.Tests
         }
 
         [TestMethod]
-        [DataRow("https://com.nicovideo.jp/community/co358573")]
-        [DataRow("co358573")]
-        public void ExtractCommunityContentId(string urlOrId)
-        {
-            if (Uri.TryCreate(urlOrId, UriKind.Absolute, out var uri))
-            {
-                CheckExtractIdResult(NiconicoIdType.Community, NiconicoUrls.ExtractNicoContentId(uri));
-            }
-            else
-            {
-                CheckExtractIdResult(NiconicoIdType.Community, new NiconicoId(urlOrId));
-            }
-        }
-
-
-
-
-        [TestMethod]
         [DataRow("https://www.nicovideo.jp/user/500600/mylist/61896980?ref=pc_userpage_mylist")]
         public void ExtractMylistContentId(string urlOrId)
         {

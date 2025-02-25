@@ -10,13 +10,13 @@ namespace NiconicoToolkit.Live.Cas
     public sealed class CasLiveClient
     {
         private readonly NiconicoContext _context;
-        private readonly JsonSerializerOptions _jsonSerializeOptions;
+        private readonly JsonSerializerOptions _options;
 
         internal CasLiveClient(NiconicoContext context, JsonSerializerOptions defaultOptions)
         {
             _context = context;
 
-            _jsonSerializeOptions = new JsonSerializerOptions(defaultOptions)
+            _options = new JsonSerializerOptions(defaultOptions)
             {
                 Converters =
                 {
@@ -28,7 +28,7 @@ namespace NiconicoToolkit.Live.Cas
         public Task<LiveProgramResponse> GetLiveProgramAsync(LiveId liveId)
         {
             const string NicocasLiveUrlFormat = @"https://api.cas.nicovideo.jp/v1/services/live/programs/{0}";
-            return _context.GetJsonAsAsync<LiveProgramResponse>(string.Format(NicocasLiveUrlFormat, liveId), _jsonSerializeOptions);
+            return _context.GetJsonAsAsync<LiveProgramResponse>(string.Format(NicocasLiveUrlFormat, liveId), _options);
         }
     }
 }
