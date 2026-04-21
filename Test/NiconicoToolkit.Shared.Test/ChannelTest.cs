@@ -20,6 +20,7 @@ namespace NiconicoToolkit.Tests
         }
 
         [TestMethod]
+        [DataRow("kamiina-botan")]
         [DataRow("maidragon")]
         [DataRow("ch2647775")]
         [DataRow("2647798")]

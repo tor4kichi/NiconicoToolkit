@@ -18,6 +18,7 @@ namespace NiconicoToolkit.Channels
         public int TotalCount { get; set; }
         public int Page { get; set; }
         public ChannelVideoItem[] Videos { get; set; }
+        public string Title { get; set; }
     }
 
     public sealed class ChannelVideoItem

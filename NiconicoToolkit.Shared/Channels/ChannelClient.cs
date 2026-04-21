@@ -96,34 +96,67 @@ namespace NiconicoToolkit.Channels
 
             return await res.Content.ReadHtmlDocumentActionAsync(document => 
             {
-            
+                static string GetTitle(IHtmlDocument doc)
+                {
+                    return doc.QuerySelector("#head_cp_breadcrumb > h1 > a").TextContent;
+                }
                 // 件数
                 static int GetCount(IHtmlDocument document)
-                {
-                    var countNode = document.QuerySelector("#video_page > section.site_body > article > section > section > header > div.list--upper > span > var");
-                    return countNode.TextContent.ToInt();
+                {                    
+                    try
+                    {
+                        var countNode = document.QuerySelector("#video_page > section > article > section > div > div > span > var");
+                        return countNode?.TextContent.ToInt() ?? 0;
+                    }
+                    catch
+                    {
+                        return 0;
+                    }
                 }
 
                 static IEnumerable<ChannelVideoItem> GetChannelVideos(IHtmlDocument document)
-                {
-                    var itemNodes = document.QuerySelectorAll("#video_page > section.site_body > article > section > section > div > ul > li");
+                {                    
+                    var itemNodes = document.QuerySelectorAll("#video_page > section > article > section > ul > li");
                     foreach (var itemNode in itemNodes)
                     {
                         ChannelVideoItem item = new();
+                        var anchorNode = itemNode.QuerySelector("a");
                         {
-                            var imageAnchorNode = itemNode.QuerySelector("div.item_left > a");
-                            var imageNode = imageAnchorNode.QuerySelector("img");
-                            var lastResNode = imageAnchorNode.QuerySelector("span.last_res");
-                            var lengthNode = imageAnchorNode.QuerySelector("span[data-style='videoLength']");
+                            var href = anchorNode.GetAttribute("href");
+                            if (href != null
+                            && href.LastIndexOf('/') is int lastSlashPos
+                            && lastSlashPos != -1)
+                            {
+                                item.ItemId = href.Substring(lastSlashPos + 1);
+                            }
+                            var imageNode = anchorNode.QuerySelector("div.thumbnail > img");
 
                             item.ThumbnailUrl = imageNode.GetAttribute("src");
-                            item.Length = lengthNode.TextContent.ToTimeSpan();
-                            item.CommentSummary = lastResNode?.TextContent ?? string.Empty;
-                            var ppv = imageAnchorNode.QuerySelector("span[data-style='paymentType']");
+                            //item.CommentSummary = lastResNode?.TextContent ?? string.Empty;
+                        }
+
+                        var itemInfoNode = anchorNode.QuerySelector(".metadata");
+                        {
+                            var titleNode = itemInfoNode.QuerySelector("h3");
+                            var countsNode = itemInfoNode.QuerySelectorAll("ul > li");
+
+                            item.Title = titleNode.TextContent.Trim();
+                            item.ViewCount = itemInfoNode.QuerySelector("dl > div:nth-child(1) > dd").TextContent.ToInt();
+                            item.CommentCount = itemInfoNode.QuerySelector("dl > div:nth-child(2) > dd").TextContent.ToInt();
+                            item.MylistCount = itemInfoNode.QuerySelector("dl > div:nth-child(3) > dd").TextContent.ToInt();
+
+                            item.PostedAt = itemInfoNode.QuerySelector("p:nth-child(4)").TextContent.ToDateTimeOffsetFromIso8601().DateTime;
+
+                        }
+                        var thumbnialNode = anchorNode.QuerySelector(".thumbnail");
+                        {
+                            item.Length = thumbnialNode.QuerySelector("span[data-style='videoLength'] > strong").TextContent.ToTimeSpan();
+                            var ppv = thumbnialNode.QuerySelector("span.c-labelPaymentType > strong");
                             if (ppv != null && ppv.TextContent is { } token)
                             {
                                 switch (token)
                                 {
+                                    case "有料": item.IsRequirePayment = true;break;
                                     case "all_pay": item.IsRequirePayment = true; break;
                                     case "会員無料": item.IsFreeForMember = true; break;
                                     case "member_unlimited_access": item.IsMemberUnlimitedAccess = true; break;
@@ -131,36 +164,6 @@ namespace NiconicoToolkit.Channels
                                 }
                             }
                         }
-
-                        var itemInfoNode = itemNode.QuerySelector("div.item_right");
-                        {
-                            var titleAnchorNode = itemInfoNode.QuerySelector("h6 > a");
-                            var countsNode = itemInfoNode.QuerySelectorAll("ul > li");
-                            var descriptionNode = itemInfoNode.QuerySelector("p.description");
-                            var timeNode = itemInfoNode.QuerySelector("p.time > time > var");
-
-                            item.ItemId = titleAnchorNode.GetAttribute("href").Split('/').Last();
-                            item.Title = titleAnchorNode.GetAttribute("title");
-                            foreach (var countNode in countsNode)
-                            {
-                                if (countNode.ClassList.Contains("view"))
-                                {
-                                    item.ViewCount = countNode.QuerySelector("var").TextContent.ToInt();
-                                }
-                                else if (countNode.ClassList.Contains("comment"))
-                                {
-                                    item.CommentCount = countNode.QuerySelector("var").TextContent.ToInt();
-                                }
-                                else if (countNode.ClassList.Contains("mylist"))
-                                {
-                                    item.MylistCount = countNode.QuerySelector("var").TextContent.ToInt();
-                                }
-                            }
-
-                            item.ShortDescription = descriptionNode.TextContent;
-                            item.PostedAt = timeNode.GetAttribute("title").ToDateTimeOffsetFromIso8601().DateTime;
-                        }
-
                         yield return item;
                     }
                 }
@@ -168,6 +171,7 @@ namespace NiconicoToolkit.Channels
                 channelVideoResponse.Data = new()
                 {
                     Page = page,
+                    Title = GetTitle(document),
                     TotalCount = GetCount(document),
                     Videos = GetChannelVideos(document).ToArray(),
                 };
