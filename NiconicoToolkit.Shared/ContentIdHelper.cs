@@ -65,11 +65,13 @@ namespace NiconicoToolkit
         }
 
 
+
         public const string VideoIdPrefixForUser = "sm";
         public const string VideoIdPrefixForChannel = "so";
         public const string VideoIdPrefixForMadeOfOfficialMovieMaker = "nm";
+        public const string VideoIdPrefixShortVideo = "ss";
 
-        internal const string VideoIdRegexBase = @"(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk)\d{1,14}"; // cd/fx/sd
+        internal const string VideoIdRegexBase = @"(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk|ss)\d{1,14}"; // cd/fx/sd
         readonly static Regex VideoIdRegex = new Regex('^' + VideoIdRegexBase + '$');
 
         public static bool IsVideoId(string id, bool allowNonPrefixId = true)
