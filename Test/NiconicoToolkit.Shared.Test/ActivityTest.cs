@@ -22,16 +22,32 @@ namespace NiconicoToolkit.Tests
         [TestMethod]
         public async Task GetVideoWatchHitoryAsync()
         {
-            var res = await _context.History.VideoWachHistory.GetWatchHistoryAsync(0, 100);
+            var res = await _context.History.VideoWachHistory.GetWatchHistoryAsync(6);
 
             Assert.IsTrue(res.Meta.IsSuccess);
 
-            if (res.Data.Items.Length > 0)
+            if (res.Data.Items.Count > 0)
             {
                 var item = res.Data.Items[0];
                 Assert.IsNotNull(item.Video);
-                Assert.IsNotNull(item.WatchId);
-                Assert.AreNotEqual(item.LastViewedAt, default(DateTimeOffset));
+                Assert.IsNotNull(item.IsMaybeLikeUserItem);
+                Assert.AreNotEqual(item.ViewedAt, default(DateTimeOffset));
+            }
+        }
+
+        [TestMethod]
+        public async Task GetShortVideoWatchHitoryAsync()
+        {
+            var res = await _context.History.VideoWachHistory.GetShortVideoWatchHistoryAsync(6);
+
+            Assert.IsTrue(res.Meta.IsSuccess);
+
+            if (res.Data.Items.Count > 0)
+            {
+                var item = res.Data.Items[0];
+                Assert.IsNotNull(item.Video);
+                Assert.IsNotNull(item.IsMaybeLikeUserItem);
+                Assert.AreNotEqual(item.ViewedAt, default(DateTimeOffset));
             }
         }
     }

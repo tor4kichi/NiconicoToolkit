@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.ComponentModel;
+
 #if WINDOWS_UWP
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
@@ -31,19 +33,47 @@ public sealed class VideoWatchHisotrySubClient
 
     internal static class Urls
     {
-        public const string WatchHitoryApi = $"{NiconicoUrls.NvApiV1Url}users/me/watch/history";
+        public const string WatchHitoryApi = $"{NiconicoUrls.NvApiV2Url}users/me/watch/history";
+    }
+
+    [RequireLogin]
+    public Task<VideoWatchHistory> GetShortVideoWatchHistoryAsync(int limit = 6, VideoWatchHistory? prevResponse = null)
+    {
+        var parameters = new NameValueCollection()
+        {
+            { "limit", limit.ToString() },
+            { "selectContentType", "short" },
+        };
+        if (prevResponse?.Data != null
+            && string.IsNullOrEmpty(prevResponse.Data.NextCursor))
+        {
+            parameters.Add("cursor", prevResponse.Data.NextCursor);
+        }
+
+        var url = new StringBuilder(Urls.WatchHitoryApi)
+            .AppendQueryString(parameters)
+            .ToString();
+
+        return _context.GetJsonAsAsync<VideoWatchHistory>(url, _options);
     }
 
     /// <remarks>[Require Login]</remarks>
     [RequireLogin]
-    public Task<VideoWatchHistory> GetWatchHistoryAsync(int page, int pageSize)
+    public Task<VideoWatchHistory> GetWatchHistoryAsync(int limit = 6, VideoWatchHistory? prevResponse = null)
     {
+        var parameters = new NameValueCollection()
+        {
+            { "limit", limit.ToString() },
+            { "selectContentType", "long" },
+        };
+        if (prevResponse?.Data != null
+            && string.IsNullOrEmpty(prevResponse.Data.NextCursor))
+        {
+            parameters.Add("cursor", prevResponse.Data.NextCursor);
+        }
+
         var url = new StringBuilder(Urls.WatchHitoryApi)
-            .AppendQueryString(new NameValueCollection()
-            {
-                { "page", (page+1).ToString() },
-                { "pageSize", (pageSize).ToString() },
-            })
+            .AppendQueryString(parameters)
             .ToString();
 
         return _context.GetJsonAsAsync<VideoWatchHistory>(url, _options);
@@ -103,33 +133,59 @@ public class VideoWatchHistory : ResponseWithMeta
     public VideoWatchHistoryData Data { get; set; }
 }
 
-public class VideoWatchHistoryData
+//public class VideoWatchHistoryData
+//{
+//    [JsonPropertyName("totalCount")]
+//    public long TotalCount { get; set; }
+
+//    [JsonPropertyName("items")]
+//    public VideoWatchHistoryItem[] Items { get; set; }
+//}
+
+//public class VideoWatchHistoryItem
+//{
+//    [JsonPropertyName("watchId")]
+//    public string WatchId { get; set; }
+
+//    //[JsonPropertyName("frontendId")]
+//    //public long FrontendId { get; set; }
+
+//    [JsonPropertyName("views")]
+//    public long? Views { get; set; }
+
+//    [JsonPropertyName("lastViewedAt")]
+//    public DateTimeOffset? LastViewedAt { get; set; }
+
+//    [JsonPropertyName("playbackPosition")]
+//    [JsonConverter(typeof(PlaybackPositionConverter))]
+//    public PlaybackPosition PlaybackPosition { get; set; }
+
+//    [JsonPropertyName("video")]
+//    public NvapiVideoItem Video { get; set; }
+//}
+
+public class VideoWatchHistoryDataItem
 {
-    [JsonPropertyName("totalCount")]
-    public long TotalCount { get; set; }
 
-    [JsonPropertyName("items")]
-    public VideoWatchHistoryItem[] Items { get; set; }
-}
+    [JsonPropertyName("itemId")]
+    public string ItemId { get; set; }
 
-public class VideoWatchHistoryItem
-{
-    [JsonPropertyName("watchId")]
-    public string WatchId { get; set; }
+    [JsonPropertyName("viewedAt")]
+    public DateTime ViewedAt { get; set; }
 
-    //[JsonPropertyName("frontendId")]
-    //public long FrontendId { get; set; }
-
-    [JsonPropertyName("views")]
-    public long? Views { get; set; }
-
-    [JsonPropertyName("lastViewedAt")]
-    public DateTimeOffset? LastViewedAt { get; set; }
-
-    [JsonPropertyName("playbackPosition")]
-    [JsonConverter(typeof(PlaybackPositionConverter))]
-    public PlaybackPosition PlaybackPosition { get; set; }
+    [JsonPropertyName("isMaybeLikeUserItem")]
+    public bool IsMaybeLikeUserItem { get; set; }
 
     [JsonPropertyName("video")]
     public NvapiVideoItem Video { get; set; }
+}
+
+public class VideoWatchHistoryData
+{
+
+    [JsonPropertyName("items")]
+    public List<VideoWatchHistoryDataItem> Items { get; set; }
+
+    [JsonPropertyName("nextCursor")]
+    public string NextCursor { get; set; }
 }

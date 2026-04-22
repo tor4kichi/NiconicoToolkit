@@ -19,6 +19,12 @@ public class NvapiVideoItem
     [JsonPropertyName("title")]
     public string Title { get; set; }
 
+    [JsonPropertyName("contentType")]
+    public string? ContentType { get; set; }
+
+    public bool IsLongVideo() => ContentType == "long";
+    public bool IsShortVideo() => ContentType == "short";
+
     [JsonPropertyName("registeredAt")]
     public DateTimeOffset RegisteredAt { get; set; }
 
