@@ -18,6 +18,8 @@ public enum ActivityType
     Publish, // コンテンツ投稿
     [Description("video")]
     Video,   // 動画投稿
+    [Description("short_video")]
+    ShortVideo,   // 動画投稿
     [Description("live")]
     Live,    // 生放送開始
     [Description("all")]

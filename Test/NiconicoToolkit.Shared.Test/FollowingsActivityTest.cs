@@ -24,6 +24,7 @@ public sealed class FollowingsActivityTest
     [TestMethod]
     [DataRow(ActivityType.Publish)]
     [DataRow(ActivityType.Video)]
+    [DataRow(ActivityType.ShortVideo)]
     [DataRow(ActivityType.Live)]
     [DataRow(ActivityType.All)]
     public async Task GetFollowingsActivityAsync(ActivityType type)
