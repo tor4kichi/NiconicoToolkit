@@ -24,6 +24,7 @@ namespace NiconicoToolkit.Tests
         {
             var res = await _context.History.VideoWachHistory.GetWatchHistoryAsync(6);
 
+            var res2 = await _context.History.VideoWachHistory.GetWatchHistoryAsync(6, res);
             Assert.IsTrue(res.Meta.IsSuccess);
 
             if (res.Data.Items.Count > 0)
@@ -33,6 +34,10 @@ namespace NiconicoToolkit.Tests
                 Assert.IsNotNull(item.IsMaybeLikeUserItem);
                 Assert.AreNotEqual(item.ViewedAt, default(DateTimeOffset));
             }
+
+            Assert.AreNotEqual(res.Data.Items[0].Video.Id, res2.Data.Items[0].Video.Id);
+
+
         }
 
         [TestMethod]

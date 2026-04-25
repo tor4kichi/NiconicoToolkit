@@ -45,7 +45,7 @@ public sealed class VideoWatchHisotrySubClient
             { "selectContentType", "short" },
         };
         if (prevResponse?.Data != null
-            && string.IsNullOrEmpty(prevResponse.Data.NextCursor))
+            && !string.IsNullOrEmpty(prevResponse.Data.NextCursor))
         {
             parameters.Add("cursor", prevResponse.Data.NextCursor);
         }
@@ -67,7 +67,7 @@ public sealed class VideoWatchHisotrySubClient
             { "selectContentType", "long" },
         };
         if (prevResponse?.Data != null
-            && string.IsNullOrEmpty(prevResponse.Data.NextCursor))
+            && !string.IsNullOrEmpty(prevResponse.Data.NextCursor))
         {
             parameters.Add("cursor", prevResponse.Data.NextCursor);
         }
