@@ -83,7 +83,6 @@ public sealed class UserClient
             );
     }
 
-
     public Task<UserVideoResponse> GetUserVideoAsync(UserId userId, int page = 0, int pageSize = 100, UserVideoSortKey sortKey = UserVideoSortKey.RegisteredAt, UserVideoSortOrder sortOrder = UserVideoSortOrder.Desc)
     {
         return _context.GetJsonAsAsync<UserVideoResponse>(

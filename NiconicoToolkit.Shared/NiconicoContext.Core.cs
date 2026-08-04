@@ -43,14 +43,6 @@ namespace NiconicoToolkit
     {
         public string RawUserAgent { get; }
         public string UserAgent { get; }
-        public NiconicoContext(string yourSiteUrl)
-            : this(new HttpClient())
-        {            
-            RawUserAgent = yourSiteUrl;
-            UserAgent = $"{nameof(NiconicoToolkit)}/1.0 (+{yourSiteUrl})";
-            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
-        }
-
         internal static readonly JsonSerializerOptions DefaultOptions = new JsonSerializerOptions()
         {
             TypeInfoResolver = GlobalJsonSourceGenerationContext.Default,
@@ -82,14 +74,25 @@ namespace NiconicoToolkit
             }
         };
 
+        public NiconicoContext(
+            string yourSiteUrl
+            )
+            : this(new HttpClient(), yourSiteUrl)
+        {
+
+        }
 
         public NiconicoContext(
-            HttpClient httpClient
+            HttpClient httpClient,
+            string yourSiteUrl
             )
         {
-            HttpClient = httpClient;            
+            RawUserAgent = yourSiteUrl;
+            UserAgent = $"{nameof(NiconicoToolkit)}/1.0 (+{yourSiteUrl})";
+            HttpClient = httpClient;
+            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
             Live = new LiveClient(this, DefaultOptions);
-            Account = new AccountClient(this);
+            Account = new AccountClient(this, DefaultOptions);
             User = new UserClient(this, DefaultOptions);
             Video = new VideoClient(this, DefaultOptions);
             History = new HistoryClient(this, DefaultOptions);
@@ -108,8 +111,13 @@ namespace NiconicoToolkit
             ExtApiClient = new ExtApiClient(this);
         }
 
+        public void ExchangeHttpClientAndCallSetupDefaultRequestHeaders(HttpClient httpClient)
+        {
+            HttpClient = httpClient;
+            SetupDefaultRequestHeaders();
+        }
 
-        public HttpClient HttpClient { get; }
+        public HttpClient HttpClient { get; private set; }
 
         public AccountClient Account { get; }
         public LiveClient Live { get; }

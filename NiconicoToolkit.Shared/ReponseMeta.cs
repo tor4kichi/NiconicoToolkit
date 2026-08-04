@@ -71,6 +71,10 @@ namespace NiconicoToolkit
         [JsonPropertyName("code")]
         public string Code { get; set; }
 
+        [JsonPropertyName("errorMessage")]
+        public string? ErrorMessage { get; set; }
+
+
         public bool IsSuccess => HttpStatusCodeHelper.IsSuccessStatusCode(Status);
     }
 }

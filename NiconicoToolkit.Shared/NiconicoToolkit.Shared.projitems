@@ -219,6 +219,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchDataForGuest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchJsonResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Video\Watch\WatchPageResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebCookieHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Live\WatchPageProp\DataPropsSource.Json" />
