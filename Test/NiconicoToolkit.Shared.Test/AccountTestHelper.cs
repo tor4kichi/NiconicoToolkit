@@ -56,17 +56,19 @@ namespace NiconicoToolkit.Tests
 
         public static async Task<(NiconicoSessionStatus status, NiconicoAccountAuthority authority, uint userId)> LogInWithTestAccountAsync(NiconicoContext niconicoContext)
         {
-            var accountInfo = await AccountLoadingAsync();
-            return await niconicoContext.Account.SignInAsync(new MailAndPasswordAuthToken(accountInfo.Mail, accountInfo.Password));
+            //var accountInfo = await AccountLoadingAsync();
+            //return await niconicoContext.Account.SignInAsync(new MailAndPasswordAuthToken(accountInfo.Mail, accountInfo.Password));
+            throw new NotSupportedException();
         }
 
         public static async Task<(NiconicoContext niconicoContext, NiconicoSessionStatus status, NiconicoAccountAuthority authority, uint userId)> CreateNiconicoContextAndLogInWithTestAccountAsync()
         {
-            NiconicoContext niconicoContext = new NiconicoContext(Site);
-            niconicoContext.SetupDefaultRequestHeaders();
-            var accountInfo = await AccountLoadingAsync();
-            var res = await niconicoContext.Account.SignInAsync(new MailAndPasswordAuthToken(accountInfo.Mail, accountInfo.Password));
-            return (niconicoContext:  niconicoContext, res.status, res.authority, res.userId);
+            //NiconicoContext niconicoContext = new NiconicoContext(Site);
+            //niconicoContext.SetupDefaultRequestHeaders();
+            //var accountInfo = await AccountLoadingAsync();
+            //var res = await niconicoContext.Account.SignInAsync(new MailAndPasswordAuthToken(accountInfo.Mail, accountInfo.Password));
+            //return (niconicoContext:  niconicoContext, res.status, res.authority, res.userId);
+            throw new NotSupportedException();
         }
     }
 }

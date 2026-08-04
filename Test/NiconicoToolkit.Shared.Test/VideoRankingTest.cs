@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CommunityToolkit.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NiconicoToolkit.Ranking.Video;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace NiconicoToolkit.Tests
         {
             await Assert.ThrowsExceptionAsync<Exception>(async () => 
             {
-                var res = await _context.Video.Ranking.GetPopularTagAsync(RankingGenre.All);
+                var res = await _context.Video.Ranking.GetRankingAsync("ignore");
                 if (res.IsSuccess is false)
                 {
                     throw new Exception(res.Meta.ErrorCode);
@@ -34,55 +35,49 @@ namespace NiconicoToolkit.Tests
             });
         }
 
+
         [TestMethod]
-        [DataRow(nameof(RankingGenre.Anime))]
-        public async Task GetPopularGenreTagsAsync(string genre)
+        public async Task GetVideoRankingAsync()
         {
-            var res = await _context.Video.Ranking.GetPopularTagAsync(Enum.Parse<RankingGenre>(genre));
+            var res = await _context.Video.Ranking.GetRankingAsync(RankingGenreConstants.All);
 
-            Assert.IsTrue(res.Meta.IsSuccess);
+            Guard.IsTrue(res.Meta.IsSuccess);
 
-            if (res.Data?.Tags.Any() ?? false)
+            Guard.IsNotNull(res.Data);
+            Guard.IsNotNull(res.Data.Response.GetTeibanRanking);
+
+            if (res.Data.Response.GetTeibanRanking.Data.Items.Any())
             {
-                var tag = res.Data.Tags[0];
-                Assert.IsNotNull(tag);
-            }
-        }
+                var video = res.Data.Response.GetTeibanRanking.Data.Items[0];
 
-        [TestMethod]        
-        public async Task GetHotTopicTagsVideoRankingAsync()
-        {
-            var res = await _context.Video.Ranking.GetHotTopicAsync();
-
-            Assert.IsTrue(res.Meta.IsSuccess);
-
-            if (res.Data?.HotTopics.Any() ?? false)
-            {
-                var topic = res.Data.HotTopics[0];                
+                Guard.IsNotNull(video.Id);
+                Guard.IsNotNull(video.Owner);
             }
         }
 
 
         [TestMethod]
-        [DataRow(nameof(RankingGenre.All))]
-        [DataRow(nameof(RankingGenre.Animal))]
-        [DataRow(nameof(RankingGenre.HotTopic))]
-        public async Task GetVideoRankingAsync(string genre)
+        public async Task GetVideoRankingAndGenreAndTagAsync()
         {
-            var res = await _context.Video.Ranking.GetRankingAsync(Enum.Parse<Ranking.Video.RankingGenre>(genre));
+            var res = await _context.Video.Ranking.GetRankingAsync(RankingGenreConstants.Game);
 
-            Assert.IsTrue(res.Meta.IsSuccess);
+            Guard.IsTrue(res.Meta.IsSuccess);
 
-            Assert.IsNotNull(res.Data);
-            Assert.IsNotNull(res.Data.Items);
+            Guard.IsNotNull(res.Data);
+            Guard.IsNotNull(res.Data.Response.GetTeibanRanking);
 
-            if (res.Data.Items.Any())
+            if (res.Data.Response.GetTeibanRanking.Data.Items.Any())
             {
-                var mylist = res.Data.Items[0];
+                var video = res.Data.Response.GetTeibanRanking.Data.Items[0];
 
-                Assert.IsNotNull(mylist.Id);
-                Assert.IsNotNull(mylist.Owner);
+                Guard.IsNotNull(video.Id);
+                Guard.IsNotNull(video.Owner);
             }
+
+            var tags = res.Data.Response.GetTeibanRankingFeaturedKeyAndTrendTags.Data.TrendTags;
+            Guard.HasSizeNotEqualTo(tags, 0);
+            var tagRes = await _context.Video.Ranking.GetRankingAsync(RankingGenreConstants.Game, tag: tags[0], pageCount: 2);
+            Guard.IsNotNullOrEmpty(tagRes.Data.Response.GetTeibanRanking.Data.Tag);
         }
     }
 }
