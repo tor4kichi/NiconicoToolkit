@@ -133,7 +133,7 @@ public sealed class VideoWatchSubClient
 
         return await _context.SendJsonAsAsync<DomandHlsAccessRightResponse>(
             HttpMethod.Post,
-            $"{NiconicoUrls.NvApiV1Url}watch/{videoId}/access-rights/hls{(watchTrackId != null ? $"?actionTrackId={watchTrackId}" : "")}",
+            $"{NiconicoUrls.NvApiV4Url}watch/{videoId}?retry=0",
             $"{{\"outputs\":[[{string.Join(',', qualities.Select(x => $"\"{x}\""))}]]}}",
             _options,
             (header) =>

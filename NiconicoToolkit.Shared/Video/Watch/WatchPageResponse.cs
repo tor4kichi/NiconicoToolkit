@@ -183,8 +183,25 @@ public class NicoVideoWatchApiData
     public Metadata Metadata { get; set; }
 
     [JsonPropertyName("response")]
-    public WatchResponse Response { get; set; }
+    public WatchResponse_V4 Response_V4 { get; set; }
+
+    [JsonIgnore]
+    public WatchResponse Response => Response_V4.Data.Data;
 }
+
+
+public class WatchResponse_V4
+{
+    [JsonPropertyName("$watchV4")]
+    public WatchResponse_V4_Data Data { get; set; }
+}
+
+public class WatchResponse_V4_Data
+{
+    [JsonPropertyName("data")]
+    public WatchResponse Data { get; set; }
+}
+
 
 public class WatchDomand
 {
@@ -318,7 +335,10 @@ public class ItemListElement
     public int? Position { get; set; }
 
     [JsonPropertyName("item")]
-    public Item Item { get; set; }
+    public string? Item { get; set; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
 }
 
 public class JsonLd
@@ -437,11 +457,34 @@ public class Marquee
 
 public class Media
 {
-    [JsonPropertyName("domand")]
+    [JsonPropertyName("contents")]
     public WatchDomand Domand { get; set; }
 
-    [JsonPropertyName("delivery")]
-    public Delivery Delivery { get; set; }
+    [JsonPropertyName("hls")]
+    public Hls Hls { get; set; }
+}
+
+
+
+public class Hls
+{
+    [JsonPropertyName("url")]
+    public string url { get; set; }
+
+    [JsonPropertyName("outputs")]
+    public List<HlsOutput> outputs { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime createdAt { get; set; }
+
+    [JsonPropertyName("expiredAt")]
+    public DateTime expiredAt { get; set; }
+}
+
+public class HlsOutput
+{
+    [JsonPropertyName("assetUnitNames")]
+    public List<string> assetUnitNames { get; set; }
 }
 
 public partial class Delivery
