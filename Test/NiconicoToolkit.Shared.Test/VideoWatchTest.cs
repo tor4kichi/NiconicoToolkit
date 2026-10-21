@@ -37,17 +37,35 @@ namespace NiconicoToolkit.Tests
             var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
             Assert.IsNotNull(res.Data);
 
-            //var accessRight = await _context.Video.VideoWatch.GetDomandHlsAccessRightAsync(
-            //    videoId
-            //    , res.Data.Response.Media.Domand
-            //    , res.Data.Response.Media.Domand.Videos.First(x => x.IsAvailable).Id
-            //    , res.Data.Response.Media.Domand.Audios.First(x => x.IsAvailable).Id
-            //    , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
-            //    );
-            //Assert.IsTrue(accessRight.IsSuccess);
-            //Assert.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+            var accessRight = await _context.Video.VideoWatch.GetVariantsDomandHlsAccessRightAsync(
+                videoId
+                , res.Data.Response.Media.Domand
+                , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
+                );
+            Guard.IsTrue(accessRight.IsSuccess);
+            Guard.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
+        }
+
+        [TestMethod]
+        [DataRow("sm34974092")]
+        public async Task WatchApiV3_PlayVideoAsync(string videoId)
+        {
+            var actionTrackId = await _context.Video.VideoWatch.GetActionTrackIdAsync(videoId);
+            Guard.IsNotNullOrEmpty(actionTrackId);
+            var res = await _context.Video.VideoWatch.GetV3WatchDataAsync(videoId, actionTrackId, true);
+            if (!res.IsSuccess)
+            {
+                Debug.WriteLine(res.Meta.ErrorCode);
+            }
+            Assert.IsNotNull(res.Data);
             
-            
+            var accessRight = await _context.Video.VideoWatch.GetNvApiV1DomandHlsAccessRightAsync(
+                videoId
+                , res.Data.Media.Domand
+                , res.Data.VideoAds.AdditionalParams.WatchTrackId
+                , default);
+            Guard.IsTrue(accessRight.IsSuccess);
+            Guard.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));
         }
 
         [TestMethod]
@@ -78,7 +96,7 @@ namespace NiconicoToolkit.Tests
         {
             var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
             
-            Assert.IsNull(res.Data.Response.Media.Hls);
+            Assert.IsNull(res.Data.Response.Media.Delivery);
         }
 
         #endregion
@@ -254,7 +272,7 @@ namespace NiconicoToolkit.Tests
         {
             var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
             Assert.IsTrue(res.IsSuccess);
-            Assert.IsNull(res.Data.Response.Media.Hls);
+            Assert.IsNull(res.Data.Response.Media.Delivery);
         }
 
         #endregion

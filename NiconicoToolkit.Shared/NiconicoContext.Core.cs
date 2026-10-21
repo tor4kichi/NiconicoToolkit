@@ -164,6 +164,7 @@ namespace NiconicoToolkit
             HttpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-site");
             HttpClient.DefaultRequestHeaders.Add("X-Request-With", "https://www.nicovideo.jp");
 
+            HttpClient.DefaultRequestHeaders.Add("Accept", "*/*");
             HttpClient.DefaultRequestHeaders.Add("Origin", "https://www.nicovideo.jp");
         }
 

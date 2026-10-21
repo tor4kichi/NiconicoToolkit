@@ -9,6 +9,17 @@ public class NicoVideoWatchApiResponse : ResponseWithData<NicoVideoWatchApiData>
    
 }
 
+public class NicoVideoWatchApiResponseV3 : ResponseWithData<NicoVideoWatchApiDataV3>
+{
+
+}
+
+public class NicoVideoWatchApiResponseV4 : ResponseWithData<NicoVideoWatchApiDataV4>
+{
+
+}
+
+
 public class AdditionalParams
 {
     [JsonPropertyName("videoId")]
@@ -183,17 +194,33 @@ public class NicoVideoWatchApiData
     public Metadata Metadata { get; set; }
 
     [JsonPropertyName("response")]
-    public WatchResponse_V4 Response_V4 { get; set; }
+    public WatchResponse Response { get; set; }
+}
 
-    [JsonIgnore]
-    public WatchResponse Response => Response_V4.Data.Data;
+#region V3
+
+public class NicoVideoWatchApiDataV3 : WatchResponse
+{
+}
+
+#endregion
+
+
+
+public class NicoVideoWatchApiDataV4
+{
+    [JsonPropertyName("metadata")]
+    public Metadata Metadata { get; set; }
+
+    [JsonPropertyName("response")]
+    public Watch_V4 Response { get; set; }
 }
 
 
-public class WatchResponse_V4
+public class Watch_V4
 {
     [JsonPropertyName("$watchV4")]
-    public WatchResponse_V4_Data Data { get; set; }
+    public WatchResponse_V4_Data Watch { get; set; }
 }
 
 public class WatchResponse_V4_Data
@@ -457,9 +484,21 @@ public class Marquee
 
 public class Media
 {
-    [JsonPropertyName("contents")]
+    [JsonPropertyName("domand")]
     public WatchDomand Domand { get; set; }
 
+    [JsonPropertyName("delivery")]
+    public Delivery Delivery { get; set; }
+
+    /// <summary>
+    /// V4
+    /// </summary>
+    [JsonPropertyName("contents")]
+    public WatchDomand Contents { get; set; }
+
+    /// <summary>
+    /// V4
+    /// </summary>
     [JsonPropertyName("hls")]
     public Hls Hls { get; set; }
 }
@@ -1034,20 +1073,6 @@ public class WatchResponse
     public Waku Waku { get; set; }
 }
 
-public partial class VideoViewer
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("nickname")]
-    public string Nickname { get; set; }
-
-    [JsonPropertyName("isPremium")]
-    public bool IsPremium { get; set; }
-
-    [JsonPropertyName("existence")]
-    public Existence Existence { get; set; }
-}
 
 public partial class Existence
 {
