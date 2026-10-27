@@ -52,22 +52,17 @@ public sealed class VideoWatchSubClient
         };
     }
 
-    /// <summary>
-    /// 2026/10/20：nvpcClientVersionの指定が不足しているとして取得できなくなっている。GetV3WatchDataAsync（SPWeb版)を利用するように。
-    /// </summary>
-    /// <param name="videoId"></param>
-    /// <param name="ct"></param>
-    /// <returns></returns>
-    [Obsolete]
-    public async Task<NicoVideoWatchApiResponse> GetWatchDataAsync(VideoId videoId, CancellationToken ct = default)
+    public async Task<NicoVideoWatchApiResponseV4> GetWatchDataAsync(VideoId videoId, CancellationToken ct = default)
     {
         var url = new StringBuilder(NiconicoUrls.WatchPageUrl)
             .Append(videoId.ToString())
             .Append("?responseType=json")
+            .Append("&nvpcClientVersion=1")
+            .Append("&additionals=pcWatchPage%2Cseries")
             .ToString();
 
         await _context.WaitPageAccessAsync();
-        return await _context.GetJsonAsAsync<NicoVideoWatchApiResponse>(url, _options);       
+        return await _context.GetJsonAsAsync<NicoVideoWatchApiResponseV4>(url, _options);       
     }
 
     public async Task<string> GetActionTrackIdAsync(VideoId videoId, CancellationToken ct = default)
@@ -250,10 +245,11 @@ public sealed class VideoWatchSubClient
     }
     public async Task<DomandHlsAccessRightResponse> GetV4VariantsDomandHlsAccessRightAsync(
         VideoId videoId,
-        WatchDomand domand,
+        Media media,
         string? watchTrackId = null,
         CancellationToken ct = default)
     {
+        var domand = media.Contents ?? media.Domand;
         List<string> qualities = new();
         foreach (var video in domand.Videos.Where(x => x.IsAvailable))
         {
@@ -270,7 +266,7 @@ public sealed class VideoWatchSubClient
             _options,
             (header) =>
             {
-                header.Add("X-Access-Right-Key", domand.AccessRightKey);
+                header.Add("X-Access-Right-Key", domand?.AccessRightKey ?? media.AccessRightKey);
                 header.Add("X-Frontend-Version", "0");
                 header.Add("X-Frontend-Id", "6");
                 header.Add("X-Request-With", "https://www.nicovideo.jp");
@@ -280,10 +276,11 @@ public sealed class VideoWatchSubClient
 
     public async Task<DomandHlsAccessRightResponse> GetVariantsDomandHlsAccessRightAsync(
         VideoId videoId,
-        WatchDomand domand,
+        Media media,
         string? watchTrackId = null,
         CancellationToken ct = default)
     {
+        var domand = media.Contents ?? media.Domand;
         List<string> qualities = new();
         foreach (var video in domand.Videos.Where(x => x.IsAvailable))
         {
@@ -300,7 +297,7 @@ public sealed class VideoWatchSubClient
             _options,
             (header) =>
             {
-                header.Add("X-Access-Right-Key", domand.AccessRightKey);
+                header.Add("X-Access-Right-Key", domand?.AccessRightKey ?? media.AccessRightKey);
                 header.Add("X-Frontend-Version", "0");
                 header.Add("X-Frontend-Id", "6");
                 header.Add("X-Request-With", "https://www.nicovideo.jp");

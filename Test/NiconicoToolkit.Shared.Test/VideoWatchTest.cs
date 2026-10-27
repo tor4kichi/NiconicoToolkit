@@ -32,6 +32,7 @@ namespace NiconicoToolkit.Tests
 
         [TestMethod]
         [DataRow("sm43420972")]
+        [DataRow("ss46927940")]
         public async Task Domand_PlayVideoAsync(string videoId)
         {
             var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
@@ -39,8 +40,8 @@ namespace NiconicoToolkit.Tests
 
             var accessRight = await _context.Video.VideoWatch.GetVariantsDomandHlsAccessRightAsync(
                 videoId
-                , res.Data.Response.Media.Domand
-                , res.Data.Response.VideoAds.AdditionalParams.WatchTrackId
+                , res.Data.Response.Media
+                , res.Data.Response.Client.WatchTrackId
                 );
             Guard.IsTrue(accessRight.IsSuccess);
             Guard.IsTrue(!string.IsNullOrEmpty(accessRight.Data.ContentUrl));

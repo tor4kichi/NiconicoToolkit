@@ -16,7 +16,7 @@ public class NicoVideoWatchApiResponseV3 : ResponseWithData<NicoVideoWatchApiDat
 
 public class NicoVideoWatchApiResponseV4 : ResponseWithData<NicoVideoWatchApiDataV4>
 {
-
+    
 }
 
 
@@ -213,7 +213,9 @@ public class NicoVideoWatchApiDataV4
     public Metadata Metadata { get; set; }
 
     [JsonPropertyName("response")]
-    public Watch_V4 Response { get; set; }
+    public Watch_V4 __Response { get; set; }
+
+    public WatchResponse Response => __Response.Watch.Data;
 }
 
 
@@ -485,7 +487,9 @@ public class Marquee
 public class Media
 {
     [JsonPropertyName("domand")]
-    public WatchDomand Domand { get; set; }
+    public WatchDomand __Domand { get; set; }
+
+    public WatchDomand Domand => Contents ?? __Domand;
 
     [JsonPropertyName("delivery")]
     public Delivery Delivery { get; set; }
@@ -501,6 +505,12 @@ public class Media
     /// </summary>
     [JsonPropertyName("hls")]
     public Hls Hls { get; set; }
+
+    [JsonPropertyName("isStoryboardAvailable")]
+    public bool? IsStoryboardAvailable { get; set; }
+
+    [JsonPropertyName("accessRightKey")]
+    public string AccessRightKey { get; set; }
 }
 
 
@@ -801,6 +811,18 @@ public class Payment
 
     [JsonPropertyName("preview")]
     public Preview Preview { get; set; }
+
+    [JsonPropertyName("ppv")]
+    public Ppv Ppv { get; set; }
+
+    [JsonPropertyName("admission")]
+    public Admission Admission { get; set; }
+
+    [JsonPropertyName("continuationBenefit")]
+    public ContinuationBenefit ContinuationBenefit { get; set; }
+
+    [JsonPropertyName("premium")]
+    public Premium Premium { get; set; }
 }
 
 public partial class PaymentVideo
