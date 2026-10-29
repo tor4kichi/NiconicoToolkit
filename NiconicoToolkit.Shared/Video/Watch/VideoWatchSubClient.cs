@@ -34,6 +34,7 @@ namespace NiconicoToolkit.Video.Watch;
 [JsonSerializable(typeof(NicoVideoWatchApiResponseV4))]
 [JsonSerializable(typeof(WatchJsonResponse))]
 [JsonSerializable(typeof(DomandHlsAccessRightResponse))]
+[JsonSerializable(typeof(LazyVideoWatchApiResponse))]
 public sealed partial class VideoWatchJsonSourceGenerationContext : JsonSerializerContext
 {
 }
@@ -442,4 +443,30 @@ public sealed class VideoWatchSubClient
 
 #endregion
 
+    public async Task<LazyVideoWatchApiResponse> GetLazyVideoWatchAsync(
+        VideoId videoId, 
+        string actionTrackId,
+        string authKey)
+    {
+        return await _context.SendJsonAsAsync<LazyVideoWatchApiResponse>(
+            HttpMethod.Post,
+            $"{NiconicoUrls.NvApiV4Url}watch/lazy/{videoId}",
+            $"{{\"actionTrackId\":\"{actionTrackId}\", \"keyToken\":\"{authKey}\"}}",
+            _options
+            , headers =>
+            {
+                headers.Add("Accept", "application/json;charset=utf-8");
+                headers.Add("X-Frontend-Id", "6");
+                headers.Add("X-Frontend-Version", "0");
+                headers.Add("X-REQUEST-WITH", "https://www.nicovideo.jp");
+                headers.Add("X-NICONICO-LANGUAGE", "ja-jp");
+#if WINDOWS_UWP
+                    headers.Referer = new Uri("https://www.nicovideo.jp/");
+#else
+                headers.Referrer = new Uri("https://www.nicovideo.jp/");
+#endif
+                headers.Add("Origin", "https://www.nicovideo.jp");
+
+            });            
+    }
 }

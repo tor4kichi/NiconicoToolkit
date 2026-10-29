@@ -353,9 +353,12 @@ namespace NiconicoToolkit
 #endif
         {
 #if WINDOWS_UWP
-            using var content = new HttpStringContent(stringHttpContent);
+            using var content = new HttpStringContent(
+                stringHttpContent,
+                Windows.Storage.Streams.UnicodeEncoding.Utf8,
+                "application/json");
 #else
-            using var content = new StringContent(stringHttpContent);
+            using var content = new StringContent(stringHttpContent, Encoding.UTF8, "application/json");
 #endif
             return await SendJsonAsAsync<T>(httpMethod, url, content, options, headerModifier, ct);
         }

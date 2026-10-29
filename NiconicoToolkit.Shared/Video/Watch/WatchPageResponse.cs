@@ -19,6 +19,213 @@ public class NicoVideoWatchApiResponseV4 : ResponseWithData<NicoVideoWatchApiDat
     
 }
 
+public class LazyVideoWatchApiResponse : ResponseWithData<LazyVideoWatchApiData>
+{
+
+}
+
+public class LazyVideoWatchApiData
+{
+    [JsonPropertyName("owner")]
+    public LazyVideoOwner Owner { get; set; }
+
+    [JsonPropertyName("ranking")]
+    public LazyVideoRanking Ranking { get; set; }
+
+    [JsonPropertyName("series")]
+    public LazyVideoSeries Series { get; set; }
+
+    [JsonPropertyName("waku")]
+    public LazyVideoWaku Waku { get; set; }    
+}
+
+
+public class LazyVideoOwner
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+
+    [JsonPropertyName("visibility")]
+    public string Visibility { get; set; }
+
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("isOfficialAnime")]
+    public bool IsOfficialAnime { get; set; }
+
+    [JsonPropertyName("isDisplayAdBanner")]
+    public bool IsDisplayAdBanner { get; set; }
+
+    [JsonPropertyName("thumbnail")]
+    public LazyThumbnail Thumbnail { get; set; }
+
+    //[JsonPropertyName("follow")]
+    //public object Follow { get; set; }
+
+    [JsonPropertyName("ownerType")]
+    public string OwnerType { get; set; }
+
+    [JsonPropertyName("iconUrl")]
+    public string IconUrl { get; set; }
+}
+
+public class PcHeaderCustomBanner
+{
+    [JsonPropertyName("imageUrl")]
+    public string ImageUrl { get; set; }
+
+    [JsonPropertyName("backgroundType")]
+    public string BackgroundType { get; set; }
+
+    //[JsonPropertyName("backgroundColorCode")]
+    //public object BackgroundColorCode { get; set; }
+
+    //[JsonPropertyName("backgroundPatternImageUrl")]
+    //public object BackgroundPatternImageUrl { get; set; }
+
+    [JsonPropertyName("linkUrl")]
+    public string LinkUrl { get; set; }
+
+    [JsonPropertyName("linkType")]
+    public string LinkType { get; set; }
+
+    [JsonPropertyName("linkOrigin")]
+    public string LinkOrigin { get; set; }
+
+    [JsonPropertyName("isNewWindow")]
+    public bool IsNewWindow { get; set; }
+}
+
+public class LazyVideoRanking
+{
+    [JsonPropertyName("teiban")]
+    public Teiban Teiban { get; set; }
+}
+
+public class LazyVideoSeries
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
+
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
+
+    [JsonPropertyName("thumbnailUrl")]
+    public string ThumbnailUrl { get; set; }
+
+    [JsonPropertyName("video")]
+    public Video Video { get; set; }
+}
+
+public class TagRelatedBanner
+{
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
+
+    [JsonPropertyName("imageUrl")]
+    public string ImageUrl { get; set; }
+
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
+
+    [JsonPropertyName("isEvent")]
+    public bool IsEvent { get; set; }
+
+    [JsonPropertyName("linkUrl")]
+    public string LinkUrl { get; set; }
+
+    [JsonPropertyName("linkType")]
+    public string LinkType { get; set; }
+
+    [JsonPropertyName("linkOrigin")]
+    public string LinkOrigin { get; set; }
+
+    [JsonPropertyName("isNewWindow")]
+    public bool IsNewWindow { get; set; }
+}
+
+public class Teiban
+{
+    [JsonPropertyName("featuredKey")]
+    public string FeaturedKey { get; set; }
+
+    [JsonPropertyName("label")]
+    public string Label { get; set; }
+
+    [JsonPropertyName("rank")]
+    public int Rank { get; set; }
+}
+
+public class LazyThumbnail
+{
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
+
+    [JsonPropertyName("smallUrl")]
+    public string SmallUrl { get; set; }
+
+    [JsonPropertyName("middleUrl")]
+    public string MiddleUrl { get; set; }
+
+    [JsonPropertyName("largeUrl")]
+    public string LargeUrl { get; set; }
+
+    [JsonPropertyName("listingUrl")]
+    public string ListingUrl { get; set; }
+
+    [JsonPropertyName("nHdUrl")]
+    public string NHdUrl { get; set; }
+
+    [JsonPropertyName("shortUrl")]
+    public string ShortUrl { get; set; }
+}
+
+public class Video
+{
+    [JsonPropertyName("prev")]
+    public NvapiVideoItem Prev { get; set; }
+
+    [JsonPropertyName("next")]
+    public NvapiVideoItem Next { get; set; }
+
+    [JsonPropertyName("first")]
+    public NvapiVideoItem First { get; set; }
+}
+
+public class LazyVideoWaku
+{
+    //[JsonPropertyName("information")]
+    //public object Information { get; set; }
+
+    [JsonPropertyName("bgImages")]
+    public List<object> BgImages { get; set; }
+
+    //[JsonPropertyName("addContents")]
+    //public object AddContents { get; set; }
+
+    //[JsonPropertyName("addVideo")]
+    //public object AddVideo { get; set; }
+
+    [JsonPropertyName("tagRelatedBanner")]
+    public TagRelatedBanner TagRelatedBanner { get; set; }
+
+    //[JsonPropertyName("tagRelatedMarquee")]
+    //public object TagRelatedMarquee { get; set; }
+
+    [JsonPropertyName("pcHeaderCustomBanner")]
+    public PcHeaderCustomBanner PcHeaderCustomBanner { get; set; }
+}
+
+
+
+
 
 public class AdditionalParams
 {
@@ -1093,8 +1300,16 @@ public class WatchResponse
 
     [JsonPropertyName("waku")]
     public Waku Waku { get; set; }
+    [JsonPropertyName("lazy")]
+    public Lazy Lazy { get; set; }
 }
 
+
+public partial class Lazy
+{
+    [JsonPropertyName("authKey")]
+    public string AuthKey { get; set; }
+}
 
 public partial class Existence
 {

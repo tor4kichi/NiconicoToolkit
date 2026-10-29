@@ -48,6 +48,18 @@ namespace NiconicoToolkit.Tests
         }
 
         [TestMethod]
+        [DataRow("sm43420972")]
+        public async Task WatchApiV4_GetLazyVideoWatchAsync(string videoId)
+        {
+            var res = await _context.Video.VideoWatch.GetWatchDataAsync(videoId);
+            Assert.IsNotNull(res.Data);
+
+            var lazy = await _context.Video.VideoWatch.GetLazyVideoWatchAsync(videoId, res.Data.Response.Client.WatchTrackId, res.Data.Response.Lazy.AuthKey);
+            Guard.IsTrue(lazy.IsSuccess, lazy.Meta.ErrorCode);
+            Guard.IsNotNull(lazy.Data);
+        }
+
+        [TestMethod]
         [DataRow("sm34974092")]
         public async Task WatchApiV3_PlayVideoAsync(string videoId)
         {
