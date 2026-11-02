@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NiconicoToolkit.ExtApi.Video;
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace NiconicoToolkit.Video.Watch;
@@ -1286,6 +1287,9 @@ public class WatchResponse
     [JsonPropertyName("tag")]
     public Tag Tag { get; set; }
 
+    [JsonPropertyName("tags")]
+    public Tags Tags { get; set; }
+
     [JsonPropertyName("video")]
     public VideoDetails Video { get; set; }
 
@@ -1304,6 +1308,38 @@ public class WatchResponse
     public Lazy Lazy { get; set; }
 }
 
+public class Tags
+{
+    [JsonPropertyName("items")]
+    public List<TagsItem> Items { get; set; }
+
+    [JsonPropertyName("hasR18Tag")]
+    public bool HasR18Tag { get; set; }
+
+    [JsonPropertyName("isPublishedNicoscript")]
+    public bool IsPublishedNicoscript { get; set; }
+
+    [JsonPropertyName("edit")]
+    public Edit Edit { get; set; }
+}
+
+public class TagsItem
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("isLocked")]
+    public bool IsLocked { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+
+    [JsonPropertyName("timingMs")]
+    public object TimingMs { get; set; }
+
+    [JsonPropertyName("additionalParams")]
+    public AdditionalParams AdditionalParams { get; set; }
+}
 
 public partial class Lazy
 {
