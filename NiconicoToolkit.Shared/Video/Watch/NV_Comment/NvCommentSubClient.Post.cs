@@ -28,7 +28,7 @@ public partial class NvCommentSubClient
     public async Task<ThreadPostKeyResponse> GetPostKeyAsync(string threadId, CancellationToken ct = default)
     {
         return await _context.GetJsonAsAsync<ThreadPostKeyResponse>(
-            $"{NvApiCommentKeysUrl}post?threadId={threadId}", _options, ct: ct
+            $"{NvApiCommentKeysUrl}post?threadId={threadId}&pc=1", _options, ct: ct
             );
     }
 
@@ -120,6 +120,15 @@ public sealed class ThreadPostKeyResponse : ResponseWithMeta
     {
         [JsonPropertyName("postKey")]
         public string PostKey { get; set; }
+
+        [JsonPropertyName("challenge")]
+        public Challenge Challenge { get; set; }
+    }
+
+    public class Challenge
+    {
+        [JsonPropertyName("isRequired")]
+        public bool? IsRequired { get; set; }
     }
 }
 
