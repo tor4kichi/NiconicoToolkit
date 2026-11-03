@@ -78,16 +78,25 @@ public sealed class VideoWatchSubClient
         }
 
         var scriptText = await res.Content.ReadHtmlDocumentActionAsync(document =>
-            document.GetElementById("S:0")?.QuerySelector("script")?.TextContent
-            ?? throw new InvalidOperationException("The S:0 script element was not found."));
+        {
+            foreach (var content in document.QuerySelectorAll("script"))
+            {
+                if (content.TextContent.StartsWith("window.__reactRouterContext.streamController.enqueue", StringComparison.Ordinal)) 
+                {
+                    return content.TextContent;
+                } 
+            }
+            
+            throw new InvalidOperationException("The WatchTrackId script element was not found.");
+        });
 
         var match = Regex.Match(
             scriptText,
-            @"\\?""actionTrackId\\?""\s*,\s*\\?""([^""\\]+)\\?""");
+            @"\\?""watchTrackId\\?""\s*,\s*\\?""([^""\\]+)\\?""");
 
         if (!match.Success)
         {
-            throw new InvalidOperationException("actionTrackId was not found in the S:0 script.");
+            throw new InvalidOperationException("watchTrackId was not found in the S:0 script.");
         }
 
         return match.Groups[1].Value;
